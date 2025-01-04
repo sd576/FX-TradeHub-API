@@ -81,18 +81,18 @@ fx_trader_server/
 
 Run the following commands in sequence to reset the database, generate new trade data, and seed the database with fresh data:
 
-Generates new trade data files
+Generates new trade data files:
 
 ```bash
 node utils/tradeGenerator.js 
 ```
 
-Validates and updates data seeding 
+Validate and updates data seeding: 
 ```bash
 node utils/updateDataSeedingWithPrompt.js
 ```
 
-Clears and seeds the database
+Clears and seeds the database:
 ```bash
 node database/initDB.js
 ```
@@ -114,9 +114,9 @@ Here, you can:
 ## Available API Endpoints
 
 ### Counterparties
-GET /api/counterparties: Retrieve all counterparties.
-GET /api/counterparties/{id}: Retrieve a specific counterparty by ID.
-POST /api/counterparties: Add a new counterparty.
+- GET /api/counterparties: Retrieve all counterparties.
+- GET /api/counterparties/{id}: Retrieve a specific counterparty by ID.
+- POST /api/counterparties: Add a new counterparty.
 
 ### Trades
 - GET /api/trades: Retrieve all trades.
