@@ -16,6 +16,24 @@ This project bridges the gap between simplistic "toy" datasets and fully-fledged
 - **Learning and Experimentation:** Serving as a sandbox for API and database exploration.
 
 ## Getting Started
+### Clone the Repository:
+In your terminal, run the command:
+```bash
+git clone https://github.com/sd576/FX-TradeHub-API.git
+```
+### Navigate to the Project Directory:
+```bash
+cd FX-TradeHub-API
+```
+### Install Dependencies:
+```bash
+npm install
+```
+### Start the Server:
+```bash
+npm start
+```
+By default, the server will run on http://localhost:3000. </br> You can access the Swagger API documentation at http://localhost:3000/api-docs.
 
 ### Folder Structure
 
