@@ -35,3 +35,7 @@ test-results/
 # Dist and build directories
 /dist/
 /build/
+node_modules/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

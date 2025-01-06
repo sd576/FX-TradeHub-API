@@ -1,28 +1,4 @@
-
-import fs from "fs";
-import path from "path";
-
-// Initially empty placeholder
-let outrightTradeData = [];
-
-// Fields for validation
-const outrightTradeDataFields = [
-  "tradeId",
-  "tradeDate",
-  "tradeType",
-  "counterpartyId",
-  "settlementDate",
-  "buyCurrency",
-  "sellCurrency",
-  "buyAmount",
-  "sellAmount",
-  "exchangeRate",
-  "buyNostroAccount",
-  "sellNostroAccount",
-];
-
-// Hardcoded initial data
-const initialoutrightTradeData = [
+[
   {
     "tradeId": "FWD-002-001",
     "tradeDate": "2025-01-01",
@@ -2323,20 +2299,4 @@ const initialoutrightTradeData = [
       "description": "Van Lanschot Kempen, Amsterdam"
     }
   }
-];
-
-// Overwrite function
-const overwriteData = () => {
-  outrightTradeData = initialoutrightTradeData;
-  console.log("Data has been overwritten with the default records.");
-
-  // Save as JSON file
-  const filePath = path.resolve("./outrightTradeData.json");
-  fs.writeFileSync(filePath, JSON.stringify(outrightTradeData, null, 2), "utf-8");
-  console.log(`Updated data saved to '${filePath}'.`);
-};
-
-// Execute overwrite function
-overwriteData();
-
-export { outrightTradeData, outrightTradeDataFields };
+]

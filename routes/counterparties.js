@@ -32,7 +32,18 @@ router.get("/", (req, res) => {
     if (err) {
       res.status(500).json({ error: "Failed to fetch counterparties" });
     } else {
-      res.json(rows);
+      // Parse the nostroAccounts field from JSON to an object
+      const parsedRows = rows.map((row) => ({
+        ...row,
+        nostroAccounts: (() => {
+          try {
+            return JSON.parse(row.nostroAccounts);
+          } catch {
+            return {};
+          }
+        })(),
+      }));
+      res.json(parsedRows);
     }
   });
 });
@@ -87,6 +98,8 @@ router.get("/:id", (req, res) => {
     } else if (!row) {
       res.status(404).json({ error: "Counterparty not found" });
     } else {
+      // Parse the nostroAccounts field from JSON to an object
+      row.nostroAccounts = JSON.parse(row.nostroAccounts);
       res.json(row);
     }
   });

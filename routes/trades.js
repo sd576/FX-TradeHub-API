@@ -58,7 +58,14 @@ router.get("/", (req, res) => {
     if (err) {
       res.status(500).json({ error: "Failed to fetch trades" });
     } else {
-      res.json(rows);
+      // Parse the nostroAccounts field from JSON to an object
+      const parsedRows = rows.map((row) => ({
+        ...row,
+        buyNostroAccount: JSON.parse(row.buyNostroAccount),
+        sellNostroAccount: JSON.parse(row.sellNostroAccount),
+      }));
+      // Use parsedRows instead of rows in the response
+      res.json(parsedRows);
     }
   });
 });

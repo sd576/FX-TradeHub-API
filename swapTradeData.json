@@ -1,28 +1,4 @@
-
-import fs from "fs";
-import path from "path";
-
-// Initially empty placeholder
-let swapTradeData = [];
-
-// Fields for validation
-const swapTradeDataFields = [
-  "tradeId",
-  "tradeDate",
-  "tradeType",
-  "counterpartyId",
-  "settlementDate",
-  "buyCurrency",
-  "sellCurrency",
-  "buyAmount",
-  "sellAmount",
-  "exchangeRate",
-  "buyNostroAccount",
-  "sellNostroAccount",
-];
-
-// Hardcoded initial data
-const initialswapTradeData = [
+[
   {
     "tradeId": "SWAP-002-001",
     "tradeDate": "2025-01-01",
@@ -4323,20 +4299,4 @@ const initialswapTradeData = [
       }
     }
   }
-];
-
-// Overwrite function
-const overwriteData = () => {
-  swapTradeData = initialswapTradeData;
-  console.log("Data has been overwritten with the default records.");
-
-  // Save as JSON file
-  const filePath = path.resolve("./swapTradeData.json");
-  fs.writeFileSync(filePath, JSON.stringify(swapTradeData, null, 2), "utf-8");
-  console.log(`Updated data saved to '${filePath}'.`);
-};
-
-// Execute overwrite function
-overwriteData();
-
-export { swapTradeData, swapTradeDataFields };
+]
