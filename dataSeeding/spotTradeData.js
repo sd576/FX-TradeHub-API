@@ -142,7 +142,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-007-006",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Citibank, New York",
     "counterpartyId": "007",
     "counterpartyName": "Citibank",
@@ -154,18 +154,18 @@ const initialspotTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Citibank, New York"
     },
     "sellNostroAccount": {
-      "id": "036",
-      "description": "Citibank, New York"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-008-007",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Goldman Sachs, New York",
     "counterpartyId": "008",
     "counterpartyName": "Goldman Sachs",
@@ -180,15 +180,15 @@ const initialspotTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "037",
+      "description": "Goldman Sachs, New York"
     }
   },
   {
     "tradeId": "SPOT-009-008",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Morgan Stanley, New York",
     "counterpartyId": "009",
     "counterpartyName": "Morgan Stanley",
@@ -199,8 +199,8 @@ const initialspotTradeData = [
     "sellAmount": 1093400,
     "exchangeRate": "1.0934",
     "buyNostroAccount": {
-      "id": "016",
-      "description": "Morgan Stanley, New York"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -234,7 +234,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-011-010",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "BNP Paribas, Paris",
     "counterpartyId": "011",
     "counterpartyName": "BNP Paribas",
@@ -245,19 +245,19 @@ const initialspotTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "BNP Paribas, Paris"
     },
     "sellNostroAccount": {
-      "id": "036",
-      "description": "BNP Paribas, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-012-011",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Société Générale, Paris",
     "counterpartyId": "012",
     "counterpartyName": "Société Générale",
@@ -268,12 +268,12 @@ const initialspotTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "026",
-      "description": "Société Générale, Paris"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Société Générale, Paris"
     }
   },
   {
@@ -326,7 +326,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-015-014",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "La Banque Postale, Paris",
     "counterpartyId": "015",
     "counterpartyName": "La Banque Postale",
@@ -338,18 +338,18 @@ const initialspotTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "La Banque Postale, Paris"
     },
     "sellNostroAccount": {
-      "id": "036",
-      "description": "La Banque Postale, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-016-015",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Deutsche Bank, Frankfurt",
     "counterpartyId": "016",
     "counterpartyName": "Deutsche Bank",
@@ -360,12 +360,12 @@ const initialspotTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Deutsche Bank, Frankfurt"
     },
     "sellNostroAccount": {
-      "id": "037",
-      "description": "Deutsche Bank, Frankfurt"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -395,7 +395,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-018-017",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "KfW Bank, Frankfurt",
     "counterpartyId": "018",
     "counterpartyName": "KfW Bank",
@@ -407,11 +407,11 @@ const initialspotTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "KfW Bank, Frankfurt"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "KfW Bank, Frankfurt"
     }
   },
   {
@@ -464,7 +464,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-021-020",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "ABN AMRO, Amsterdam",
     "counterpartyId": "021",
     "counterpartyName": "ABN AMRO",
@@ -475,19 +475,19 @@ const initialspotTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "034",
+      "description": "ABN AMRO, Amsterdam"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "ABN AMRO, Amsterdam"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-022-021",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "ING Bank, Amsterdam",
     "counterpartyId": "022",
     "counterpartyName": "ING Bank",
@@ -503,7 +503,7 @@ const initialspotTradeData = [
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "ING Bank, Amsterdam"
     }
   },
   {
@@ -533,7 +533,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-024-023",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Bunq, Amsterdam",
     "counterpartyId": "024",
     "counterpartyName": "Bunq",
@@ -544,19 +544,19 @@ const initialspotTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "Bunq, Amsterdam"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "037",
+      "description": "Bunq, Amsterdam"
     }
   },
   {
     "tradeId": "SPOT-025-024",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Van Lanschot Kempen, Amsterdam",
     "counterpartyId": "025",
     "counterpartyName": "Van Lanschot Kempen",
@@ -571,15 +571,15 @@ const initialspotTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Van Lanschot Kempen, Amsterdam"
     }
   },
   {
     "tradeId": "SPOT-026-025",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Commonwealth Bank of Australia, Sydney",
     "counterpartyId": "026",
     "counterpartyName": "Commonwealth Bank of Australia",
@@ -591,11 +591,11 @@ const initialspotTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Commonwealth Bank of Australia, Sydney"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Commonwealth Bank of Australia, Sydney"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -625,7 +625,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-028-027",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "National Australia Bank (NAB), Sydney",
     "counterpartyId": "028",
     "counterpartyName": "National Australia Bank (NAB)",
@@ -640,8 +640,8 @@ const initialspotTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "National Australia Bank (NAB), Sydney"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -671,7 +671,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-030-029",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Macquarie Bank, Sydney",
     "counterpartyId": "030",
     "counterpartyName": "Macquarie Bank",
@@ -682,19 +682,19 @@ const initialspotTradeData = [
     "sellAmount": 865400,
     "exchangeRate": "0.8654",
     "buyNostroAccount": {
-      "id": "Deutsche Bank, Frankfurt",
-      "description": "Macquarie Bank, Sydney"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Macquarie Bank, Sydney"
     }
   },
   {
     "tradeId": "SPOT-031-030",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Bank of New Zealand (BNZ), Wellington",
     "counterpartyId": "031",
     "counterpartyName": "Bank of New Zealand (BNZ)",
@@ -706,11 +706,11 @@ const initialspotTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Bank of New Zealand (BNZ), Wellington"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "036",
+      "description": "Bank of New Zealand (BNZ), Wellington"
     }
   },
   {
@@ -740,7 +740,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-033-032",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Kiwibank, Wellington",
     "counterpartyId": "033",
     "counterpartyName": "Kiwibank",
@@ -751,12 +751,12 @@ const initialspotTradeData = [
     "sellAmount": 1093400,
     "exchangeRate": "1.0934",
     "buyNostroAccount": {
-      "id": "Deutsche Bank, Frankfurt",
-      "description": "Kiwibank, Wellington"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Kiwibank, Wellington"
     }
   },
   {
@@ -832,7 +832,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-037-036",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Royal Bank of Canada, Ontario",
     "counterpartyId": "037",
     "counterpartyName": "Royal Bank of Canada",
@@ -843,12 +843,12 @@ const initialspotTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "034",
+      "description": "Royal Bank of Canada, Ontario"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Royal Bank of Canada, Ontario"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -878,7 +878,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-001-038",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Barclays Bank, London",
     "counterpartyId": "001",
     "counterpartyName": "Barclays Bank",
@@ -893,7 +893,7 @@ const initialspotTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "036",
+      "id": "001",
       "description": "Barclays Bank, London"
     }
   },
@@ -993,7 +993,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-006-043",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "JPMorgan Chase, New York",
     "counterpartyId": "006",
     "counterpartyName": "JPMorgan Chase",
@@ -1004,8 +1004,8 @@ const initialspotTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "026",
+      "description": "JPMorgan Chase, New York"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -1039,7 +1039,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-008-045",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Goldman Sachs, New York",
     "counterpartyId": "008",
     "counterpartyName": "Goldman Sachs",
@@ -1050,12 +1050,12 @@ const initialspotTradeData = [
     "sellAmount": 865400,
     "exchangeRate": "0.8654",
     "buyNostroAccount": {
-      "id": "016",
-      "description": "Goldman Sachs, New York"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Goldman Sachs, New York"
     }
   },
   {
@@ -1108,7 +1108,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-011-048",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "BNP Paribas, Paris",
     "counterpartyId": "011",
     "counterpartyName": "BNP Paribas",
@@ -1123,8 +1123,8 @@ const initialspotTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "BNP Paribas, Paris"
     }
   },
   {
@@ -1177,7 +1177,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-014-051",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Natixis, Paris",
     "counterpartyId": "014",
     "counterpartyName": "Natixis",
@@ -1188,19 +1188,19 @@ const initialspotTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "026",
+      "description": "Natixis, Paris"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Natixis, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-015-052",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "La Banque Postale, Paris",
     "counterpartyId": "015",
     "counterpartyName": "La Banque Postale",
@@ -1211,12 +1211,12 @@ const initialspotTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "034",
+      "description": "La Banque Postale, Paris"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "La Banque Postale, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -1246,7 +1246,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-017-054",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Commerzbank, Frankfurt",
     "counterpartyId": "017",
     "counterpartyName": "Commerzbank",
@@ -1258,11 +1258,11 @@ const initialspotTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Commerzbank, Frankfurt"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "036",
+      "description": "Commerzbank, Frankfurt"
     }
   },
   {
@@ -1292,7 +1292,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-019-056",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "DZ Bank, Frankfurt",
     "counterpartyId": "019",
     "counterpartyName": "DZ Bank",
@@ -1307,8 +1307,8 @@ const initialspotTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "DZ Bank, Frankfurt"
     }
   },
   {
@@ -1338,7 +1338,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-021-058",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "ABN AMRO, Amsterdam",
     "counterpartyId": "021",
     "counterpartyName": "ABN AMRO",
@@ -1349,19 +1349,19 @@ const initialspotTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "ABN AMRO, Amsterdam"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "ABN AMRO, Amsterdam"
     }
   },
   {
     "tradeId": "SPOT-022-059",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "ING Bank, Amsterdam",
     "counterpartyId": "022",
     "counterpartyName": "ING Bank",
@@ -1372,19 +1372,19 @@ const initialspotTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "026",
+      "description": "ING Bank, Amsterdam"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "ING Bank, Amsterdam"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-023-060",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Rabobank, Amsterdam",
     "counterpartyId": "023",
     "counterpartyName": "Rabobank",
@@ -1395,12 +1395,12 @@ const initialspotTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "034",
-      "description": "Rabobank, Amsterdam"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Rabobank, Amsterdam"
     }
   },
   {
@@ -1499,7 +1499,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-028-065",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "National Australia Bank (NAB), Sydney",
     "counterpartyId": "028",
     "counterpartyName": "National Australia Bank (NAB)",
@@ -1511,18 +1511,18 @@ const initialspotTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "National Australia Bank (NAB), Sydney"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "National Australia Bank (NAB), Sydney"
     }
   },
   {
     "tradeId": "SPOT-029-066",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "ANZ Banking Group, Sydney",
     "counterpartyId": "029",
     "counterpartyName": "ANZ Banking Group",
@@ -1533,12 +1533,12 @@ const initialspotTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "ANZ Banking Group, Sydney"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "ANZ Banking Group, Sydney"
     }
   },
   {
@@ -1591,7 +1591,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-032-069",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "ANZ Bank New Zealand, Wellington",
     "counterpartyId": "032",
     "counterpartyName": "ANZ Bank New Zealand",
@@ -1602,12 +1602,12 @@ const initialspotTradeData = [
     "sellAmount": 865400,
     "exchangeRate": "0.8654",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "Deutsche Bank, Frankfurt",
+      "description": "ANZ Bank New Zealand, Wellington"
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "ANZ Bank New Zealand, Wellington"
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -1637,7 +1637,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-034-071",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Westpac New Zealand, Wellington",
     "counterpartyId": "034",
     "counterpartyName": "Westpac New Zealand",
@@ -1648,12 +1648,12 @@ const initialspotTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Westpac New Zealand, Wellington"
     },
     "sellNostroAccount": {
-      "id": "037",
-      "description": "Westpac New Zealand, Wellington"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -1683,7 +1683,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-036-073",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Mizuho Bank, Tokyo",
     "counterpartyId": "036",
     "counterpartyName": "Mizuho Bank",
@@ -1695,18 +1695,18 @@ const initialspotTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Mizuho Bank, Tokyo"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Mizuho Bank, Tokyo"
     }
   },
   {
     "tradeId": "SPOT-037-074",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Royal Bank of Canada, Ontario",
     "counterpartyId": "037",
     "counterpartyName": "Royal Bank of Canada",
@@ -1717,19 +1717,19 @@ const initialspotTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Royal Bank of Canada, Ontario"
     },
     "sellNostroAccount": {
-      "id": "036",
-      "description": "Royal Bank of Canada, Ontario"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-999-075",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Global Trade Bank, London",
     "counterpartyId": "999",
     "counterpartyName": "Global Trade Bank",
@@ -1740,19 +1740,19 @@ const initialspotTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "026",
-      "description": "Global Trade Bank, London"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Global Trade Bank, London"
     }
   },
   {
     "tradeId": "SPOT-001-076",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Barclays Bank, London",
     "counterpartyId": "001",
     "counterpartyName": "Barclays Bank",
@@ -1763,11 +1763,11 @@ const initialspotTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "001",
+      "id": "034",
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "010",
+      "id": "001",
       "description": "Barclays Bank, London"
     }
   },
@@ -1821,7 +1821,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-004-079",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "NatWest Bank, London",
     "counterpartyId": "004",
     "counterpartyName": "NatWest Bank",
@@ -1832,19 +1832,19 @@ const initialspotTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "NatWest Bank, London"
     },
     "sellNostroAccount": {
-      "id": "037",
-      "description": "NatWest Bank, London"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-005-080",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Standard Chartered Bank, London",
     "counterpartyId": "005",
     "counterpartyName": "Standard Chartered Bank",
@@ -1855,19 +1855,19 @@ const initialspotTradeData = [
     "sellAmount": 1093400,
     "exchangeRate": "1.0934",
     "buyNostroAccount": {
-      "id": "016",
-      "description": "Standard Chartered Bank, London"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Standard Chartered Bank, London"
     }
   },
   {
     "tradeId": "SPOT-006-081",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "JPMorgan Chase, New York",
     "counterpartyId": "006",
     "counterpartyName": "JPMorgan Chase",
@@ -1879,7 +1879,7 @@ const initialspotTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "JPMorgan Chase, New York"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -1890,7 +1890,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-007-082",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Citibank, New York",
     "counterpartyId": "007",
     "counterpartyName": "Citibank",
@@ -1905,15 +1905,15 @@ const initialspotTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "036",
+      "description": "Citibank, New York"
     }
   },
   {
     "tradeId": "SPOT-008-083",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Goldman Sachs, New York",
     "counterpartyId": "008",
     "counterpartyName": "Goldman Sachs",
@@ -1924,8 +1924,8 @@ const initialspotTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "026",
+      "description": "Goldman Sachs, New York"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -1936,7 +1936,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-009-084",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Morgan Stanley, New York",
     "counterpartyId": "009",
     "counterpartyName": "Morgan Stanley",
@@ -1947,8 +1947,8 @@ const initialspotTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "034",
-      "description": "Morgan Stanley, New York"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -1982,7 +1982,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-011-086",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "BNP Paribas, Paris",
     "counterpartyId": "011",
     "counterpartyName": "BNP Paribas",
@@ -1994,18 +1994,18 @@ const initialspotTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "BNP Paribas, Paris"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "036",
+      "description": "BNP Paribas, Paris"
     }
   },
   {
     "tradeId": "SPOT-012-087",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Société Générale, Paris",
     "counterpartyId": "012",
     "counterpartyName": "Société Générale",
@@ -2016,19 +2016,19 @@ const initialspotTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Société Générale, Paris"
     },
     "sellNostroAccount": {
-      "id": "037",
-      "description": "Société Générale, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-013-088",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Crédit Agricole, Paris",
     "counterpartyId": "013",
     "counterpartyName": "Crédit Agricole",
@@ -2043,8 +2043,8 @@ const initialspotTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Crédit Agricole, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -2097,7 +2097,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-016-091",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Deutsche Bank, Frankfurt",
     "counterpartyId": "016",
     "counterpartyName": "Deutsche Bank",
@@ -2108,12 +2108,12 @@ const initialspotTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "026",
+      "description": "Deutsche Bank, Frankfurt"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Deutsche Bank, Frankfurt"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -2143,7 +2143,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-018-093",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "KfW Bank, Frankfurt",
     "counterpartyId": "018",
     "counterpartyName": "KfW Bank",
@@ -2159,14 +2159,14 @@ const initialspotTradeData = [
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "KfW Bank, Frankfurt"
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-019-094",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "DZ Bank, Frankfurt",
     "counterpartyId": "019",
     "counterpartyName": "DZ Bank",
@@ -2178,11 +2178,11 @@ const initialspotTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "DZ Bank, Frankfurt"
     },
     "sellNostroAccount": {
-      "id": "036",
-      "description": "DZ Bank, Frankfurt"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
@@ -2235,7 +2235,7 @@ const initialspotTradeData = [
     "tradeId": "SPOT-022-097",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "ING Bank, Amsterdam",
     "counterpartyId": "022",
     "counterpartyName": "ING Bank",
@@ -2247,18 +2247,18 @@ const initialspotTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "ING Bank, Amsterdam"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "ING Bank, Amsterdam"
+      "id": "001",
+      "description": "Barclays Bank, London"
     }
   },
   {
     "tradeId": "SPOT-023-098",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Rabobank, Amsterdam",
     "counterpartyId": "023",
     "counterpartyName": "Rabobank",
@@ -2269,19 +2269,19 @@ const initialspotTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "Rabobank, Amsterdam"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "Rabobank, Amsterdam"
     }
   },
   {
     "tradeId": "SPOT-024-099",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Bunq, Amsterdam",
     "counterpartyId": "024",
     "counterpartyName": "Bunq",
@@ -2292,19 +2292,19 @@ const initialspotTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "026",
-      "description": "Bunq, Amsterdam"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Bunq, Amsterdam"
     }
   },
   {
     "tradeId": "SPOT-025-100",
     "tradeDate": "2025-01-01",
     "tradeType": "SPOT",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Van Lanschot Kempen, Amsterdam",
     "counterpartyId": "025",
     "counterpartyName": "Van Lanschot Kempen",
@@ -2315,12 +2315,12 @@ const initialspotTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "034",
-      "description": "Van Lanschot Kempen, Amsterdam"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Van Lanschot Kempen, Amsterdam"
     }
   }
 ];

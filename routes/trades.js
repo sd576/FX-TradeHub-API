@@ -8,69 +8,48 @@ const router = express.Router();
  * @swagger
  * /api/trades:
  *   get:
- *     summary: Retrieve all trades
+ *     summary: Retrieve all trades, optionally filtered by query parameters
  *     tags: [Trades]
+ *     parameters:
+ *       - in: query
+ *         name: weBuyWeSell
+ *         schema:
+ *           type: string
+ *         description: Filter trades by 'we buy' or 'we sell'
  *     responses:
  *       200:
- *         description: A list of all trades
+ *         description: A list of all trades or filtered trades
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 type: object
- *                 properties:
- *                   tradeId:
- *                     type: string
- *                     description: Unique identifier for the trade
- *                   tradeType:
- *                     type: string
- *                     description: Type of trade (e.g., SPOT, FWD, SWAP)
- *                   counterpartyId:
- *                     type: string
- *                     description: Identifier for the trade's counterparty
- *                   tradeDate:
- *                     type: string
- *                     format: date
- *                     description: Date of the trade
- *                   buyCurrency:
- *                     type: string
- *                     description: The currency being bought
- *                   sellCurrency:
- *                     type: string
- *                     description: The currency being sold
- *                   buyAmount:
- *                     type: number
- *                     format: float
- *                     description: Amount of currency being bought
- *                   sellAmount:
- *                     type: number
- *                     format: float
- *                     description: Amount of currency being sold
- *                   exchangeRate:
- *                     type: number
- *                     format: float
- *                     description: Exchange rate for the trade
  */
-
 router.get("/", (req, res) => {
-  db.all("SELECT * FROM trades", [], (err, rows) => {
+  const { weBuyWeSell } = req.query;
+  let query = "SELECT * FROM trades";
+  const params = [];
+
+  if (weBuyWeSell) {
+    query += " WHERE weBuyWeSell = ?";
+    params.push(weBuyWeSell);
+  }
+
+  db.all(query, params, (err, rows) => {
     if (err) {
       res.status(500).json({ error: "Failed to fetch trades" });
     } else {
-      // Parse the nostroAccounts field from JSON to an object
       const parsedRows = rows.map((row) => ({
         ...row,
         buyNostroAccount: JSON.parse(row.buyNostroAccount),
         sellNostroAccount: JSON.parse(row.sellNostroAccount),
       }));
-      // Use parsedRows instead of rows in the response
       res.json(parsedRows);
     }
   });
 });
 
-// Fetch a specific trade by ID
 /**
  * @swagger
  * /api/trades/{id}:
@@ -102,134 +81,117 @@ router.get("/:id", (req, res) => {
     } else if (!row) {
       res.status(404).json({ error: "Trade not found" });
     } else {
+      row.buyNostroAccount = JSON.parse(row.buyNostroAccount);
+      row.sellNostroAccount = JSON.parse(row.sellNostroAccount);
       res.json(row);
     }
   });
 });
 
-// Add a new trade
+// Top Queries Section
+
 /**
  * @swagger
- * /api/trades:
- *   post:
- *     summary: Add a new trade
+ * /api/trades/sell:
+ *   get:
+ *     summary: Retrieve trades where weBuyWeSell = "we sell"
  *     tags: [Trades]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               tradeId:
- *                 type: string
- *               counterpartyId:
- *                 type: string
- *               tradeDate:
- *                 type: string
- *               buyCurrency:
- *                 type: string
- *               sellCurrency:
- *                 type: string
- *               buyAmount:
- *                 type: number
- *               sellAmount:
- *                 type: number
- *               exchangeRate:
- *                 type: number
- *               settlementDate:
- *                 type: string
- *               nearDate:
- *                 type: string
- *               farDate:
- *                 type: string
- *               tradeType:
- *                 type: string
  *     responses:
- *       201:
- *         description: Trade added successfully
- *       400:
- *         description: Validation error
+ *       200:
+ *         description: Trades where 'we sell'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Trade'
  */
-router.post(
-  "/",
-  [
-    body("tradeId").isString().withMessage("Trade ID must be a string"),
-    body("counterpartyId")
-      .isString()
-      .withMessage("Counterparty ID must be a string"),
-    body("tradeDate")
-      .isISO8601()
-      .withMessage("Trade date must be in ISO 8601 format"),
-    body("buyCurrency").isString().withMessage("Buy currency must be a string"),
-    body("sellCurrency")
-      .isString()
-      .withMessage("Sell currency must be a string"),
-    body("buyAmount")
-      .isFloat({ min: 0 })
-      .withMessage("Buy amount must be a positive number"),
-    body("sellAmount")
-      .isFloat({ min: 0 })
-      .withMessage("Sell amount must be a positive number"),
-    body("exchangeRate")
-      .isFloat({ min: 0 })
-      .withMessage("Exchange rate must be a positive number"),
-    body("settlementDate")
-      .isISO8601()
-      .withMessage("Settlement date must be in ISO 8601 format"),
-    body("tradeType").isString().withMessage("Trade type must be a string"),
-  ],
-  (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+router.get("/sell", (req, res) => {
+  const query = "SELECT * FROM trades WHERE weBuyWeSell = 'we sell'";
+  db.all(query, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: "Failed to fetch trades" });
+    } else {
+      const parsedRows = rows.map((row) => ({
+        ...row,
+        buyNostroAccount: JSON.parse(row.buyNostroAccount),
+        sellNostroAccount: JSON.parse(row.sellNostroAccount),
+      }));
+      res.json(parsedRows);
     }
+  });
+});
 
-    const {
-      tradeId,
-      counterpartyId,
-      tradeDate,
-      buyCurrency,
-      sellCurrency,
-      buyAmount,
-      sellAmount,
-      exchangeRate,
-      settlementDate,
-      nearDate,
-      farDate,
-      tradeType,
-    } = req.body;
+/**
+ * @swagger
+ * /api/trades/buy:
+ *   get:
+ *     summary: Retrieve trades where weBuyWeSell = "we buy"
+ *     tags: [Trades]
+ *     responses:
+ *       200:
+ *         description: Trades where 'we buy'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Trade'
+ */
+router.get("/buy", (req, res) => {
+  const query = "SELECT * FROM trades WHERE weBuyWeSell = 'we buy'";
+  db.all(query, [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: "Failed to fetch trades" });
+    } else {
+      const parsedRows = rows.map((row) => ({
+        ...row,
+        buyNostroAccount: JSON.parse(row.buyNostroAccount),
+        sellNostroAccount: JSON.parse(row.sellNostroAccount),
+      }));
+      res.json(parsedRows);
+    }
+  });
+});
 
-    const query = `
-      INSERT INTO trades (
-        tradeId, counterpartyId, tradeDate, buyCurrency, sellCurrency, 
-        buyAmount, sellAmount, exchangeRate, settlementDate, nearDate, farDate, tradeType
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    const params = [
-      tradeId,
-      counterpartyId,
-      tradeDate,
-      buyCurrency,
-      sellCurrency,
-      buyAmount,
-      sellAmount,
-      exchangeRate,
-      settlementDate,
-      nearDate,
-      farDate,
-      tradeType,
-    ];
-
-    db.run(query, params, (err) => {
-      if (err) {
-        res.status(500).json({ error: "Failed to add trade" });
-      } else {
-        res.status(201).json({ message: "Trade added successfully!" });
-      }
-    });
-  }
-);
+/**
+ * @swagger
+ * /api/trades/byCurrency/{buyCurrency}:
+ *   get:
+ *     summary: Retrieve trades filtered by buy currency
+ *     tags: [Trades]
+ *     parameters:
+ *       - in: path
+ *         name: buyCurrency
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The currency being bought
+ *     responses:
+ *       200:
+ *         description: Trades filtered by buy currency
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Trade'
+ */
+router.get("/byCurrency/:buyCurrency", (req, res) => {
+  const { buyCurrency } = req.params;
+  const query = "SELECT * FROM trades WHERE buyCurrency = ?";
+  db.all(query, [buyCurrency], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: "Failed to fetch trades" });
+    } else {
+      const parsedRows = rows.map((row) => ({
+        ...row,
+        buyNostroAccount: JSON.parse(row.buyNostroAccount),
+        sellNostroAccount: JSON.parse(row.sellNostroAccount),
+      }));
+      res.json(parsedRows);
+    }
+  });
+});
 
 export default router;

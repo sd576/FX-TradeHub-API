@@ -123,7 +123,7 @@ const createTradeTable = async () => {
     tradeId TEXT PRIMARY KEY,
     tradeType TEXT,
     weBuyWeSell TEXT,
-    counterpartyDescription TEXT,
+    counterpartyName TEXT,
     counterpartyId TEXT,
     tradeDate TEXT,
     buyCurrency TEXT,
@@ -153,7 +153,7 @@ const populateTradeTable = async () => {
   await clearTable("trades");
 
   const insertQuery = `INSERT INTO trades (
-    tradeId, tradeType, weBuyWeSell, counterpartyDescription,
+    tradeId, tradeType, weBuyWeSell, counterpartyName,
     counterpartyId, tradeDate, buyCurrency, sellCurrency,
     buyAmount, sellAmount, exchangeRate, settlementDate,
     nearDate, farDate, buyNostroAccount, sellNostroAccount
@@ -167,7 +167,7 @@ const populateTradeTable = async () => {
         trade.tradeId,
         trade.tradeType,
         trade.weBuyWeSell,
-        trade.counterpartyDescription,
+        trade.counterpartyName,
         trade.counterpartyId,
         trade.tradeDate,
         trade.buyCurrency,

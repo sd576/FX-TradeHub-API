@@ -70,7 +70,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-003-002",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Lloyds Bank, London",
     "counterpartyId": "003",
     "counterpartyName": "Lloyds Bank",
@@ -81,12 +81,12 @@ const initialswapTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "Lloyds Bank, London"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "Lloyds Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-003-002-FAR",
@@ -100,12 +100,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "147.2250",
       "buyNostroAccount": {
-        "id": "010",
-        "description": "Lloyds Bank, London"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "036",
+        "description": "Lloyds Bank, London"
       }
     }
   },
@@ -113,7 +113,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-004-003",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "NatWest Bank, London",
     "counterpartyId": "004",
     "counterpartyName": "NatWest Bank",
@@ -124,12 +124,12 @@ const initialswapTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "026",
-      "description": "NatWest Bank, London"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "NatWest Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-004-003-FAR",
@@ -143,12 +143,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.6393",
       "buyNostroAccount": {
-        "id": "026",
-        "description": "NatWest Bank, London"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "010",
+        "description": "NatWest Bank, London"
       }
     }
   },
@@ -199,7 +199,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-006-005",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "JPMorgan Chase, New York",
     "counterpartyId": "006",
     "counterpartyName": "JPMorgan Chase",
@@ -210,12 +210,12 @@ const initialswapTradeData = [
     "sellAmount": 865400,
     "exchangeRate": "0.8654",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "016",
+      "description": "JPMorgan Chase, New York"
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "JPMorgan Chase, New York"
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-006-005-FAR",
@@ -229,12 +229,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.8656",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "016",
+        "description": "JPMorgan Chase, New York"
       },
       "sellNostroAccount": {
         "id": "001",
-        "description": "JPMorgan Chase, New York"
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -242,7 +242,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-007-006",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Citibank, New York",
     "counterpartyId": "007",
     "counterpartyName": "Citibank",
@@ -254,11 +254,11 @@ const initialswapTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Citibank, New York"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "036",
+      "description": "Citibank, New York"
     },
     "farLeg": {
       "tradeId": "SWAP-007-006-FAR",
@@ -273,11 +273,11 @@ const initialswapTradeData = [
       "exchangeRate": "185.1300",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Citibank, New York"
+        "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "036",
+        "description": "Citibank, New York"
       }
     }
   },
@@ -328,7 +328,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-009-008",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Morgan Stanley, New York",
     "counterpartyId": "009",
     "counterpartyName": "Morgan Stanley",
@@ -339,8 +339,8 @@ const initialswapTradeData = [
     "sellAmount": 1093400,
     "exchangeRate": "1.0934",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "016",
+      "description": "Morgan Stanley, New York"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -358,8 +358,8 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "1.0936",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "016",
+        "description": "Morgan Stanley, New York"
       },
       "sellNostroAccount": {
         "id": "001",
@@ -414,7 +414,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-011-010",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "BNP Paribas, Paris",
     "counterpartyId": "011",
     "counterpartyName": "BNP Paribas",
@@ -425,12 +425,12 @@ const initialswapTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "BNP Paribas, Paris"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "BNP Paribas, Paris"
     },
     "farLeg": {
       "tradeId": "SWAP-011-010-FAR",
@@ -444,12 +444,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "147.2250",
       "buyNostroAccount": {
-        "id": "010",
-        "description": "BNP Paribas, Paris"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "036",
+        "description": "BNP Paribas, Paris"
       }
     }
   },
@@ -543,7 +543,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-014-013",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Natixis, Paris",
     "counterpartyId": "014",
     "counterpartyName": "Natixis",
@@ -559,7 +559,7 @@ const initialswapTradeData = [
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Natixis, Paris"
     },
     "farLeg": {
       "tradeId": "SWAP-014-013-FAR",
@@ -578,7 +578,7 @@ const initialswapTradeData = [
       },
       "sellNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "Natixis, Paris"
       }
     }
   },
@@ -629,7 +629,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-016-015",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Deutsche Bank, Frankfurt",
     "counterpartyId": "016",
     "counterpartyName": "Deutsche Bank",
@@ -640,12 +640,12 @@ const initialswapTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Deutsche Bank, Frankfurt"
     },
     "sellNostroAccount": {
-      "id": "037",
-      "description": "Deutsche Bank, Frankfurt"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-016-015-FAR",
@@ -659,12 +659,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "1.3481",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "010",
+        "description": "Deutsche Bank, Frankfurt"
       },
       "sellNostroAccount": {
-        "id": "037",
-        "description": "Deutsche Bank, Frankfurt"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -672,7 +672,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-017-016",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Commerzbank, Frankfurt",
     "counterpartyId": "017",
     "counterpartyName": "Commerzbank",
@@ -687,8 +687,8 @@ const initialswapTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Commerzbank, Frankfurt"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-017-016-FAR",
@@ -706,8 +706,8 @@ const initialswapTradeData = [
         "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "010",
-        "description": "Commerzbank, Frankfurt"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -758,7 +758,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-019-018",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "DZ Bank, Frankfurt",
     "counterpartyId": "019",
     "counterpartyName": "DZ Bank",
@@ -769,12 +769,12 @@ const initialswapTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "DZ Bank, Frankfurt"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "DZ Bank, Frankfurt"
     },
     "farLeg": {
       "tradeId": "SWAP-019-018-FAR",
@@ -788,12 +788,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "147.2250",
       "buyNostroAccount": {
-        "id": "010",
-        "description": "DZ Bank, Frankfurt"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "036",
+        "description": "DZ Bank, Frankfurt"
       }
     }
   },
@@ -801,7 +801,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-020-019",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Helaba (Landesbank Hessen-Thüringen), Frankfurt",
     "counterpartyId": "020",
     "counterpartyName": "Helaba (Landesbank Hessen-Thüringen)",
@@ -812,12 +812,12 @@ const initialswapTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "026",
-      "description": "Helaba (Landesbank Hessen-Thüringen), Frankfurt"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Helaba (Landesbank Hessen-Thüringen), Frankfurt"
     },
     "farLeg": {
       "tradeId": "SWAP-020-019-FAR",
@@ -831,12 +831,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.6393",
       "buyNostroAccount": {
-        "id": "026",
-        "description": "Helaba (Landesbank Hessen-Thüringen), Frankfurt"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "010",
+        "description": "Helaba (Landesbank Hessen-Thüringen), Frankfurt"
       }
     }
   },
@@ -887,7 +887,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-022-021",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "ING Bank, Amsterdam",
     "counterpartyId": "022",
     "counterpartyName": "ING Bank",
@@ -903,7 +903,7 @@ const initialswapTradeData = [
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "ING Bank, Amsterdam"
     },
     "farLeg": {
       "tradeId": "SWAP-022-021-FAR",
@@ -922,7 +922,7 @@ const initialswapTradeData = [
       },
       "sellNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "ING Bank, Amsterdam"
       }
     }
   },
@@ -930,7 +930,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-023-022",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Rabobank, Amsterdam",
     "counterpartyId": "023",
     "counterpartyName": "Rabobank",
@@ -942,11 +942,11 @@ const initialswapTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Rabobank, Amsterdam"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "036",
+      "description": "Rabobank, Amsterdam"
     },
     "farLeg": {
       "tradeId": "SWAP-023-022-FAR",
@@ -961,11 +961,11 @@ const initialswapTradeData = [
       "exchangeRate": "185.1300",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Rabobank, Amsterdam"
+        "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "036",
+        "description": "Rabobank, Amsterdam"
       }
     }
   },
@@ -973,7 +973,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-024-023",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Bunq, Amsterdam",
     "counterpartyId": "024",
     "counterpartyName": "Bunq",
@@ -984,12 +984,12 @@ const initialswapTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "Bunq, Amsterdam"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "037",
+      "description": "Bunq, Amsterdam"
     },
     "farLeg": {
       "tradeId": "SWAP-024-023-FAR",
@@ -1003,12 +1003,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "1.3481",
       "buyNostroAccount": {
-        "id": "010",
-        "description": "Bunq, Amsterdam"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "037",
+        "description": "Bunq, Amsterdam"
       }
     }
   },
@@ -1102,7 +1102,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-027-026",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Westpac Banking Corporation, Sydney",
     "counterpartyId": "027",
     "counterpartyName": "Westpac Banking Corporation",
@@ -1113,12 +1113,12 @@ const initialswapTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "Westpac Banking Corporation, Sydney"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "Westpac Banking Corporation, Sydney"
     },
     "farLeg": {
       "tradeId": "SWAP-027-026-FAR",
@@ -1132,12 +1132,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "147.2250",
       "buyNostroAccount": {
-        "id": "010",
-        "description": "Westpac Banking Corporation, Sydney"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "036",
+        "description": "Westpac Banking Corporation, Sydney"
       }
     }
   },
@@ -1188,7 +1188,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-029-028",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "ANZ Banking Group, Sydney",
     "counterpartyId": "029",
     "counterpartyName": "ANZ Banking Group",
@@ -1199,12 +1199,12 @@ const initialswapTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "034",
-      "description": "ANZ Banking Group, Sydney"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "ANZ Banking Group, Sydney"
     },
     "farLeg": {
       "tradeId": "SWAP-029-028-FAR",
@@ -1218,12 +1218,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.5938",
       "buyNostroAccount": {
-        "id": "034",
-        "description": "ANZ Banking Group, Sydney"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "010",
+        "description": "ANZ Banking Group, Sydney"
       }
     }
   },
@@ -1231,7 +1231,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-030-029",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Macquarie Bank, Sydney",
     "counterpartyId": "030",
     "counterpartyName": "Macquarie Bank",
@@ -1242,12 +1242,12 @@ const initialswapTradeData = [
     "sellAmount": 865400,
     "exchangeRate": "0.8654",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "Deutsche Bank, Frankfurt",
+      "description": "Macquarie Bank, Sydney"
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Macquarie Bank, Sydney"
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-030-029-FAR",
@@ -1261,12 +1261,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.8656",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "Deutsche Bank, Frankfurt",
+        "description": "Macquarie Bank, Sydney"
       },
       "sellNostroAccount": {
         "id": "001",
-        "description": "Macquarie Bank, Sydney"
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -1317,7 +1317,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-032-031",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "ANZ Bank New Zealand, Wellington",
     "counterpartyId": "032",
     "counterpartyName": "ANZ Bank New Zealand",
@@ -1328,12 +1328,12 @@ const initialswapTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "ANZ Bank New Zealand, Wellington"
     },
     "sellNostroAccount": {
-      "id": "037",
-      "description": "ANZ Bank New Zealand, Wellington"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-032-031-FAR",
@@ -1347,12 +1347,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "1.3481",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "010",
+        "description": "ANZ Bank New Zealand, Wellington"
       },
       "sellNostroAccount": {
-        "id": "037",
-        "description": "ANZ Bank New Zealand, Wellington"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -1403,7 +1403,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-034-033",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Westpac New Zealand, Wellington",
     "counterpartyId": "034",
     "counterpartyName": "Westpac New Zealand",
@@ -1415,11 +1415,11 @@ const initialswapTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Westpac New Zealand, Wellington"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Westpac New Zealand, Wellington"
     },
     "farLeg": {
       "tradeId": "SWAP-034-033-FAR",
@@ -1434,11 +1434,11 @@ const initialswapTradeData = [
       "exchangeRate": "1.2623",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Westpac New Zealand, Wellington"
+        "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "010",
+        "description": "Westpac New Zealand, Wellington"
       }
     }
   },
@@ -1489,7 +1489,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-036-035",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Mizuho Bank, Tokyo",
     "counterpartyId": "036",
     "counterpartyName": "Mizuho Bank",
@@ -1500,12 +1500,12 @@ const initialswapTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "026",
+      "description": "Mizuho Bank, Tokyo"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Mizuho Bank, Tokyo"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-036-035-FAR",
@@ -1519,12 +1519,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.6393",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "026",
+        "description": "Mizuho Bank, Tokyo"
       },
       "sellNostroAccount": {
-        "id": "010",
-        "description": "Mizuho Bank, Tokyo"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -1532,7 +1532,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-037-036",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Royal Bank of Canada, Ontario",
     "counterpartyId": "037",
     "counterpartyName": "Royal Bank of Canada",
@@ -1543,12 +1543,12 @@ const initialswapTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "034",
-      "description": "Royal Bank of Canada, Ontario"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "Royal Bank of Canada, Ontario"
     },
     "farLeg": {
       "tradeId": "SWAP-037-036-FAR",
@@ -1562,12 +1562,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.5938",
       "buyNostroAccount": {
-        "id": "034",
-        "description": "Royal Bank of Canada, Ontario"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "010",
+        "description": "Royal Bank of Canada, Ontario"
       }
     }
   },
@@ -1833,7 +1833,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-006-043",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "JPMorgan Chase, New York",
     "counterpartyId": "006",
     "counterpartyName": "JPMorgan Chase",
@@ -1844,8 +1844,8 @@ const initialswapTradeData = [
     "sellAmount": 639000,
     "exchangeRate": "0.6390",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "026",
+      "description": "JPMorgan Chase, New York"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -1863,8 +1863,8 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.6393",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "026",
+        "description": "JPMorgan Chase, New York"
       },
       "sellNostroAccount": {
         "id": "001",
@@ -1919,7 +1919,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-008-045",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Goldman Sachs, New York",
     "counterpartyId": "008",
     "counterpartyName": "Goldman Sachs",
@@ -1930,12 +1930,12 @@ const initialswapTradeData = [
     "sellAmount": 865400,
     "exchangeRate": "0.8654",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "016",
+      "description": "Goldman Sachs, New York"
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Goldman Sachs, New York"
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-008-045-FAR",
@@ -1949,12 +1949,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.8656",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "016",
+        "description": "Goldman Sachs, New York"
       },
       "sellNostroAccount": {
         "id": "001",
-        "description": "Goldman Sachs, New York"
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -1962,7 +1962,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-009-046",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Morgan Stanley, New York",
     "counterpartyId": "009",
     "counterpartyName": "Morgan Stanley",
@@ -1974,11 +1974,11 @@ const initialswapTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Morgan Stanley, New York"
     },
     "sellNostroAccount": {
-      "id": "036",
-      "description": "Morgan Stanley, New York"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-009-046-FAR",
@@ -1993,11 +1993,11 @@ const initialswapTradeData = [
       "exchangeRate": "185.1300",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "Morgan Stanley, New York"
       },
       "sellNostroAccount": {
-        "id": "036",
-        "description": "Morgan Stanley, New York"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -2048,7 +2048,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-011-048",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "BNP Paribas, Paris",
     "counterpartyId": "011",
     "counterpartyName": "BNP Paribas",
@@ -2063,8 +2063,8 @@ const initialswapTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "BNP Paribas, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-011-048-FAR",
@@ -2082,8 +2082,8 @@ const initialswapTradeData = [
         "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "010",
-        "description": "BNP Paribas, Paris"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -2220,7 +2220,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-015-052",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "La Banque Postale, Paris",
     "counterpartyId": "015",
     "counterpartyName": "La Banque Postale",
@@ -2231,12 +2231,12 @@ const initialswapTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "034",
-      "description": "La Banque Postale, Paris"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "010",
+      "description": "La Banque Postale, Paris"
     },
     "farLeg": {
       "tradeId": "SWAP-015-052-FAR",
@@ -2250,12 +2250,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.5938",
       "buyNostroAccount": {
-        "id": "034",
-        "description": "La Banque Postale, Paris"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "010",
+        "description": "La Banque Postale, Paris"
       }
     }
   },
@@ -2392,7 +2392,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-019-056",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "DZ Bank, Frankfurt",
     "counterpartyId": "019",
     "counterpartyName": "DZ Bank",
@@ -2407,8 +2407,8 @@ const initialswapTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "DZ Bank, Frankfurt"
     },
     "farLeg": {
       "tradeId": "SWAP-019-056-FAR",
@@ -2426,8 +2426,8 @@ const initialswapTradeData = [
         "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "010",
+        "description": "DZ Bank, Frankfurt"
       }
     }
   },
@@ -2435,7 +2435,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-020-057",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Helaba (Landesbank Hessen-Thüringen), Frankfurt",
     "counterpartyId": "020",
     "counterpartyName": "Helaba (Landesbank Hessen-Thüringen)",
@@ -2447,11 +2447,11 @@ const initialswapTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Helaba (Landesbank Hessen-Thüringen), Frankfurt"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Helaba (Landesbank Hessen-Thüringen), Frankfurt"
     },
     "farLeg": {
       "tradeId": "SWAP-020-057-FAR",
@@ -2466,11 +2466,11 @@ const initialswapTradeData = [
       "exchangeRate": "1.2623",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Helaba (Landesbank Hessen-Thüringen), Frankfurt"
+        "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "010",
+        "description": "Helaba (Landesbank Hessen-Thüringen), Frankfurt"
       }
     }
   },
@@ -2607,7 +2607,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-024-061",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Bunq, Amsterdam",
     "counterpartyId": "024",
     "counterpartyName": "Bunq",
@@ -2623,7 +2623,7 @@ const initialswapTradeData = [
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Bunq, Amsterdam"
     },
     "farLeg": {
       "tradeId": "SWAP-024-061-FAR",
@@ -2642,7 +2642,7 @@ const initialswapTradeData = [
       },
       "sellNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "Bunq, Amsterdam"
       }
     }
   },
@@ -2908,7 +2908,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-031-068",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Bank of New Zealand (BNZ), Wellington",
     "counterpartyId": "031",
     "counterpartyName": "Bank of New Zealand (BNZ)",
@@ -2923,8 +2923,8 @@ const initialswapTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Bank of New Zealand (BNZ), Wellington"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-031-068-FAR",
@@ -2942,8 +2942,8 @@ const initialswapTradeData = [
         "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "010",
-        "description": "Bank of New Zealand (BNZ), Wellington"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -3037,7 +3037,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-034-071",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Westpac New Zealand, Wellington",
     "counterpartyId": "034",
     "counterpartyName": "Westpac New Zealand",
@@ -3048,12 +3048,12 @@ const initialswapTradeData = [
     "sellAmount": 1347800,
     "exchangeRate": "1.3478",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "010",
+      "description": "Westpac New Zealand, Wellington"
     },
     "sellNostroAccount": {
-      "id": "037",
-      "description": "Westpac New Zealand, Wellington"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-034-071-FAR",
@@ -3067,12 +3067,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "1.3481",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "010",
+        "description": "Westpac New Zealand, Wellington"
       },
       "sellNostroAccount": {
-        "id": "037",
-        "description": "Westpac New Zealand, Wellington"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -3166,7 +3166,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-037-074",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Royal Bank of Canada, Ontario",
     "counterpartyId": "037",
     "counterpartyName": "Royal Bank of Canada",
@@ -3177,12 +3177,12 @@ const initialswapTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "Royal Bank of Canada, Ontario"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "Royal Bank of Canada, Ontario"
     },
     "farLeg": {
       "tradeId": "SWAP-037-074-FAR",
@@ -3196,12 +3196,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "147.2250",
       "buyNostroAccount": {
-        "id": "010",
-        "description": "Royal Bank of Canada, Ontario"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "036",
+        "description": "Royal Bank of Canada, Ontario"
       }
     }
   },
@@ -3252,7 +3252,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-001-076",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Barclays Bank, London",
     "counterpartyId": "001",
     "counterpartyName": "Barclays Bank",
@@ -3263,11 +3263,11 @@ const initialswapTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "034",
+      "id": "001",
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
+      "id": "010",
       "description": "Barclays Bank, London"
     },
     "farLeg": {
@@ -3282,11 +3282,11 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.5938",
       "buyNostroAccount": {
-        "id": "034",
+        "id": "001",
         "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "001",
+        "id": "010",
         "description": "Barclays Bank, London"
       }
     }
@@ -3295,7 +3295,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-002-077",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "HSBC Bank, London",
     "counterpartyId": "002",
     "counterpartyName": "HSBC Bank",
@@ -3306,8 +3306,8 @@ const initialswapTradeData = [
     "sellAmount": 865400,
     "exchangeRate": "0.8654",
     "buyNostroAccount": {
-      "id": "016",
-      "description": "HSBC Bank, London"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -3325,8 +3325,8 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.8656",
       "buyNostroAccount": {
-        "id": "016",
-        "description": "HSBC Bank, London"
+        "id": "001",
+        "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
         "id": "001",
@@ -3467,7 +3467,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-006-081",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "JPMorgan Chase, New York",
     "counterpartyId": "006",
     "counterpartyName": "JPMorgan Chase",
@@ -3479,7 +3479,7 @@ const initialswapTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "JPMorgan Chase, New York"
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
       "id": "001",
@@ -3498,7 +3498,7 @@ const initialswapTradeData = [
       "exchangeRate": "1.2623",
       "buyNostroAccount": {
         "id": "001",
-        "description": "JPMorgan Chase, New York"
+        "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
         "id": "001",
@@ -3510,7 +3510,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-007-082",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Citibank, New York",
     "counterpartyId": "007",
     "counterpartyName": "Citibank",
@@ -3525,8 +3525,8 @@ const initialswapTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "036",
+      "description": "Citibank, New York"
     },
     "farLeg": {
       "tradeId": "SWAP-007-082-FAR",
@@ -3544,8 +3544,8 @@ const initialswapTradeData = [
         "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "036",
+        "description": "Citibank, New York"
       }
     }
   },
@@ -3639,7 +3639,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-010-085",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Bank of America, New York",
     "counterpartyId": "010",
     "counterpartyName": "Bank of America",
@@ -3650,12 +3650,12 @@ const initialswapTradeData = [
     "sellAmount": 865400,
     "exchangeRate": "0.8654",
     "buyNostroAccount": {
-      "id": "016",
-      "description": "Bank of America, New York"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Bank of America, New York"
     },
     "farLeg": {
       "tradeId": "SWAP-010-085-FAR",
@@ -3669,12 +3669,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.8656",
       "buyNostroAccount": {
-        "id": "016",
-        "description": "Bank of America, New York"
+        "id": "001",
+        "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "Bank of America, New York"
       }
     }
   },
@@ -3682,7 +3682,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-011-086",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "BNP Paribas, Paris",
     "counterpartyId": "011",
     "counterpartyName": "BNP Paribas",
@@ -3694,11 +3694,11 @@ const initialswapTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "BNP Paribas, Paris"
     },
     "sellNostroAccount": {
-      "id": "036",
-      "description": "BNP Paribas, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-011-086-FAR",
@@ -3713,11 +3713,11 @@ const initialswapTradeData = [
       "exchangeRate": "185.1300",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "BNP Paribas, Paris"
       },
       "sellNostroAccount": {
-        "id": "036",
-        "description": "BNP Paribas, Paris"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -3811,7 +3811,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-014-089",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Natixis, Paris",
     "counterpartyId": "014",
     "counterpartyName": "Natixis",
@@ -3823,11 +3823,11 @@ const initialswapTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "Natixis, Paris"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Natixis, Paris"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-014-089-FAR",
@@ -3842,11 +3842,11 @@ const initialswapTradeData = [
       "exchangeRate": "1.2623",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "Natixis, Paris"
       },
       "sellNostroAccount": {
-        "id": "010",
-        "description": "Natixis, Paris"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -3854,7 +3854,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-015-090",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "La Banque Postale, Paris",
     "counterpartyId": "015",
     "counterpartyName": "La Banque Postale",
@@ -3865,12 +3865,12 @@ const initialswapTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "La Banque Postale, Paris"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "La Banque Postale, Paris"
     },
     "farLeg": {
       "tradeId": "SWAP-015-090-FAR",
@@ -3884,12 +3884,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "147.2250",
       "buyNostroAccount": {
-        "id": "010",
-        "description": "La Banque Postale, Paris"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "036",
+        "description": "La Banque Postale, Paris"
       }
     }
   },
@@ -3940,7 +3940,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-017-092",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "Commerzbank, Frankfurt",
     "counterpartyId": "017",
     "counterpartyName": "Commerzbank",
@@ -3951,12 +3951,12 @@ const initialswapTradeData = [
     "sellAmount": 593500,
     "exchangeRate": "0.5935",
     "buyNostroAccount": {
-      "id": "001",
-      "description": "Barclays Bank, London"
+      "id": "034",
+      "description": "Commerzbank, Frankfurt"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "Commerzbank, Frankfurt"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-017-092-FAR",
@@ -3970,12 +3970,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "0.5938",
       "buyNostroAccount": {
-        "id": "001",
-        "description": "Barclays Bank, London"
+        "id": "034",
+        "description": "Commerzbank, Frankfurt"
       },
       "sellNostroAccount": {
-        "id": "010",
-        "description": "Commerzbank, Frankfurt"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -3983,7 +3983,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-018-093",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "KfW Bank, Frankfurt",
     "counterpartyId": "018",
     "counterpartyName": "KfW Bank",
@@ -3999,7 +3999,7 @@ const initialswapTradeData = [
     },
     "sellNostroAccount": {
       "id": "001",
-      "description": "KfW Bank, Frankfurt"
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-018-093-FAR",
@@ -4018,7 +4018,7 @@ const initialswapTradeData = [
       },
       "sellNostroAccount": {
         "id": "001",
-        "description": "KfW Bank, Frankfurt"
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -4026,7 +4026,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-019-094",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "DZ Bank, Frankfurt",
     "counterpartyId": "019",
     "counterpartyName": "DZ Bank",
@@ -4038,11 +4038,11 @@ const initialswapTradeData = [
     "exchangeRate": "185.1250",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "DZ Bank, Frankfurt"
     },
     "sellNostroAccount": {
-      "id": "036",
-      "description": "DZ Bank, Frankfurt"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-019-094-FAR",
@@ -4057,11 +4057,11 @@ const initialswapTradeData = [
       "exchangeRate": "185.1300",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "DZ Bank, Frankfurt"
       },
       "sellNostroAccount": {
-        "id": "036",
-        "description": "DZ Bank, Frankfurt"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -4112,7 +4112,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-021-096",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "ABN AMRO, Amsterdam",
     "counterpartyId": "021",
     "counterpartyName": "ABN AMRO",
@@ -4127,8 +4127,8 @@ const initialswapTradeData = [
       "description": "Barclays Bank, London"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "ABN AMRO, Amsterdam"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-021-096-FAR",
@@ -4146,8 +4146,8 @@ const initialswapTradeData = [
         "description": "Barclays Bank, London"
       },
       "sellNostroAccount": {
-        "id": "010",
-        "description": "ABN AMRO, Amsterdam"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -4155,7 +4155,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-022-097",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we sell",
+    "weBuyWeSell": "we buy",
     "counterpartyDescription": "ING Bank, Amsterdam",
     "counterpartyId": "022",
     "counterpartyName": "ING Bank",
@@ -4167,11 +4167,11 @@ const initialswapTradeData = [
     "exchangeRate": "1.2620",
     "buyNostroAccount": {
       "id": "001",
-      "description": "Barclays Bank, London"
+      "description": "ING Bank, Amsterdam"
     },
     "sellNostroAccount": {
-      "id": "010",
-      "description": "ING Bank, Amsterdam"
+      "id": "001",
+      "description": "Barclays Bank, London"
     },
     "farLeg": {
       "tradeId": "SWAP-022-097-FAR",
@@ -4186,11 +4186,11 @@ const initialswapTradeData = [
       "exchangeRate": "1.2623",
       "buyNostroAccount": {
         "id": "001",
-        "description": "Barclays Bank, London"
+        "description": "ING Bank, Amsterdam"
       },
       "sellNostroAccount": {
-        "id": "010",
-        "description": "ING Bank, Amsterdam"
+        "id": "001",
+        "description": "Barclays Bank, London"
       }
     }
   },
@@ -4198,7 +4198,7 @@ const initialswapTradeData = [
     "tradeId": "SWAP-023-098",
     "tradeDate": "2025-01-01",
     "tradeType": "SWAP",
-    "weBuyWeSell": "we buy",
+    "weBuyWeSell": "we sell",
     "counterpartyDescription": "Rabobank, Amsterdam",
     "counterpartyId": "023",
     "counterpartyName": "Rabobank",
@@ -4209,12 +4209,12 @@ const initialswapTradeData = [
     "sellAmount": 147220000,
     "exchangeRate": "147.2200",
     "buyNostroAccount": {
-      "id": "010",
-      "description": "Rabobank, Amsterdam"
-    },
-    "sellNostroAccount": {
       "id": "001",
       "description": "Barclays Bank, London"
+    },
+    "sellNostroAccount": {
+      "id": "036",
+      "description": "Rabobank, Amsterdam"
     },
     "farLeg": {
       "tradeId": "SWAP-023-098-FAR",
@@ -4228,12 +4228,12 @@ const initialswapTradeData = [
       "sellAmount": 1000000,
       "exchangeRate": "147.2250",
       "buyNostroAccount": {
-        "id": "010",
-        "description": "Rabobank, Amsterdam"
-      },
-      "sellNostroAccount": {
         "id": "001",
         "description": "Barclays Bank, London"
+      },
+      "sellNostroAccount": {
+        "id": "036",
+        "description": "Rabobank, Amsterdam"
       }
     }
   },
