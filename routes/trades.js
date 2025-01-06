@@ -1,5 +1,4 @@
 import express from "express";
-import { body, validationResult } from "express-validator";
 import db from "../database/db.js"; // Use the centralized db connection
 
 const router = express.Router();
