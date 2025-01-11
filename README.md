@@ -56,27 +56,19 @@ fx_trader_server/
 │   ├── outrightTradeData.js   # Static trade data for outright trades
 │   ├── spotTradeData.js       # Static trade data for spot trades
 │   ├── swapTradeData.js       # Static trade data for swaps
-├── dataSeedingBackup/
-│   ├── backup-<timestamp>/    # Backup folder with timestamped data
-├── generatedTradeOutput/
-│   ├── outrightTradeData.json # Generated outright trade data
-│   ├── spotTradeData.json     # Generated spot trade data
-│   ├── swapTradeData.json     # Generated swap trade data
 ├── node_modules/              # Node.js dependencies (gitignored)
 ├── routes/
-│   ├── counterparties.js      # Routes for handling counterparty-related requests
-│   ├── trades.js              # Routes for handling trade-related requests
+│   ├── counterpartyRoutes.js  # Routes for handling counterparty-related requests
+│   ├── tradeRoutes.js         # Routes for handling trade-related requests
 ├── swagger/
 │   ├── swagger.js             # Swagger configuration for API documentation
-├── utils/
-│   ├── adjustInvalidDates.js  # Ensures valid dates in trade data
-│   ├── backupDataSeeding.js   # Backs up the dataSeeding folder
-│   ├── tradeGenerator.js      # Generates trade data dynamically
-│   ├── updateDataSeedingWithPrompt.js # Interactively updates data seeding files
+├── .env                       # Environment variables for sensitive configuration
 ├── .gitignore                 # Git ignore file for untracked files/folders
 ├── app.js                     # Main Express server entry point
-├── package.json               # Node.js project metadata and scripts
+├── eslint.config.js           # ESLint rules for consistent code style
+├── LICENSE                    # Project licensing terms and conditions
 ├── package-lock.json          # Dependency lock file
+├── package.json               # Node.js project metadata and scripts
 ├── README.md                  # Project overview and utility instructions
 
 ```
@@ -88,20 +80,24 @@ fx_trader_server/
 
 Run the following commands in sequence to reset the database, generate new trade data, and seed the database with fresh data:
 
-Generates new trade data files:
-
+Open SQLite database for direct queries:
 ```bash
-node utils/tradeGenerator.js 
+npm run db
 ```
 
-Validate and updates data seeding: 
+Start the server:
 ```bash
-node utils/updateDataSeedingWithPrompt.js
+npm start
 ```
 
-Clears and seeds the database:
+Clear and seed the database:
 ```bash
-node database/initDB.js
+npm run seed
+```
+
+Seed the database and start the server:
+```bash
+npm run setup-and-start
 ```
 
 
@@ -127,8 +123,8 @@ Here, you can:
 
 ### Trades
 - GET /api/trades: Retrieve all trades.
-- GET /api/trades/{id}: Retrieve a specific trade by ID.
-- POST /api/trades: Add a new trade.
+- GET /api/trades/{id}: Retrieve all trades, optionally filtered by 'we buy' or 'we sell'
+- POST /api/trades: Add a new trade. - under development
 
 ## Testing and Development
 
