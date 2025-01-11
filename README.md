@@ -49,6 +49,7 @@ By default, the server will run on http://localhost:3000. </br> You can access t
 fx_trader_server/
 |
 ├── database/
+|   |
 │   ├── db.js                  # Database connection script
 │   ├── initDB.js              # Script to initialize and seed the database
 |   ├── fx_trades.db           # SQLite database file storing trade and counterparty data
