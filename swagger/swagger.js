@@ -24,6 +24,14 @@ const swaggerOptions = {
         name: "Trades",
         description: "Operations related to trades",
       },
+      {
+        name: "Nostro Accounts",
+        description: "Operations related to nostro accounts",
+      },
+      {
+        name: "Nostro Instructions",
+        description: "Operations related to nostro instructions",
+      },
     ],
     components: {
       schemas: {
@@ -108,10 +116,64 @@ const swaggerOptions = {
             },
           },
         },
+        NostroAccount: {
+          type: "object",
+          properties: {
+            id: {
+              type: "string",
+              description: "Unique ID of the nostro account",
+              example: "001EUR",
+            },
+            counterpartyId: {
+              type: "string",
+              description:
+                "ID of the counterparty associated with the nostro account",
+              example: "001",
+            },
+            currency: {
+              type: "string",
+              description: "Currency of the nostro account",
+              example: "EUR",
+            },
+            description: {
+              type: "string",
+              description: "Description of the nostro account",
+              example: "Barclays Bank - EUR",
+            },
+          },
+          required: ["id", "counterpartyId", "currency"],
+        },
+        NostroInstruction: {
+          type: "object",
+          properties: {
+            counterpartyId: {
+              type: "string",
+              description: "ID of the counterparty",
+              example: "001",
+            },
+            currency: {
+              type: "string",
+              description: "Currency for the nostro instruction",
+              example: "EUR",
+            },
+            nostroAccountId: {
+              type: "string",
+              description: "ID of the associated nostro account",
+              example: "001EUR",
+            },
+            nostroAccountDescription: {
+              type: "string",
+              description:
+                "Description of the nostro account handling this currency",
+              example: "Barclays Bank handles EUR",
+            },
+          },
+          required: ["counterpartyId", "currency", "nostroAccountId"],
+        },
       },
     },
   },
-  apis: ["./routes/**/*.js"],
+  apis: ["./routes/**/*.js"], // Adjust path if routes are in a different location
 };
 
 const swaggerDocs = swaggerJSDoc(swaggerOptions);

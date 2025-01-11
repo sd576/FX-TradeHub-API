@@ -6,6 +6,8 @@ import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./swagger/swagger.js"; // Adjust path if needed
 import counterpartyRoutes from "./routes/counterpartyRoutes.js";
 import tradeRoutes from "./routes/tradeRoutes.js";
+import nostroAccountRoutes from "./routes/nostroAccountRoutes.js";
+import nostroInstructionRoutes from "./routes/nostroInstructionRoutes.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -25,6 +27,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // API Routes
 app.use("/api/counterparties", counterpartyRoutes);
 app.use("/api/trades", tradeRoutes);
+app.use("/api/nostroAccounts", nostroAccountRoutes);
+app.use("/api/nostroInstructions", nostroInstructionRoutes);
 
 // Root endpoint for API health check
 app.get("/", (req, res) => {
