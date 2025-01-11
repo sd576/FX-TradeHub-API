@@ -3,6 +3,13 @@
 ## Overview
 The FX Trader API Server is a robust application designed to manage trades and counterparties within an FX trading environment. It serves as a comprehensive tool for testing and development, with a fully populated database that mimics realistic trading scenarios. The primary goal of this project is to provide a solid foundation for writing Postman, Cypress, and Playwright API tests.
 
+## Current Development Notice
+⚠️ **Important:** This project is actively undergoing modifications to enhance functionality and streamline workflows. Specifically:
+- Routes and API endpoints are in the process of being updated and optimized.
+- Node.js commands in the `package.json` file are being reviewed and may change.
+
+As a result, certain features or commands may be in flux. Please check back frequently or refer to the latest commit messages for updates.
+
 ## Features
 - **Two main tables:** `trades` and `counterparties`, storing detailed trade and counterparty information.
 - **Pre-seeded database:** Realistic volume of data for meaningful testing.
