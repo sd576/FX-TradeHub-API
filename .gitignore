@@ -12,6 +12,7 @@ yarn-error.log*
 
 # SQLite database files
 *.sqlite
+*.sqbpro
 
 # Generated trade output (exclude generated files)
 generatedTradeOutput/

@@ -1,7 +1,3 @@
-import fs from "fs";
-import path from "path";
-
-// Initially empty counterparty data placeholder
 let counterpartyData = [];
 
 // Static params array
@@ -12,13 +8,38 @@ const counterpartyFields = [
   "country",
   "currency",
   "accountNumber",
-  "nostroAccount",
   "swiftCode",
   "contactPerson",
   "email",
   "phone",
   "nostroAccounts",
 ];
+
+// Validation function for counterparty data
+const validateCounterparty = (counterparty) => {
+  const requiredFields = [
+    "id",
+    "name",
+    "city",
+    "country",
+    "currency",
+    "accountNumber",
+    "swiftCode",
+    "contactPerson",
+    "email",
+    "phone",
+    "nostroAccounts",
+  ];
+  requiredFields.forEach((field) => {
+    if (!counterparty[field]) {
+      throw new Error(
+        `Missing required field: ${field} in counterparty ${JSON.stringify(
+          counterparty
+        )}`
+      );
+    }
+  });
+};
 
 // New data to overwrite the existing counterpartyData
 const initialCounterpartyData = [
@@ -30,7 +51,6 @@ const initialCounterpartyData = [
     country: "United Kingdom",
     currency: "GBP",
     accountNumber: "12345678",
-    nostroAccount: "98765432",
     swiftCode: "BARCGB22",
     contactPerson: "John Smith",
     email: "john.smith@barclays.co.uk",
@@ -51,7 +71,6 @@ const initialCounterpartyData = [
     country: "United Kingdom",
     currency: "GBP",
     accountNumber: "22334455",
-    nostroAccount: "55443322",
     swiftCode: "HBUKGB4B",
     contactPerson: "Jane Doe",
     email: "jane.doe@hsbc.co.uk",
@@ -72,7 +91,6 @@ const initialCounterpartyData = [
     country: "United Kingdom",
     currency: "GBP",
     accountNumber: "33334444",
-    nostroAccount: "44443333",
     swiftCode: "LOYDGB2L",
     contactPerson: "Richard Miles",
     email: "richard.miles@lloydsbank.co.uk",
@@ -93,7 +111,6 @@ const initialCounterpartyData = [
     country: "United Kingdom",
     currency: "GBP",
     accountNumber: "11223344",
-    nostroAccount: "44332211",
     swiftCode: "NWBKGB2L",
     contactPerson: "Emily White",
     email: "emily.white@natwest.com",
@@ -114,7 +131,6 @@ const initialCounterpartyData = [
     country: "United Kingdom",
     currency: "GBP",
     accountNumber: "77889900",
-    nostroAccount: "00998877",
     swiftCode: "SCBLGB2L",
     contactPerson: "Michael Brown",
     email: "michael.brown@sc.com",
@@ -136,7 +152,6 @@ const initialCounterpartyData = [
     country: "United States",
     currency: "USD",
     accountNumber: "123456789",
-    nostroAccount: "987654321",
     swiftCode: "CHASUS33",
     contactPerson: "Amanda Lee",
     email: "amanda.lee@jpmorgan.com",
@@ -157,7 +172,6 @@ const initialCounterpartyData = [
     country: "United States",
     currency: "USD",
     accountNumber: "987654321",
-    nostroAccount: "123456789",
     swiftCode: "CITIUS33",
     contactPerson: "James Harris",
     email: "james.harris@citi.com",
@@ -178,7 +192,6 @@ const initialCounterpartyData = [
     country: "United States",
     currency: "USD",
     accountNumber: "56781234",
-    nostroAccount: "43218765",
     swiftCode: "GSCMUS33",
     contactPerson: "Sophia Turner",
     email: "sophia.turner@goldmansachs.com",
@@ -199,7 +212,6 @@ const initialCounterpartyData = [
     country: "United States",
     currency: "USD",
     accountNumber: "87654321",
-    nostroAccount: "12348765",
     swiftCode: "MSNYUS33",
     contactPerson: "Brian Carter",
     email: "brian.carter@morganstanley.com",
@@ -220,7 +232,6 @@ const initialCounterpartyData = [
     country: "United States",
     currency: "USD",
     accountNumber: "43211234",
-    nostroAccount: "34122134",
     swiftCode: "BOFAUS3N",
     contactPerson: "Liam Bennett",
     email: "liam.bennett@bankofamerica.com",
@@ -242,7 +253,6 @@ const initialCounterpartyData = [
     country: "France",
     currency: "EUR",
     accountNumber: "98761234",
-    nostroAccount: "43219876",
     swiftCode: "BNPAFRPP",
     contactPerson: "Alice Martin",
     email: "alice.martin@bnpparibas.com",
@@ -263,7 +273,6 @@ const initialCounterpartyData = [
     country: "France",
     currency: "EUR",
     accountNumber: "12348765",
-    nostroAccount: "56781234",
     swiftCode: "SOGEFRPP",
     contactPerson: "Charlotte Dupont",
     email: "charlotte.dupont@socgen.com",
@@ -284,7 +293,6 @@ const initialCounterpartyData = [
     country: "France",
     currency: "EUR",
     accountNumber: "11224433",
-    nostroAccount: "33442211",
     swiftCode: "AGRIFRPP",
     contactPerson: "Julien Laurent",
     email: "julien.laurent@creditagricole.fr",
@@ -305,7 +313,6 @@ const initialCounterpartyData = [
     country: "France",
     currency: "EUR",
     accountNumber: "33445566",
-    nostroAccount: "66554433",
     swiftCode: "NATXFRPP",
     contactPerson: "Amelie Rousseau",
     email: "amelie.rousseau@natixis.com",
@@ -326,7 +333,6 @@ const initialCounterpartyData = [
     country: "France",
     currency: "EUR",
     accountNumber: "55667788",
-    nostroAccount: "88776655",
     swiftCode: "PSSTFRPP",
     contactPerson: "Louis Martin",
     email: "louis.martin@labanquepostale.fr",
@@ -348,7 +354,6 @@ const initialCounterpartyData = [
     country: "Germany",
     currency: "EUR",
     accountNumber: "99887766",
-    nostroAccount: "66778899",
     swiftCode: "DEUTDEFF",
     contactPerson: "Hans Müller",
     email: "hans.mueller@db.com",
@@ -369,7 +374,6 @@ const initialCounterpartyData = [
     country: "Germany",
     currency: "EUR",
     accountNumber: "88997766",
-    nostroAccount: "66779988",
     swiftCode: "COBADEFF",
     contactPerson: "Katrin Fischer",
     email: "katrin.fischer@commerzbank.com",
@@ -390,7 +394,6 @@ const initialCounterpartyData = [
     country: "Germany",
     currency: "EUR",
     accountNumber: "11223344",
-    nostroAccount: "44332211",
     swiftCode: "KFWIDEFF",
     contactPerson: "Stefan Weber",
     email: "stefan.weber@kfw.de",
@@ -411,7 +414,6 @@ const initialCounterpartyData = [
     country: "Germany",
     currency: "EUR",
     accountNumber: "22334455",
-    nostroAccount: "55443322",
     swiftCode: "GENODEFF",
     contactPerson: "Laura Klein",
     email: "laura.klein@dzbank.de",
@@ -432,7 +434,6 @@ const initialCounterpartyData = [
     country: "Germany",
     currency: "EUR",
     accountNumber: "33445566",
-    nostroAccount: "66554433",
     swiftCode: "WELADEFF",
     contactPerson: "Maximilian Bauer",
     email: "max.bauer@helaba.de",
@@ -454,7 +455,6 @@ const initialCounterpartyData = [
     country: "Netherlands",
     currency: "EUR",
     accountNumber: "11224455",
-    nostroAccount: "55442211",
     swiftCode: "ABNANL2A",
     contactPerson: "Sanne de Vries",
     email: "sanne.vries@abnamro.nl",
@@ -475,7 +475,6 @@ const initialCounterpartyData = [
     country: "Netherlands",
     currency: "EUR",
     accountNumber: "55667788",
-    nostroAccount: "88776655",
     swiftCode: "INGBNL2A",
     contactPerson: "Jeroen Bos",
     email: "jeroen.bos@ing.nl",
@@ -496,7 +495,6 @@ const initialCounterpartyData = [
     country: "Netherlands",
     currency: "EUR",
     accountNumber: "66778899",
-    nostroAccount: "99887766",
     swiftCode: "RABONL2U",
     contactPerson: "Anouk Visser",
     email: "anouk.visser@rabobank.nl",
@@ -517,7 +515,6 @@ const initialCounterpartyData = [
     country: "Netherlands",
     currency: "EUR",
     accountNumber: "77889900",
-    nostroAccount: "00998877",
     swiftCode: "BUNQNL2A",
     contactPerson: "Tom Groen",
     email: "tom.groen@bunq.com",
@@ -538,7 +535,6 @@ const initialCounterpartyData = [
     country: "Netherlands",
     currency: "EUR",
     accountNumber: "88990011",
-    nostroAccount: "11009988",
     swiftCode: "FVLBNL22",
     contactPerson: "Maaike van der Berg",
     email: "maaike.berg@vanlanschot.com",
@@ -560,7 +556,6 @@ const initialCounterpartyData = [
     country: "Australia",
     currency: "AUD",
     accountNumber: "56781234",
-    nostroAccount: "12348765",
     swiftCode: "CTBAAU2S",
     contactPerson: "Sarah Johnson",
     email: "sarah.johnson@commbank.com.au",
@@ -581,7 +576,6 @@ const initialCounterpartyData = [
     country: "Australia",
     currency: "AUD",
     accountNumber: "77889900",
-    nostroAccount: "00998877",
     swiftCode: "WPACAU2S",
     contactPerson: "James Wilson",
     email: "james.wilson@westpac.com.au",
@@ -602,7 +596,6 @@ const initialCounterpartyData = [
     country: "Australia",
     currency: "AUD",
     accountNumber: "88990011",
-    nostroAccount: "11009988",
     swiftCode: "NATAAU33",
     contactPerson: "Emily Davis",
     email: "emily.davis@nab.com.au",
@@ -623,7 +616,6 @@ const initialCounterpartyData = [
     country: "Australia",
     currency: "AUD",
     accountNumber: "99887766",
-    nostroAccount: "66778899",
     swiftCode: "ANZBAU3M",
     contactPerson: "Daniel Brown",
     email: "daniel.brown@anz.com",
@@ -644,7 +636,6 @@ const initialCounterpartyData = [
     country: "Australia",
     currency: "AUD",
     accountNumber: "33445566",
-    nostroAccount: "66554433",
     swiftCode: "MACQAU2S",
     contactPerson: "Isabella Taylor",
     email: "isabella.taylor@macquarie.com",
@@ -666,7 +657,6 @@ const initialCounterpartyData = [
     country: "New Zealand",
     currency: "NZD",
     accountNumber: "22334455",
-    nostroAccount: "55443322",
     swiftCode: "BKNZNZ22",
     contactPerson: "Oliver Moore",
     email: "oliver.moore@bnz.co.nz",
@@ -687,7 +677,6 @@ const initialCounterpartyData = [
     country: "New Zealand",
     currency: "NZD",
     accountNumber: "55667788",
-    nostroAccount: "88776655",
     swiftCode: "ANZBNZ22",
     contactPerson: "Charlotte Evans",
     email: "charlotte.evans@anz.co.nz",
@@ -708,7 +697,6 @@ const initialCounterpartyData = [
     country: "New Zealand",
     currency: "NZD",
     accountNumber: "66778899",
-    nostroAccount: "99887766",
     swiftCode: "KIWINZ22",
     contactPerson: "Jacob Roberts",
     email: "jacob.roberts@kiwibank.co.nz",
@@ -729,7 +717,6 @@ const initialCounterpartyData = [
     country: "New Zealand",
     currency: "NZD",
     accountNumber: "77889900",
-    nostroAccount: "00998877",
     swiftCode: "WPACNZ22",
     contactPerson: "Sophia Green",
     email: "sophia.green@westpac.co.nz",
@@ -750,7 +737,6 @@ const initialCounterpartyData = [
     country: "New Zealand",
     currency: "NZD",
     accountNumber: "98765432",
-    nostroAccount: "12345678",
     swiftCode: "ASBBNZ22",
     contactPerson: "Emma Thompson",
     email: "emma.thompson@asbbank.co.nz",
@@ -771,7 +757,6 @@ const initialCounterpartyData = [
     country: "Japan",
     currency: "JPY",
     accountNumber: "11223344",
-    nostroAccount: "99887766",
     swiftCode: "MHCBJPJT",
     contactPerson: "Hiroshi Tanaka",
     email: "hiroshi.tanaka@mizuhobank.co.jp",
@@ -792,7 +777,6 @@ const initialCounterpartyData = [
     country: "Canada",
     currency: "CAD",
     accountNumber: "44556677",
-    nostroAccount: "22334455",
     swiftCode: "ROYCCAT2",
     contactPerson: "Sarah Johnson",
     email: "sarah.johnson@rbc.com",
@@ -813,7 +797,6 @@ const initialCounterpartyData = [
     country: "United Kingdom",
     currency: "GBP",
     accountNumber: "99999999",
-    nostroAccount: "00000000",
     swiftCode: "GTBUKGBX",
     contactPerson: "Your Name",
     email: "info@globaltradebank.co.uk",
@@ -830,24 +813,23 @@ const initialCounterpartyData = [
   },
 ];
 
-// Function to overwrite the data with default records
-const overwriteData = () => {
-  counterpartyData = initialCounterpartyData;
-  console.log(
-    "Counterparty data has been overwritten with the default records."
-  );
-
-  // Save the updated data to a file
-  const filePath = path.resolve("./counterpartyData.json");
-  fs.writeFileSync(
-    filePath,
-    JSON.stringify(counterpartyData, null, 2),
-    "utf-8"
-  );
-  console.log(`Updated counterparty data saved to '${filePath}'.`);
+// Function to populate counterpartyData with validation
+const populateCounterpartyTable = () => {
+  counterpartyData = initialCounterpartyData
+    .map((counterparty) => {
+      try {
+        validateCounterparty(counterparty); // Validate before adding
+        return counterparty;
+      } catch (err) {
+        console.error(`Validation failed: ${err.message}`);
+        return null; // Skip invalid records
+      }
+    })
+    .filter(Boolean); // Remove null records
+  console.log("Counterparty data populated and validated.");
 };
 
-// Execute overwriteData when running the file
-overwriteData();
+// Populate the counterpartyData array
+populateCounterpartyTable();
 
 export { counterpartyData, counterpartyFields };
