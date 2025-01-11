@@ -47,6 +47,7 @@ By default, the server will run on http://localhost:3000. </br> You can access t
 ```tree
 
 fx_trader_server/
+|
 ├── database/
 │   ├── db.js                  # Database connection script
 │   ├── initDB.js              # Script to initialize and seed the database
