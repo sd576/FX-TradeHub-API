@@ -13,7 +13,8 @@ const db = new sqlite3.Database(dbPath, sqlite3.OPEN_READWRITE, (err) => {
   if (err) {
     console.error("Error connecting to SQLite database:", err.message);
   } else {
-    console.log("Connected to SQLite database at:", dbPath);
+    if (process.env.NODE_ENV !== "production")
+      console.log("Connected to SQLite database at:", dbPath);
   }
 });
 

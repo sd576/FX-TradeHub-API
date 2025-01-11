@@ -4,8 +4,8 @@ import morgan from "morgan";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocs from "./swagger/swagger.js"; // Adjust path if needed
-import counterpartyRoutes from "./routes/counterparties.js";
-import tradeRoutes from "./routes/trades.js";
+import counterpartyRoutes from "./routes/counterpartyRoutes.js";
+import tradeRoutes from "./routes/tradeRoutes.js";
 
 // Load environment variables from .env file
 dotenv.config();
