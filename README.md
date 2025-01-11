@@ -52,17 +52,25 @@ fx_trader_server/
 │   ├── db.js                  # Database connection script
 │   ├── initDB.js              # Script to initialize and seed the database
 |   ├── fx_trades.db           # SQLite database file storing trade and counterparty data
+|   |
 ├── dataSeeding/
 │   ├── counterpartyData.js    # Static source of truth for counterparties
 │   ├── outrightTradeData.js   # Static trade data for outright trades
 │   ├── spotTradeData.js       # Static trade data for spot trades
 │   ├── swapTradeData.js       # Static trade data for swaps
+|   |
 ├── node_modules/              # Node.js dependencies (gitignored)
+|   |
 ├── routes/
+|   |
 │   ├── counterpartyRoutes.js  # Routes for handling counterparty-related requests
+|   |
 │   ├── tradeRoutes.js         # Routes for handling trade-related requests
+|   |
 ├── swagger/
+|   |
 │   ├── swagger.js             # Swagger configuration for API documentation
+|   |
 ├── .env                       # Environment variables for sensitive configuration
 ├── .gitignore                 # Git ignore file for untracked files/folders
 ├── app.js                     # Main Express server entry point
