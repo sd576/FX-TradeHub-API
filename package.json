@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "node app.js",
-    "seed": "node database/initDB.js",
-    "setup-and-start": "npm run seed && npm start",
-    "db": "sqlite3 \"/Volumes/Stuarts Documents/fx_trader/fx_trader_server/database/fx_trades.db\""
+    "db": "node database/initDB.js",
+    "sqlite": "sqlite3 \"/Volumes/Stuarts Documents/fx_trader/fx_trader_server/database/fx_trades.db\"",
+    "setup-and-start": "npm run db && npm start"
   },
   "keywords": [],
   "author": "",

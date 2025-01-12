@@ -7,13 +7,26 @@ import { swapTradeData } from "../dataSeeding/swapTradeData.js";
 
 const dbPath = path.resolve("./database/fx_trades.db");
 
-const dropTables = async (db) => {
+const dropTablesAndViews = async (db) => {
+  const views = ["settlements_view"]; // Add other views here if needed
   const tables = [
     "nostroAccounts",
     "nostroInstructions",
     "counterparties",
     "trades",
   ];
+
+  // Drop views
+  for (const view of views) {
+    await new Promise((resolve, reject) =>
+      db.run(`DROP VIEW IF EXISTS ${view};`, (err) =>
+        err ? reject(err) : resolve()
+      )
+    );
+  }
+  console.log("Existing views dropped.");
+
+  // Drop tables
   for (const table of tables) {
     await new Promise((resolve, reject) =>
       db.run(`DROP TABLE IF EXISTS ${table};`, (err) =>
@@ -341,9 +354,36 @@ const main = async () => {
   const db = new sqlite3.Database(dbPath);
 
   try {
-    await dropTables(db);
+    await dropTablesAndViews(db);
     await createTables(db);
     await seedData(db);
+
+    await db.exec(`
+      CREATE VIEW settlements_view AS
+      SELECT
+        c.id AS "Counterparty ID",
+        c.name AS "Counterparty Name",
+        c.city AS "City",
+        c.country AS "Country",
+        GROUP_CONCAT(
+          ni.currency || " -> " || na.id || ", " || na.description,
+          " | "
+          ) AS "takes"
+        FROM
+          counterparties c
+        JOIN
+          nostroInstructions ni 
+        ON 
+          c.id = ni.counterpartyId
+        JOIN
+          nostroAccounts na
+        ON
+          ni.nostroAccountId = na.id
+        GROUP BY
+          c.id, c.name, c.city, c.country;
+        `);
+
+    console.log("View 'settlements_view' created successfully.");
   } catch (error) {
     console.error("Error during initialization:", error.message);
   } finally {
