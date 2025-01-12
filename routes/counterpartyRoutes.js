@@ -27,78 +27,111 @@ const router = express.Router();
  *               items:
  *                 type: object
  */
+
+// Retrieve all counterparties
 router.get("/", (req, res) => {
   db.all("SELECT * FROM counterparties", [], (err, rows) => {
     if (err) {
       res.status(500).json({ error: "Failed to fetch counterparties" });
     } else {
-      // Parse the nostroAccounts field from JSON to an object
-      const parsedRows = rows.map((row) => ({
-        ...row,
-        nostroAccounts: (() => {
-          try {
-            return JSON.parse(row.nostroAccounts);
-          } catch {
-            return {};
-          }
-        })(),
-      }));
-      res.json(parsedRows);
+      res.json(rows); // Return all counterparties as-is
     }
   });
 });
 
 /**
  * @swagger
- * /api/counterparties/{id}:
+ * /api/settlements/{counterpartyId}:
  *   get:
- *     summary: Retrieve a specific counterparty by ID
- *     tags: [Counterparties]
+ *     summary: Retrieve settlements for a specific counterparty
+ *     tags:
+ *       - Settlements
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: counterpartyId
  *         required: true
  *         schema:
  *           type: string
- *         description: The unique ID of the counterparty
+ *         description: The ID of the counterparty
  *     responses:
  *       200:
- *         description: Details of the specified counterparty
+ *         description: Settlements for the counterparty
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 id:
+ *                 Counterparty ID:
  *                   type: string
- *                   description: Unique identifier for the counterparty
- *                 name:
+ *                 Counterparty Name:
  *                   type: string
- *                   description: Name of the counterparty
- *                 city:
+ *                 City:
  *                   type: string
- *                   description: City where the counterparty is located
- *                 country:
+ *                 Country:
  *                   type: string
- *                   description: Country where the counterparty is located
- *                 currency:
- *                   type: string
- *                   description: Default currency used by the counterparty
+ *                 nostroAccounts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       currency:
+ *                         type: string
+ *                       nostroAccountId:
+ *                         type: string
+ *                       description:
+ *                         type: string
  *       404:
- *         description: Counterparty not found
+ *         description: No settlements found
  *       500:
- *         description: Server error
+ *         description: Internal server error
  */
+router.get("/:counterpartyId", (req, res) => {
+  const { counterpartyId } = req.params;
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  db.get("SELECT * FROM counterparties WHERE id = ?", [id], (err, row) => {
+  const query = `
+    SELECT
+      ni.currency AS "currency",
+      ni.nostroAccountId AS "nostroAccountId",
+      na.description AS "description",
+      c.id AS "Counterparty ID",
+      c.name AS "Counterparty Name",
+      c.city AS "City",
+      c.country AS "Country"
+    FROM
+      nostroInstructions ni
+    JOIN
+      nostroAccounts na
+    ON
+      ni.nostroAccountId = na.id
+    JOIN
+      counterparties c
+    ON
+      ni.counterpartyId = c.id
+    WHERE
+      c.id = ?;
+  `;
+
+  db.all(query, [counterpartyId], (err, rows) => {
     if (err) {
-      res.status(500).json({ error: "Failed to fetch counterparty" });
-    } else if (!row) {
-      res.status(404).json({ error: "Counterparty not found" });
+      res.status(500).json({ error: "Failed to fetch settlements" });
+    } else if (rows.length === 0) {
+      res
+        .status(404)
+        .json({ error: "No settlements found for this counterparty" });
     } else {
-      res.json(row); // Directly return the row as no parsing is needed
+      // Build structured response
+      const result = {
+        "Counterparty ID": rows[0]["Counterparty ID"],
+        "Counterparty Name": rows[0]["Counterparty Name"],
+        City: rows[0]["City"],
+        Country: rows[0]["Country"],
+        nostroAccounts: rows.map((row) => ({
+          currency: row.currency,
+          nostroAccountId: row.nostroAccountId,
+          description: row.description,
+        })),
+      };
+      res.json(result);
     }
   });
 });
@@ -177,6 +210,7 @@ router.get("/:id", (req, res) => {
  *         description: Duplicate record error
  */
 
+// Add a new counterparty
 router.post(
   "/",
   [
@@ -227,11 +261,12 @@ router.post(
     db.run(query, params, (err) => {
       if (err) {
         if (err.code === "SQLITE_CONSTRAINT") {
-          return res
+          res
             .status(409)
             .json({ error: "Counterparty with this ID already exists." });
+        } else {
+          res.status(500).json({ error: "Failed to add counterparty" });
         }
-        return res.status(500).json({ error: "Failed to add counterparty" });
       } else {
         res.status(201).json({ message: "Counterparty added successfully!" });
       }
