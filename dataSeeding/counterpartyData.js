@@ -1,4 +1,5 @@
 let counterpartyData = [];
+let nostroData = [];
 
 // Static params array
 const counterpartyFields = [
@@ -832,4 +833,24 @@ const populateCounterpartyTable = () => {
 // Populate the counterpartyData array
 populateCounterpartyTable();
 
-export { counterpartyData, counterpartyFields };
+// Function to populate nostroData
+const populateNostroData = () => {
+  counterpartyData.forEach((cp) => {
+    Object.entries(cp.nostroAccounts).forEach(([currency, nostroCode]) => {
+      nostroData.push({
+        currency,
+        nostroCode, // The nostro account's unique identifier
+        counterpartyId: cp.id, // The counterparty that owns this nostro account
+        managedById: nostroCode, // Assume nostroCode is valid
+      });
+    });
+  });
+
+  console.log("Nostro data populated.");
+};
+
+// Populate the nostroData array
+populateNostroData();
+
+// Export both counterpartyData and nostroData
+export { counterpartyData, counterpartyFields, nostroData };

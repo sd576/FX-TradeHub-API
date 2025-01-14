@@ -11,16 +11,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # SQLite database files
-*.sqlite
-*.sqbpro
+/database/*.db
 
-# Generated trade output (exclude generated files)
-generatedTradeOutput/
-
-# Backup folder (not part of active development)
-/dataSeedingBackup/
-
-# Ignore OS-specific files
+# OS-specific files
 .DS_Store
 Thumbs.db
 
@@ -28,6 +21,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+*.code-workspace
 
 # Test results and coverage reports
 coverage/
@@ -36,7 +30,3 @@ test-results/
 # Dist and build directories
 /dist/
 /build/
-node_modules/
-/playwright-report/
-/blob-report/
-/playwright/.cache/

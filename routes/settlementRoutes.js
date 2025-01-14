@@ -1,5 +1,12 @@
 import express from "express";
-import db from "../database/db.js"; // SQLite connection
+import {
+  fetchAllSettlements,
+  fetchSettlementByCounterparty,
+  fetchSettlementByCounterpartyAndCurrency,
+  updateSettlement,
+  partialUpdateSettlement,
+  deleteSettlement,
+} from "../controllers/settlementController.js";
 
 const router = express.Router();
 
@@ -30,21 +37,7 @@ const router = express.Router();
  *         500:
  *           description: Internal server error
  */
-
-// Get all settlements
-router.get("/", (req, res) => {
-  const query = `
-    SELECT * FROM settlements_view;
-  `;
-
-  db.all(query, [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch settlements" });
-    } else {
-      res.json(rows);
-    }
-  });
-});
+router.get("/", fetchAllSettlements);
 
 /**
  * @swagger
@@ -75,56 +68,7 @@ router.get("/", (req, res) => {
  *         500:
  *           description: Internal server error
  */
-// Get settlements for a specific counterparty
-router.get("/:counterpartyId", (req, res) => {
-  const { counterpartyId } = req.params;
-
-  const query = `
-    SELECT
-      ni.currency AS "Currency",
-      ni.nostroAccountId AS "Nostro Account ID",
-      na.description AS "Nostro Account Description",
-      c.id AS "Counterparty ID",
-      c.name AS "Counterparty Name",
-      c.city AS "City",
-      c.country AS "Country"
-    FROM
-      nostroInstructions ni
-    JOIN
-      nostroAccounts na
-    ON
-      ni.nostroAccountId = na.id
-    JOIN
-      counterparties c
-    ON
-      ni.counterpartyId = c.id
-    WHERE
-      c.id = ?;
-  `;
-
-  db.all(query, [counterpartyId], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch settlements" });
-    } else if (rows.length === 0) {
-      res
-        .status(404)
-        .json({ error: "No settlements found for this counterparty" });
-    } else {
-      const result = {
-        "Counterparty ID": rows[0]["Counterparty ID"],
-        "Counterparty Name": rows[0]["Counterparty Name"],
-        City: rows[0]["City"],
-        Country: rows[0]["Country"],
-        nostroAccounts: rows.map((row) => ({
-          currency: row["Currency"],
-          nostroAccountId: row["Nostro Account ID"],
-          nostroAccountDescription: row["Nostro Account Description"],
-        })),
-      };
-      res.json(result);
-    }
-  });
-});
+router.get("/:counterpartyId", fetchSettlementByCounterparty);
 
 /**
  * @swagger
@@ -159,46 +103,134 @@ router.get("/:counterpartyId", (req, res) => {
  *         500:
  *           description: Internal server error
  */
-// Get settlement details for a specific counterparty and currency
-router.get("/:counterpartyId/:currency", (req, res) => {
-  const { counterpartyId, currency } = req.params;
+router.get(
+  "/:counterpartyId/:currency",
+  fetchSettlementByCounterpartyAndCurrency
+);
 
-  const query = `
-    SELECT
-      ni.currency AS "Currency",
-      ni.nostroAccountId AS "Nostro Account ID",
-      na.description AS "Nostro Account Description",
-      c.id AS "Counterparty ID",
-      c.name AS "Counterparty Name",
-      c.city AS "City",
-      c.country AS "Country"
-    FROM
-      nostroInstructions ni
-    JOIN
-      nostroAccounts na
-    ON
-      ni.nostroAccountId = na.id
-    JOIN
-      counterparties c
-    ON
-      ni.counterpartyId = c.id
-    WHERE
-      c.id = ? AND ni.currency = ?;
-  `;
+/**
+ * @swagger
+ * paths:
+ *   /api/settlements/{counterpartyId}/{currency}:
+ *     put:
+ *       summary: Replace settlement details for a specific counterparty and currency
+ *       tags:
+ *         - Settlements
+ *       parameters:
+ *         - in: path
+ *           name: counterpartyId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The ID of the counterparty
+ *         - in: path
+ *           name: currency
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The currency code (e.g., USD, EUR)
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 nostroAccountId:
+ *                   type: string
+ *                   description: The new nostro account ID
+ *                   example: "001EUR"
+ *                 nostroAccountDescription:
+ *                   type: string
+ *                   description: The description of the nostro account
+ *                   example: "Barclays Bank - EUR"
+ *       responses:
+ *         200:
+ *           description: Settlement replaced successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *         400:
+ *           description: Validation error
+ *         404:
+ *           description: Settlement not found
+ *         500:
+ *           description: Server error
+ */
+router.put("/:counterpartyId/:currency", updateSettlement);
 
-  db.get(query, [counterpartyId, currency], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch settlement details" });
-    } else if (!row) {
-      res
-        .status(404)
-        .json({
-          error: "No settlement found for this counterparty and currency",
-        });
-    } else {
-      res.json(row);
-    }
-  });
-});
+/**
+ * @swagger
+ * paths:
+ *   /api/settlements/{counterpartyId}/{currency}:
+ *     patch:
+ *       summary: Partially update settlement details for a specific counterparty and currency
+ *       tags:
+ *         - Settlements
+ *       parameters:
+ *         - in: path
+ *           name: counterpartyId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The ID of the counterparty
+ *         - in: path
+ *           name: currency
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The currency code (e.g., USD, EUR)
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 nostroAccountId:
+ *                   type: string
+ *                 nostroAccountDescription:
+ *                   type: string
+ *       responses:
+ *         200:
+ *           description: Settlement updated successfully
+ *         404:
+ *           description: Settlement not found
+ *         500:
+ *           description: Server error
+ */
+router.patch("/:counterpartyId/:currency", partialUpdateSettlement);
+
+/**
+ * @swagger
+ * paths:
+ *   /api/settlements/{counterpartyId}/{currency}:
+ *     delete:
+ *       summary: Delete settlement details for a specific counterparty and currency
+ *       tags:
+ *         - Settlements
+ *       parameters:
+ *         - in: path
+ *           name: counterpartyId
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The ID of the counterparty
+ *         - in: path
+ *           name: currency
+ *           required: true
+ *           schema:
+ *             type: string
+ *           description: The currency code (e.g., USD, EUR)
+ *       responses:
+ *         200:
+ *           description: Settlement deleted successfully
+ *         404:
+ *           description: Settlement not found
+ *         500:
+ *           description: Server error
+ */
+router.delete("/:counterpartyId/:currency", deleteSettlement);
 
 export default router;

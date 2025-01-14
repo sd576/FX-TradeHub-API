@@ -1,18 +1,19 @@
 import swaggerJSDoc from "swagger-jsdoc";
 
+// Define Swagger options and API documentation structure
 const swaggerOptions = {
   swaggerDefinition: {
-    openapi: "3.0.0",
+    openapi: "3.0.0", // OpenAPI version
     info: {
-      title: "FX Trader API",
-      version: "1.0.0",
+      title: "FX Trader API", // API title
+      version: "1.0.0", // API version
       description:
-        "API for managing trades and counterparties in the FX Trader system",
+        "API for managing trades, counterparties, and settlements in the FX Trader system", // Brief description
     },
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Development server",
+        url: "http://localhost:3000", // Development server URL
+        description: "Development server", // Server description
       },
     ],
     tags: [
@@ -25,16 +26,13 @@ const swaggerOptions = {
         description: "Operations related to trades",
       },
       {
-        name: "Nostro Accounts",
-        description: "Operations related to nostro accounts",
-      },
-      {
-        name: "Nostro Instructions",
-        description: "Operations related to nostro instructions",
+        name: "Settlements",
+        description: "Account settlement details",
       },
     ],
     components: {
       schemas: {
+        // Schema for Counterparty
         Counterparty: {
           type: "object",
           properties: {
@@ -65,6 +63,7 @@ const swaggerOptions = {
             },
           },
         },
+        // Schema for Trade
         Trade: {
           type: "object",
           properties: {
@@ -116,66 +115,46 @@ const swaggerOptions = {
             },
           },
         },
-        NostroAccount: {
+        // Schema for Settlement
+        Settlement: {
           type: "object",
           properties: {
-            id: {
+            "Counterparty ID": {
               type: "string",
-              description: "Unique ID of the nostro account",
-              example: "001EUR",
-            },
-            counterpartyId: {
-              type: "string",
-              description:
-                "ID of the counterparty associated with the nostro account",
+              description: "Unique identifier for the counterparty",
               example: "001",
             },
-            currency: {
+            "Counterparty Name": {
               type: "string",
-              description: "Currency of the nostro account",
-              example: "EUR",
+              description: "Name of the counterparty",
+              example: "Barclays Bank",
             },
-            description: {
+            City: {
               type: "string",
-              description: "Description of the nostro account",
-              example: "Barclays Bank - EUR",
+              description: "City of the counterparty",
+              example: "London",
             },
-          },
-          required: ["id", "counterpartyId", "currency"],
-        },
-        NostroInstruction: {
-          type: "object",
-          properties: {
-            counterpartyId: {
+            Country: {
               type: "string",
-              description: "ID of the counterparty",
-              example: "001",
+              description: "Country of the counterparty",
+              example: "United Kingdom",
             },
-            currency: {
-              type: "string",
-              description: "Currency for the nostro instruction",
-              example: "EUR",
-            },
-            nostroAccountId: {
-              type: "string",
-              description: "ID of the associated nostro account",
-              example: "001EUR",
-            },
-            nostroAccountDescription: {
+            Takes: {
               type: "string",
               description:
-                "Description of the nostro account handling this currency",
-              example: "Barclays Bank handles EUR",
+                "Which bank and country the counterparty takes the currency",
+              example:
+                "EUR -> 001EUR, Barclays Bank - EUR | USD -> 001USD, Barclays Bank - USD",
             },
           },
-          required: ["counterpartyId", "currency", "nostroAccountId"],
         },
       },
     },
   },
-  apis: ["./routes/**/*.js"], // Adjust path if routes are in a different location
+  apis: ["./routes/**/*.js"], // Path to API route files
 };
 
+// Generate Swagger docs
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 export default swaggerDocs;

@@ -3,21 +3,34 @@
   "version": "1.0.0",
   "main": "app.js",
   "type": "module",
+  "description": "A Node.js-based server for managing trades, counterparties, and settlements in a foreign exchange trading system.",
+  "keywords": [
+    "fx",
+    "trading",
+    "API",
+    "sqlite",
+    "nodejs",
+    "swagger",
+    "foreign-exchange"
+  ],
+  "author": "Stuart Ducasse <your-email@example.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/fx_trader_server.git"
+  },
   "scripts": {
     "start": "node app.js",
     "db": "node database/initDB.js",
-    "sqlite": "sqlite3 \"/Volumes/Stuarts Documents/fx_trader/fx_trader_server/database/fx_trades.db\"",
-    "setup-and-start": "npm run db && npm start"
+    "sqlite": "sqlite3 'database/fx_trades.db'",
+    "setup-and-start": "npm run db && npm start",
+    "dev": "nodemon app.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "@faker-js/faker": "^9.3.0",
     "better-sqlite3": "^11.7.2",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "express-validator": "^7.2.1",
@@ -25,7 +38,7 @@
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

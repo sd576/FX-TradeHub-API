@@ -1,5 +1,6 @@
 import sqlite3 from "sqlite3";
 import path from "path";
+import { addBusinessDays, differenceInCalendarDays, isWeekend } from "date-fns";
 import { counterpartyData } from "../dataSeeding/counterpartyData.js";
 import { outrightTradeData } from "../dataSeeding/outrightTradeData.js";
 import { spotTradeData } from "../dataSeeding/spotTradeData.js";
@@ -7,389 +8,323 @@ import { swapTradeData } from "../dataSeeding/swapTradeData.js";
 
 const dbPath = path.resolve("./database/fx_trades.db");
 
+// Helper function: Determine a valid trade date
+const getTradeDate = () => {
+  const today = new Date();
+  return isWeekend(today)
+    ? today.getDay() === 6
+      ? addBusinessDays(today, -1)
+      : addBusinessDays(today, 1)
+    : today;
+};
+
+// General query executor
+const executeQuery = (db, query, params = []) =>
+  new Promise((resolve, reject) => {
+    db.run(query, params, (err) => (err ? reject(err) : resolve()));
+  });
+
+// Drop existing tables and views
 const dropTablesAndViews = async (db) => {
-  const views = ["settlements_view"]; // Add other views here if needed
+  console.log("Dropping existing views...");
+  const views = ["settlements_view"];
+  for (const view of views) {
+    await executeQuery(db, `DROP VIEW IF EXISTS ${view};`);
+  }
+  console.log("Existing views dropped.");
+
+  console.log("Dropping existing tables...");
   const tables = [
     "nostroAccounts",
     "nostroInstructions",
     "counterparties",
     "trades",
   ];
-
-  // Drop views
-  for (const view of views) {
-    await new Promise((resolve, reject) =>
-      db.run(`DROP VIEW IF EXISTS ${view};`, (err) =>
-        err ? reject(err) : resolve()
-      )
-    );
-  }
-  console.log("Existing views dropped.");
-
-  // Drop tables
   for (const table of tables) {
-    await new Promise((resolve, reject) =>
-      db.run(`DROP TABLE IF EXISTS ${table};`, (err) =>
-        err ? reject(err) : resolve()
-      )
-    );
+    await executeQuery(db, `DROP TABLE IF EXISTS ${table};`);
   }
   console.log("Existing tables dropped.");
 };
 
+// Create tables
 const createTables = async (db) => {
-  await Promise.all([
-    new Promise((resolve, reject) =>
-      db.run(
-        `
-        CREATE TABLE IF NOT EXISTS counterparties (
-          id TEXT PRIMARY KEY,
-          name TEXT NOT NULL,
-          city TEXT,
-          country TEXT,
-          currency TEXT NOT NULL,
-          accountNumber TEXT,
-          swiftCode TEXT,
-          contactPerson TEXT,
-          email TEXT,
-          phone TEXT
-        );
-        `,
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            console.log("Table 'counterparties' created successfully.");
-            resolve();
-          }
-        }
-      )
-    ),
-    new Promise((resolve, reject) =>
-      db.run(
-        `
-        CREATE TABLE IF NOT EXISTS nostroAccounts (
-          id TEXT PRIMARY KEY,
-          counterpartyId TEXT NOT NULL,
-          currency TEXT NOT NULL,
-          description TEXT,
-          FOREIGN KEY (counterpartyId) REFERENCES counterparties(id)
-        );
-        `,
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            console.log("Table 'nostroAccounts' created successfully.");
-            resolve();
-          }
-        }
-      )
-    ),
-    new Promise((resolve, reject) =>
-      db.run(
-        `
-        CREATE TABLE IF NOT EXISTS nostroInstructions (
-          counterpartyId TEXT NOT NULL,
-          currency TEXT NOT NULL,
-          nostroAccountId TEXT NOT NULL,
-          nostroAccountDescription TEXT,
-          PRIMARY KEY (counterpartyId, currency),
-          FOREIGN KEY (counterpartyId) REFERENCES counterparties(id),
-          FOREIGN KEY (nostroAccountId) REFERENCES nostroAccounts(id)
-        );
-        `,
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            console.log("Table 'nostroInstructions' created successfully.");
-            resolve();
-          }
-        }
-      )
-    ),
-    new Promise((resolve, reject) =>
-      db.run(
-        `
-        CREATE TABLE IF NOT EXISTS trades (
-          tradeId TEXT PRIMARY KEY,
-          tradeType TEXT NOT NULL,
-          parentTradeId TEXT,
-          tradeDate TEXT NOT NULL,
-          settlementDate TEXT NOT NULL,
-          weBuyWeSell TEXT NOT NULL,
-          counterpartyId TEXT NOT NULL,
-          buyCurrency TEXT NOT NULL,
-          sellCurrency TEXT NOT NULL,
-          buyAmount REAL NOT NULL,
-          sellAmount REAL NOT NULL,
-          exchangeRate REAL NOT NULL,
-          buyNostroAccountId TEXT,
-          sellNostroAccountId TEXT,
-          FOREIGN KEY (counterpartyId) REFERENCES counterparties(id),
-          FOREIGN KEY (buyNostroAccountId) REFERENCES nostroAccounts(id),
-          FOREIGN KEY (sellNostroAccountId) REFERENCES nostroAccounts(id)
-        );
-        `,
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            console.log("Table 'trades' created successfully.");
-            resolve();
-          }
-        }
-      )
-    ),
-  ]);
+  console.log("Creating tables...");
+  const tableDefinitions = [
+    `CREATE TABLE IF NOT EXISTS counterparties (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      city TEXT,
+      country TEXT,
+      currency TEXT NOT NULL,
+      accountNumber TEXT,
+      swiftCode TEXT,
+      contactPerson TEXT,
+      email TEXT,
+      phone TEXT
+    );`,
+    `CREATE TABLE IF NOT EXISTS nostroAccounts (
+      id TEXT NOT NULL,
+      counterpartyId TEXT NOT NULL,
+      currency TEXT NOT NULL,
+      description TEXT,
+      managedById TEXT,
+      PRIMARY KEY (id, counterpartyId),
+      FOREIGN KEY (counterpartyId) REFERENCES counterparties(id),
+      FOREIGN KEY (managedById) REFERENCES counterparties(id)
+    );`,
+    `CREATE TABLE IF NOT EXISTS nostroInstructions (
+      counterpartyId TEXT NOT NULL,
+      currency TEXT NOT NULL,
+      nostroAccountId TEXT NOT NULL,
+      nostroAccountDescription TEXT,
+      PRIMARY KEY (counterpartyId, currency),
+      FOREIGN KEY (counterpartyId) REFERENCES counterparties(id),
+      FOREIGN KEY (nostroAccountId) REFERENCES nostroAccounts(id)
+    );`,
+    `CREATE TABLE IF NOT EXISTS trades (
+      tradeId TEXT PRIMARY KEY,
+      tradeType TEXT NOT NULL,
+      parentTradeId TEXT,
+      tradeDate TEXT NOT NULL,
+      settlementDate TEXT NOT NULL,
+      weBuyWeSell TEXT NOT NULL,
+      counterpartyId TEXT NOT NULL,
+      buyCurrency TEXT NOT NULL,
+      sellCurrency TEXT NOT NULL,
+      buyAmount REAL NOT NULL,
+      sellAmount REAL NOT NULL,
+      exchangeRate REAL NOT NULL,
+      buyNostroAccountId TEXT,
+      sellNostroAccountId TEXT,
+      FOREIGN KEY (counterpartyId) REFERENCES counterparties(id),
+      FOREIGN KEY (buyNostroAccountId) REFERENCES nostroAccounts(id),
+      FOREIGN KEY (sellNostroAccountId) REFERENCES nostroAccounts(id)
+    );`,
+  ];
 
+  for (const definition of tableDefinitions) {
+    await executeQuery(db, definition);
+  }
   console.log("Tables created successfully.");
 };
 
-const deriveNostroId = (counterpartyId, currency) => {
-  return `${counterpartyId}${currency}`;
+// Seed counterparties
+const seedCounterparties = async (db) => {
+  console.log("Seeding counterparties...");
+  for (const counterparty of counterpartyData) {
+    const query = `INSERT INTO counterparties (id, name, city, country, currency, accountNumber, swiftCode, contactPerson, email, phone)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+    const params = [
+      counterparty.id,
+      counterparty.name,
+      counterparty.city,
+      counterparty.country,
+      counterparty.currency,
+      counterparty.accountNumber,
+      counterparty.swiftCode,
+      counterparty.contactPerson,
+      counterparty.email,
+      counterparty.phone,
+    ];
+    await executeQuery(db, query, params);
+  }
+  console.log("Counterparties seeded successfully.");
 };
 
-const seedData = async (db) => {
-  // Seed counterparties
-  for (const counterparty of counterpartyData) {
-    console.log(
-      `Seeding counterparty: ${counterparty.id} - ${counterparty.name}`
-    );
-    await new Promise((resolve, reject) =>
-      db.run(
-        `INSERT INTO counterparties (id, name, city, country, currency, accountNumber, swiftCode, contactPerson, email, phone)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
-        [
-          counterparty.id,
-          counterparty.name,
-          counterparty.city,
-          counterparty.country,
-          counterparty.currency,
-          counterparty.accountNumber,
-          counterparty.swiftCode,
-          counterparty.contactPerson,
-          counterparty.email,
-          counterparty.phone,
-        ],
-        (err) => {
-          if (err) {
-            console.error(
-              `Error seeding counterparty ${counterparty.id} (${counterparty.name}): ${err.message}`
-            );
-            reject(err);
-          } else {
-            console.log(
-              `Successfully seeded counterparty ${counterparty.id} (${counterparty.name}).`
-            );
-            resolve();
-          }
-        }
-      )
-    );
-  }
-
-  // Seed nostroAccounts and nostroInstructions
+// Seed nostro data
+const seedNostroData = async (db) => {
+  console.log("Seeding nostro data...");
   for (const counterparty of counterpartyData) {
     if (counterparty.nostroAccounts) {
-      for (const [currency] of Object.entries(counterparty.nostroAccounts)) {
-        const nostroId = `${counterparty.id}${currency}`;
-        await new Promise((resolve, reject) =>
-          db.run(
-            `
-              INSERT INTO nostroAccounts (id, counterpartyId, currency, description)
-              VALUES (?, ?, ?, ?);
-              `,
-            [
-              nostroId,
-              counterparty.id,
-              currency,
-              `${counterparty.name} - ${currency}`,
-            ],
-            (err) => {
-              if (err) {
-                console.error(
-                  `Error seeding nostroAccounts ${counterparty.id} (${counterparty.name}): ${err.message}`
-                );
-                reject(err);
-              } else {
-                console.log(
-                  `Successfully seeded nostroAccounts ${counterparty.id} (${counterparty.name}).`
-                );
-                resolve();
-              }
-            }
-          )
-        );
+      for (const [currency, nostroAccountId] of Object.entries(
+        counterparty.nostroAccounts
+      )) {
+        // Generate a unique ID by combining counterpartyId and nostroAccountId
+        const uniqueId = `${counterparty.id}-${nostroAccountId}`;
 
-        await new Promise((resolve, reject) =>
-          db.run(
-            `
-              INSERT INTO nostroInstructions (counterpartyId, currency, nostroAccountId, nostroAccountDescription)
-              VALUES (?, ?, ?, ?);
-              `,
-            [
-              counterparty.id,
-              currency,
-              nostroId,
-              `${counterparty.name} handles ${currency}`,
-            ],
-            (err) => {
-              if (err) {
-                console.error(
-                  `Error seeding nostroInstructions ${counterparty.id} (${counterparty.name}): ${err.message}`
-                );
-                reject(err);
-              } else {
-                console.log(
-                  `Successfully seeded nostroInstructions ${counterparty.id} (${counterparty.name}).`
-                );
-                resolve();
-              }
-            }
-          )
-        );
+        const accountQuery = `
+          INSERT OR IGNORE INTO nostroAccounts (id, counterpartyId, currency, description, managedById)
+          VALUES (?, ?, ?, ?, ?);
+        `;
+        const instructionQuery = `
+          INSERT OR IGNORE INTO nostroInstructions (counterpartyId, currency, nostroAccountId, nostroAccountDescription)
+          VALUES (?, ?, ?, ?);
+        `;
+        try {
+          await executeQuery(db, accountQuery, [
+            uniqueId, // Use the unique ID here
+            counterparty.id,
+            currency,
+            `${counterparty.name} ${currency} Nostro Account`,
+            counterparty.id,
+          ]);
+          await executeQuery(db, instructionQuery, [
+            counterparty.id,
+            currency,
+            uniqueId, // Use the unique ID here as well
+            `${counterparty.name} ${currency} Nostro Account`,
+          ]);
+        } catch (error) {
+          console.error(
+            `Error inserting nostro account '${uniqueId}':`,
+            error.message
+          );
+        }
       }
     }
   }
+  console.log("Nostro data seeded successfully.");
+};
 
-  // Seed trades
-  const allTrades = [
-    ...spotTradeData,
-    ...outrightTradeData,
+const validateTrade = (trade) => {
+  const requiredFields = [
+    "tradeId",
+    "tradeType",
+    "tradeDate",
+    "settlementDate",
+    "weBuyWeSell",
+    "counterpartyId",
+    "buyCurrency",
+    "sellCurrency",
+    "buyAmount",
+    "sellAmount",
+    "exchangeRate",
+  ];
+
+  requiredFields.forEach((field) => {
+    if (!trade[field]) {
+      throw new Error(
+        `Missing required field: '${field}' in trade: ${JSON.stringify(trade)}`
+      );
+    }
+  });
+};
+
+// Seed trades
+const seedTrades = async (db) => {
+  console.log("Seeding trades...");
+  const today = getTradeDate();
+  const originalTradeDate = new Date("2025-01-01");
+  const dateOffset = differenceInCalendarDays(today, originalTradeDate);
+
+  const trades = [
+    ...spotTradeData.map((trade) => ({
+      ...trade,
+      tradeDate: addBusinessDays(new Date(trade.tradeDate), dateOffset),
+      settlementDate: addBusinessDays(
+        new Date(trade.settlementDate),
+        dateOffset
+      ),
+    })),
+    ...outrightTradeData.map((trade) => ({
+      ...trade,
+      tradeDate: addBusinessDays(new Date(trade.tradeDate), dateOffset),
+      settlementDate: addBusinessDays(
+        new Date(trade.settlementDate),
+        dateOffset
+      ),
+    })),
     ...swapTradeData.flatMap((trade) => [
+      // Near leg of the SWAP trade
       {
         tradeId: trade.tradeId,
         tradeType: trade.tradeType,
-        parentTradeId: null,
-        tradeDate: trade.tradeDate,
-        settlementDate: trade.nearSettlementDate,
+        parentTradeId: null, // Near leg has no parent
+        tradeDate: addBusinessDays(new Date(trade.tradeDate), dateOffset),
+        settlementDate: addBusinessDays(
+          new Date(trade.nearSettlementDate),
+          dateOffset
+        ),
         weBuyWeSell: trade.weBuyWeSell,
         counterpartyId: trade.counterpartyId,
-        buyCurrency: trade.nearBuyCurrency,
-        sellCurrency: trade.nearSellCurrency,
-        buyAmount: trade.nearBuyAmount,
-        sellAmount: trade.nearSellAmount,
+        buyCurrency: trade.nearBuyCurrency, // Map to expected field
+        sellCurrency: trade.nearSellCurrency, // Map to expected field
+        buyAmount: trade.nearBuyAmount, // Map to expected field
+        sellAmount: trade.nearSellAmount, // Map to expected field
         exchangeRate: trade.nearExchangeRate,
-        buyNostroAccountId:
-          trade.nearBuyNostroAccountId ||
-          deriveNostroId(trade.counterpartyId, trade.nearBuyCurrency),
-        sellNostroAccountId:
-          trade.nearSellNostroAccountId ||
-          deriveNostroId(trade.counterpartyId, trade.nearSellCurrency),
+        buyNostroAccountId: trade.nearBuyNostroAccountId,
+        sellNostroAccountId: trade.nearSellNostroAccountId,
       },
+      // Far leg of the SWAP trade
       {
         tradeId: trade.farTradeId,
         tradeType: trade.tradeType,
-        parentTradeId: trade.tradeId,
-        tradeDate: trade.tradeDate,
-        settlementDate: trade.farSettlementDate,
+        parentTradeId: trade.tradeId, // Far leg links back to near leg
+        tradeDate: addBusinessDays(new Date(trade.tradeDate), dateOffset),
+        settlementDate: addBusinessDays(
+          new Date(trade.farSettlementDate),
+          dateOffset
+        ),
         weBuyWeSell: trade.weBuyWeSell === "we buy" ? "we sell" : "we buy",
         counterpartyId: trade.counterpartyId,
-        buyCurrency: trade.farBuyCurrency,
-        sellCurrency: trade.farSellCurrency,
-        buyAmount: trade.farBuyAmount,
-        sellAmount: trade.farSellAmount,
+        buyCurrency: trade.farBuyCurrency, // Map to expected field
+        sellCurrency: trade.farSellCurrency, // Map to expected field
+        buyAmount: trade.farBuyAmount, // Map to expected field
+        sellAmount: trade.farSellAmount, // Map to expected field
         exchangeRate: trade.farExchangeRate,
-        buyNostroAccountId:
-          trade.farBuyNostroAccountId ||
-          deriveNostroId(trade.counterpartyId, trade.farBuyCurrency),
-        sellNostroAccountId:
-          trade.farSellNostroAccountId ||
-          deriveNostroId(trade.counterpartyId, trade.farSellCurrency),
+        buyNostroAccountId: trade.farBuyNostroAccountId,
+        sellNostroAccountId: trade.farSellNostroAccountId,
       },
     ]),
   ];
 
-  for (const trade of allTrades) {
-    if (!trade.settlementDate) {
-      console.warn(
-        `Skipping trade ${trade.tradeId} due to missing settlementDate.`
-      );
-      continue;
+  for (const trade of trades) {
+    try {
+      validateTrade(trade); // Validate transformed trade object
+
+      const tradeDate = new Date(trade.tradeDate);
+      const settlementDate = new Date(trade.settlementDate);
+
+      const query = `
+        INSERT INTO trades (
+          tradeId, tradeType, parentTradeId, tradeDate, settlementDate, weBuyWeSell,
+          counterpartyId, buyCurrency, sellCurrency, buyAmount, sellAmount, exchangeRate,
+          buyNostroAccountId, sellNostroAccountId
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+      `;
+      const params = [
+        trade.tradeId,
+        trade.tradeType,
+        trade.parentTradeId || null,
+        tradeDate.toISOString().split("T")[0],
+        settlementDate.toISOString().split("T")[0],
+        trade.weBuyWeSell,
+        trade.counterpartyId,
+        trade.buyCurrency,
+        trade.sellCurrency,
+        trade.buyAmount,
+        trade.sellAmount,
+        trade.exchangeRate,
+        trade.buyNostroAccountId,
+        trade.sellNostroAccountId,
+      ];
+
+      await executeQuery(db, query, params);
+      console.log(`Trade '${trade.tradeId}' seeded successfully.`);
+    } catch (error) {
+      console.error(`Error for trade '${trade.tradeId}':`, error.message);
     }
-
-    await new Promise((resolve, reject) =>
-      db.run(
-        `
-          INSERT INTO trades (
-            tradeId, tradeType, parentTradeId, tradeDate, settlementDate, weBuyWeSell,
-            counterpartyId, buyCurrency, sellCurrency, buyAmount, sellAmount, exchangeRate,
-            buyNostroAccountId, sellNostroAccountId
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-          `,
-        [
-          trade.tradeId,
-          trade.tradeType,
-          trade.parentTradeId,
-          trade.tradeDate,
-          trade.settlementDate,
-          trade.weBuyWeSell,
-          trade.counterpartyId,
-          trade.buyCurrency,
-          trade.sellCurrency,
-          trade.buyAmount,
-          trade.sellAmount,
-          trade.exchangeRate,
-          trade.buyNostroAccountId,
-          trade.sellNostroAccountId,
-        ],
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            console.log(`Successfully created trade number ${trade.tradeId}.`);
-            resolve();
-          }
-        }
-      )
-    );
   }
-
-  console.log("Initial data seeded.");
+  console.log("Trades seeded successfully.");
 };
 
+// Main function
 const main = async () => {
   const db = new sqlite3.Database(dbPath);
-
   try {
+    console.log("Starting database initialization...");
     await dropTablesAndViews(db);
     await createTables(db);
-    await seedData(db);
-
-    await db.exec(`
-      CREATE VIEW settlements_view AS
-      SELECT
-        c.id AS "Counterparty ID",
-        c.name AS "Counterparty Name",
-        c.city AS "City",
-        c.country AS "Country",
-        GROUP_CONCAT(
-          ni.currency || " -> " || na.id || ", " || na.description,
-          " | "
-          ) AS "takes"
-        FROM
-          counterparties c
-        JOIN
-          nostroInstructions ni 
-        ON 
-          c.id = ni.counterpartyId
-        JOIN
-          nostroAccounts na
-        ON
-          ni.nostroAccountId = na.id
-        GROUP BY
-          c.id, c.name, c.city, c.country;
-        `);
-
-    console.log("View 'settlements_view' created successfully.");
+    await seedCounterparties(db);
+    await seedNostroData(db);
+    await seedTrades(db);
+    console.log("Database initialization completed successfully.");
   } catch (error) {
-    console.error("Error during initialization:", error.message);
+    console.error("Error during database initialization:", error.message);
   } finally {
     db.close((err) => {
       if (err) {
-        console.error("Error closing database connection:", err.message);
+        console.error("Error closing database:", err.message);
       } else {
         console.log("Database connection closed.");
       }

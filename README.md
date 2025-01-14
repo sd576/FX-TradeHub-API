@@ -48,8 +48,19 @@ By default, the server will run on http://localhost:3000. </br> You can access t
 
 fx_trader_server/
 |
-├── database/
+├── .vscode/
 |   |
+│   ├── .eslint.json          # Configuration file for defining ESLint rules and code style
+│   ├── launch.json           # Configuration for debugging settings in Visual Studio Code
+│   ├── settings.json         # User and workspace settings for Visual Studio Code
+│   ├── tasks.json            # Task definitions for automated workflows in Visual Studio Code
+|   |
+├── controllers/
+│   ├── counterpartyController.js  # Handles HTTP requests and responses for counterparty operations
+│   ├── settlementController.js    # Manages settlement-related HTTP requests and responses
+│   ├── tradeController.js         # Handles trade-related HTTP requests and responses
+|   |
+├── database/
 │   ├── db.js                  # Database connection script
 │   ├── initDB.js              # Script to initialize and seed the database
 |   ├── fx_trades.db           # SQLite database file storing trade and counterparty data
@@ -60,16 +71,21 @@ fx_trader_server/
 │   ├── spotTradeData.js       # Static trade data for spot trades
 │   ├── swapTradeData.js       # Static trade data for swaps
 |   |
+├── middleware/
+|   ├── validate.js            # Middleware for validating incoming requests and enforcing data integrity
+|   |
 ├── node_modules/              # Node.js dependencies (gitignored)
 |   |
 ├── routes/
-|   |
 │   ├── counterpartyRoutes.js  # Routes for handling counterparty-related requests
-|   |
+|   ├── settlementRoutes.js    # Routes for handling settlement-related requests
 │   ├── tradeRoutes.js         # Routes for handling trade-related requests
 |   |
-├── swagger/
+├── services/
+│   ├── counterpartyService.js # Service layer for managing counterparty-related business logic
+│   ├── tradeService.js        # Service layer for handling trade-related business logic and operations
 |   |
+├── swagger/
 │   ├── swagger.js             # Swagger configuration for API documentation
 |   |
 ├── .env                       # Environment variables for sensitive configuration

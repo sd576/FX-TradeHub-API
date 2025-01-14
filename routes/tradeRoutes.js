@@ -1,21 +1,10 @@
 import express from "express";
-import db from "../database/db.js";
+import {
+  fetchAllTrades,
+  fetchTradeById,
+} from "../controllers/tradeController.js";
 
 const router = express.Router();
-
-/**
- * Parse JSON fields in the trade rows.
- */
-const parseTradeRows = (rows) =>
-  rows.map((row) => ({
-    ...row,
-    buyNostroAccount: row.buyNostroAccount
-      ? JSON.parse(row.buyNostroAccount)
-      : null,
-    sellNostroAccount: row.sellNostroAccount
-      ? JSON.parse(row.sellNostroAccount)
-      : null,
-  }));
 
 /**
  * @swagger
@@ -58,29 +47,7 @@ const parseTradeRows = (rows) =>
  *         500:
  *           description: "Internal server error."
  */
-router.get("/", (req, res) => {
-  const { weBuyWeSell, page = 1, size = 20 } = req.query;
-  let query = "SELECT * FROM trades";
-  const params = [];
-
-  if (weBuyWeSell) {
-    query += " WHERE weBuyWeSell = ?";
-    params.push(weBuyWeSell);
-  }
-
-  // Pagination
-  const offset = (page - 1) * size;
-  query += " LIMIT ? OFFSET ?";
-  params.push(size, offset);
-
-  db.all(query, params, (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch trades" });
-    } else {
-      res.json(parseTradeRows(rows));
-    }
-  });
-});
+router.get("/", fetchAllTrades);
 
 /**
  * @swagger
@@ -107,26 +74,6 @@ router.get("/", (req, res) => {
  *         404:
  *           description: "Trade not found."
  */
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-
-  db.get("SELECT * FROM trades WHERE tradeId = ?", [id], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch trade" });
-    } else if (!row) {
-      res.status(404).json({ error: "Trade not found" });
-    } else {
-      res.json({
-        ...row,
-        buyNostroAccount: row.buyNostroAccount
-          ? JSON.parse(row.buyNostroAccount)
-          : null,
-        sellNostroAccount: row.sellNostroAccount
-          ? JSON.parse(row.sellNostroAccount)
-          : null,
-      });
-    }
-  });
-});
+router.get("/:id", fetchTradeById);
 
 export default router;
