@@ -11,7 +11,7 @@ The FX Trader API Server is a robust application designed to manage trades and c
 As a result, certain features or commands may be in flux. Please check back frequently or refer to the latest commit messages for updates.
 
 ## Features
-- **Two main tables:** `trades` and `counterparties`, storing detailed trade and counterparty information.
+- **Three main tables:** `trades`, `counterparties` and `settlements`, storing detailed trade, counterparty and settlement information.
 - **Pre-seeded database:** Realistic volume of data for meaningful testing.
 - **Fully documented API:** Accessible via Swagger on the local development server.
 - **Utility tools:** For resetting and reseeding the database.
@@ -112,20 +112,25 @@ Open SQLite database for direct queries:
 npm run db
 ```
 
-Start the server:
+Start the API server:
 ```bash
 npm start
 ```
-
-Clear and seed the database:
-```bash
-npm run seed
-```
-
 Seed the database and start the server:
 ```bash
 npm run setup-and-start
 ```
+
+Work with SQLite Database directly:
+```bash
+npm run sqlite
+```
+
+Run the server in Development Mode:
+```bash
+npm run dev
+```
+
 
 
 - The server will run at http://localhost:3000.
