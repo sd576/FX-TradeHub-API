@@ -1,197 +1,140 @@
-import db from "../database/db.js";
+import {
+  getAllSettlements,
+  getSettlementsByCounterparty,
+  getSettlementByCounterpartyAndCurrency,
+  replaceSettlement,
+  updateSettlement,
+  deleteSettlement,
+} from "../services/settlementService.js";
 
 /**
- * Fetch all settlements from the database
+ * Retrieve all settlements.
  */
-export const fetchAllSettlements = (req, res) => {
-  const query = `
-    SELECT * FROM settlements_view;
-  `;
-
-  db.all(query, [], (err, rows) => {
-    console.log("Query Result:", rows);
-    if (err) {
-      console.error("Error fetching settlements:", err);
-      res.status(500).json({ error: "Failed to fetch settlements" });
-    } else {
-      res.json(rows);
-    }
-  });
+export const fetchAllSettlements = async (req, res) => {
+  try {
+    const settlements = await getAllSettlements();
+    res.status(200).json(settlements);
+  } catch (err) {
+    console.error("Error fetching all settlements:", err.message);
+    res.status(500).json({ error: "Failed to fetch settlements" });
+  }
 };
 
 /**
- * Fetch settlements for a specific counterparty
+ * Retrieve settlements for a specific counterparty.
  */
-export const fetchSettlementByCounterparty = (req, res) => {
+export const fetchSettlementsByCounterparty = async (req, res) => {
   const { counterpartyId } = req.params;
 
-  const query = `
-    SELECT
-      ni.currency AS "Currency",
-      ni.nostroAccountId AS "Nostro Account ID",
-      na.description AS "Nostro Account Description",
-      c.id AS "Counterparty ID",
-      c.name AS "Counterparty Name",
-      c.city AS "City",
-      c.country AS "Country"
-    FROM
-      nostroInstructions ni
-    JOIN
-      nostroAccounts na
-    ON
-      ni.nostroAccountId = na.id
-    JOIN
-      counterparties c
-    ON
-      ni.counterpartyId = c.id
-    WHERE
-      c.id = ?;
-  `;
-
-  db.all(query, [counterpartyId], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch settlements" });
-    } else if (rows.length === 0) {
-      res
+  try {
+    const settlements = await getSettlementsByCounterparty(counterpartyId);
+    if (settlements.length === 0) {
+      return res
         .status(404)
         .json({ error: "No settlements found for this counterparty" });
-    } else {
-      const result = {
-        "Counterparty ID": rows[0]["Counterparty ID"],
-        "Counterparty Name": rows[0]["Counterparty Name"],
-        City: rows[0]["City"],
-        Country: rows[0]["Country"],
-        nostroAccounts: rows.map((row) => ({
-          currency: row["Currency"],
-          nostroAccountId: row["Nostro Account ID"],
-          nostroAccountDescription: row["Nostro Account Description"],
-        })),
-      };
-      res.json(result);
     }
-  });
+    res.status(200).json(settlements);
+  } catch (err) {
+    console.error(
+      `Error fetching settlements for counterparty ID ${counterpartyId}:`,
+      err.message
+    );
+    res.status(500).json({ error: "Failed to fetch settlements" });
+  }
 };
 
 /**
- * Fetch settlement details for a specific counterparty and currency
+ * Retrieve settlement details for a specific counterparty and currency.
  */
-export const fetchSettlementByCounterpartyAndCurrency = (req, res) => {
+export const fetchSettlementByCounterpartyAndCurrency = async (req, res) => {
   const { counterpartyId, currency } = req.params;
 
-  const query = `
-    SELECT
-      ni.currency AS "Currency",
-      ni.nostroAccountId AS "Nostro Account ID",
-      na.description AS "Nostro Account Description",
-      c.id AS "Counterparty ID",
-      c.name AS "Counterparty Name",
-      c.city AS "City",
-      c.country AS "Country"
-    FROM
-      nostroInstructions ni
-    JOIN
-      nostroAccounts na
-    ON
-      ni.nostroAccountId = na.id
-    JOIN
-      counterparties c
-    ON
-      ni.counterpartyId = c.id
-    WHERE
-      c.id = ? AND ni.currency = ?;
-  `;
-
-  db.get(query, [counterpartyId, currency], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch settlement details" });
-    } else if (!row) {
-      res.status(404).json({
-        error: "No settlement found for this counterparty and currency",
-      });
-    } else {
-      res.json(row);
+  try {
+    const settlement = await getSettlementByCounterpartyAndCurrency(
+      counterpartyId,
+      currency
+    );
+    if (!settlement) {
+      return res
+        .status(404)
+        .json({
+          error: "No settlement found for this counterparty and currency",
+        });
     }
-  });
-  console.log("Counterparty ID:", counterpartyId, "Currency:", currency);
+    res.status(200).json(settlement);
+  } catch (err) {
+    console.error(
+      `Error fetching settlement for counterparty ID ${counterpartyId} and currency ${currency}:`,
+      err.message
+    );
+    res.status(500).json({ error: "Failed to fetch settlement" });
+  }
 };
 
 /**
- * Update settlement details for a specific counterparty and currency
+ * Replace settlement details for a specific counterparty and currency.
  */
-export const updateSettlement = (req, res) => {
+export const replaceSettlementDetails = async (req, res) => {
   const { counterpartyId, currency } = req.params;
-  const { nostroAccountId, nostroAccountDescription } = req.body;
+  const settlement = req.body;
 
-  const updateQuery = `
-    UPDATE nostroInstructions
-    SET nostroAccountId = ?, nostroAccountDescription = ?
-    WHERE counterpartyId = ? AND currency = ?;
-  `;
-
-  db.run(
-    updateQuery,
-    [nostroAccountId, nostroAccountDescription, counterpartyId, currency],
-    function (err) {
-      if (err) {
-        res.status(500).json({ error: "Failed to update settlement" });
-      } else if (this.changes === 0) {
-        res.status(404).json({ error: "Settlement not found" });
-      } else {
-        res.json({ message: "Settlement updated successfully" });
-      }
+  try {
+    await replaceSettlement(settlement, counterpartyId, currency);
+    res.status(200).json({ message: "Settlement replaced successfully" });
+  } catch (err) {
+    console.error(
+      `Error replacing settlement for counterparty ID ${counterpartyId} and currency ${currency}:`,
+      err.message
+    );
+    if (err.message === "Settlement not found") {
+      res.status(404).json({ error: "Settlement not found" });
+    } else {
+      res.status(500).json({ error: "Failed to replace settlement" });
     }
-  );
+  }
 };
 
 /**
- * Partially update settlement details
+ * Partially update settlement details for a specific counterparty and currency.
  */
-export const partialUpdateSettlement = (req, res) => {
+export const updateSettlementDetails = async (req, res) => {
   const { counterpartyId, currency } = req.params;
   const updates = req.body;
 
-  const updateKeys = Object.keys(updates)
-    .map((key) => `${key} = ?`)
-    .join(", ");
-  const updateQuery = `
-    UPDATE nostroInstructions
-    SET ${updateKeys}
-    WHERE counterpartyId = ? AND currency = ?;
-  `;
-
-  db.run(
-    updateQuery,
-    [...Object.values(updates), counterpartyId, currency],
-    function (err) {
-      if (err) {
-        res.status(500).json({ error: "Failed to update settlement" });
-      } else if (this.changes === 0) {
-        res.status(404).json({ error: "Settlement not found" });
-      } else {
-        res.json({ message: "Settlement partially updated successfully" });
-      }
+  try {
+    await updateSettlement(updates, counterpartyId, currency);
+    res.status(200).json({ message: "Settlement updated successfully" });
+  } catch (err) {
+    console.error(
+      `Error updating settlement for counterparty ID ${counterpartyId} and currency ${currency}:`,
+      err.message
+    );
+    if (err.message === "Settlement not found") {
+      res.status(404).json({ error: "Settlement not found" });
+    } else {
+      res.status(500).json({ error: "Failed to update settlement" });
     }
-  );
+  }
 };
 
 /**
- * Delete settlement details for a specific counterparty and currency
+ * Delete settlement details for a specific counterparty and currency.
  */
-export const deleteSettlement = (req, res) => {
+export const deleteSettlementDetails = async (req, res) => {
   const { counterpartyId, currency } = req.params;
 
-  const deleteQuery = `
-    DELETE FROM nostroInstructions
-    WHERE counterpartyId = ? AND currency = ?;
-  `;
-
-  db.run(deleteQuery, [counterpartyId, currency], function (err) {
-    if (err) {
-      res.status(500).json({ error: "Failed to delete settlement" });
-    } else if (this.changes === 0) {
+  try {
+    await deleteSettlement(counterpartyId, currency);
+    res.status(200).json({ message: "Settlement deleted successfully" });
+  } catch (err) {
+    console.error(
+      `Error deleting settlement for counterparty ID ${counterpartyId} and currency ${currency}:`,
+      err.message
+    );
+    if (err.message === "Settlement not found") {
       res.status(404).json({ error: "Settlement not found" });
     } else {
-      res.json({ message: "Settlement deleted successfully" });
+      res.status(500).json({ error: "Failed to delete settlement" });
     }
-  });
+  }
 };

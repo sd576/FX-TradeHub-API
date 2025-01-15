@@ -1,9 +1,5 @@
 import db from "../database/db.js";
 
-/**
- * Retrieve all counterparties from the database.
- * @returns {Promise<Array>} - A promise that resolves to an array of counterparties.
- */
 export const getAllCounterparties = () => {
   const query = "SELECT * FROM counterparties";
   return new Promise((resolve, reject) => {
@@ -18,49 +14,23 @@ export const getAllCounterparties = () => {
   });
 };
 
-/**
- * Retrieve settlements for a specific counterparty.
- * @param {string} counterpartyId - The ID of the counterparty.
- * @returns {Promise<Array>} - A promise that resolves to an array of settlements.
- */
-export const getCounterpartySettlements = (counterpartyId) => {
-  const query = `
-    SELECT
-      ni.currency AS "currency",
-      ni.nostroAccountId AS "nostroAccountId",
-      na.description AS "description",
-      c.id AS "Counterparty ID",
-      c.name AS "Counterparty Name",
-      c.city AS "City",
-      c.country AS "Country"
-    FROM
-      nostroInstructions ni
-    JOIN
-      nostroAccounts na ON ni.nostroAccountId = na.id
-    JOIN
-      counterparties c ON ni.counterpartyId = c.id
-    WHERE c.id = ?;
-  `;
+export const getCounterpartyById = (counterpartyId) => {
+  const query = "SELECT * FROM counterparties WHERE id = ?";
   return new Promise((resolve, reject) => {
-    db.all(query, [counterpartyId], (err, rows) => {
+    db.get(query, [counterpartyId], (err, row) => {
       if (err) {
         console.error(
-          `Error fetching settlements for counterparty ${counterpartyId}:`,
+          `Error fetching counterparty with ID ${counterpartyId}:`,
           err.message
         );
-        reject(new Error("Failed to fetch settlements"));
+        reject(new Error("Failed to fetch counterparty"));
       } else {
-        resolve(rows);
+        resolve(row || null);
       }
     });
   });
 };
 
-/**
- * Add a new counterparty to the database.
- * @param {Object} counterparty - The counterparty details.
- * @returns {Promise<void>} - A promise that resolves when the operation is complete.
- */
 export const addCounterparty = (counterparty) => {
   const query = `
     INSERT INTO counterparties (

@@ -1,9 +1,10 @@
 import {
   getAllCounterparties,
-  getCounterpartySettlements,
+  getCounterpartyById,
   addCounterparty,
 } from "../services/counterpartyService.js";
 
+// Fetch all counterparties
 export const fetchCounterparties = async (req, res) => {
   try {
     const counterparties = await getAllCounterparties();
@@ -14,35 +15,27 @@ export const fetchCounterparties = async (req, res) => {
   }
 };
 
-export const fetchSettlements = async (req, res) => {
+// Fetch a single counterparty by ID
+export const fetchCounterpartyById = async (req, res) => {
   const { counterpartyId } = req.params;
   try {
-    const settlements = await getCounterpartySettlements(counterpartyId);
-    if (settlements.length === 0) {
-      res.status(404).json({ error: "No settlements found" });
-    } else {
-      const result = {
-        "Counterparty ID": settlements[0]["Counterparty ID"],
-        "Counterparty Name": settlements[0]["Counterparty Name"],
-        City: settlements[0]["City"],
-        Country: settlements[0]["Country"],
-        nostroAccounts: settlements.map((row) => ({
-          currency: row.currency,
-          nostroAccountId: row.nostroAccountId,
-          description: row.description,
-        })),
-      };
-      res.json(result);
+    const counterparty = await getCounterpartyById(counterpartyId);
+    if (!counterparty) {
+      return res
+        .status(404)
+        .json({ error: `Counterparty with ID ${counterpartyId} not found.` });
     }
+    res.json(counterparty);
   } catch (err) {
     console.error(
-      `Error fetching settlements for counterparty ID ${counterpartyId}:`,
+      `Error fetching counterparty with ID ${counterpartyId}:`,
       err
-    ); // Log the error
-    res.status(500).json({ error: "Failed to fetch settlements" });
+    );
+    res.status(500).json({ error: "Failed to fetch counterparty" });
   }
 };
 
+// Add a new counterparty
 export const createCounterparty = async (req, res) => {
   const counterparty = req.body;
   try {

@@ -1,12 +1,12 @@
-import express from "express";
-import { body, validationResult } from "express-validator";
+import { Router } from "express";
 import {
   fetchCounterparties,
-  fetchSettlements,
+  fetchCounterpartyById,
   createCounterparty,
 } from "../controllers/counterpartyController.js";
+import { body, validationResult } from "express-validator";
 
-const router = express.Router();
+const router = Router();
 
 /**
  * @swagger
@@ -37,7 +37,7 @@ router.get("/", fetchCounterparties);
  * @swagger
  * /api/counterparties/{counterpartyId}:
  *   get:
- *     summary: Retrieve settlements for a specific counterparty
+ *     summary: Retrieve a single counterparty by ID
  *     tags: [Counterparties]
  *     parameters:
  *       - in: path
@@ -48,37 +48,38 @@ router.get("/", fetchCounterparties);
  *         description: The ID of the counterparty
  *     responses:
  *       200:
- *         description: Settlements for the counterparty
+ *         description: A single counterparty
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 Counterparty ID:
+ *                 id:
  *                   type: string
- *                 Counterparty Name:
+ *                 name:
  *                   type: string
- *                 City:
+ *                 city:
  *                   type: string
- *                 Country:
+ *                 country:
  *                   type: string
- *                 nostroAccounts:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       currency:
- *                         type: string
- *                       nostroAccountId:
- *                         type: string
- *                       description:
- *                         type: string
+ *                 currency:
+ *                   type: string
+ *                 accountNumber:
+ *                   type: string
+ *                 swiftCode:
+ *                   type: string
+ *                 contactPerson:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 phone:
+ *                   type: string
  *       404:
- *         description: No settlements found
+ *         description: Counterparty not found
  *       500:
  *         description: Internal server error
  */
-router.get("/:counterpartyId", fetchSettlements);
+router.get("/:counterpartyId", fetchCounterpartyById);
 
 /**
  * @swagger
