@@ -91,14 +91,14 @@ fx_trader_server/
 |   |
 ├── tests/
 │   ├── api/
-│   ├── testCounterpartiesAPI.js
-│   ├── testSettlementsAPI.js
-│   ├── testTradesAPI.js
+│   ├── testCounterpartiesAPI.js    # Tests for validating Counterparty API endpoints
+│   ├── testSettlementsAPI.js       # Tests for validating Settlement API endpoints
+│   ├── testTradesAPI.js            # Tests for validating Trades API endpoints
 |   |
 │   ├── services/
-│   ├── testCounterpartiesService.js
-│   ├── testSettlementsService.js
-│   ├── testTradesAPI.js
+│   ├── testCounterpartiesService.js    # Tests for validating service logic for Counterparties
+│   ├── testSettlementsService.js       # Tests for validating service logic for Settlements
+│   ├── testTradesAPI.js                # Tests for validating service logic for Trades
 |   |
 ├── .env                       # Environment variables for sensitive configuration
 ├── .gitignore                 # Git ignore file for untracked files/folders
