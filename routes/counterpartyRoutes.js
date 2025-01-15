@@ -1,5 +1,5 @@
 import express from "express";
-import { body } from "express-validator";
+import { body, validationResult } from "express-validator";
 import {
   fetchCounterparties,
   fetchSettlements,
@@ -150,6 +150,13 @@ router.post(
     body("currency").isString().withMessage("Currency must be a string"),
     body("email").isEmail().withMessage("Invalid email address"),
   ],
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
   createCounterparty
 );
 

@@ -67,6 +67,7 @@ fx_trader_server/
 |   |
 ├── dataSeeding/
 │   ├── counterpartyData.js    # Static source of truth for counterparties
+│   ├── nostroData.js          # Static counterparty nostro account information
 │   ├── outrightTradeData.js   # Static trade data for outright trades
 │   ├── spotTradeData.js       # Static trade data for spot trades
 │   ├── swapTradeData.js       # Static trade data for swaps

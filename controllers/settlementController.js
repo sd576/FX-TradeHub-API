@@ -9,7 +9,9 @@ export const fetchAllSettlements = (req, res) => {
   `;
 
   db.all(query, [], (err, rows) => {
+    console.log("Query Result:", rows);
     if (err) {
+      console.error("Error fetching settlements:", err);
       res.status(500).json({ error: "Failed to fetch settlements" });
     } else {
       res.json(rows);
@@ -110,6 +112,7 @@ export const fetchSettlementByCounterpartyAndCurrency = (req, res) => {
       res.json(row);
     }
   });
+  console.log("Counterparty ID:", counterpartyId, "Currency:", currency);
 };
 
 /**
