@@ -89,6 +89,17 @@ fx_trader_server/
 ├── swagger/
 │   ├── swagger.js             # Swagger configuration for API documentation
 |   |
+├── tests/
+│   ├── api/
+│   ├── testCounterpartiesAPI.js
+│   ├── testSettlementsAPI.js
+│   ├── testTradesAPI.js
+|   |
+│   ├── services/
+│   ├── testCounterpartiesService.js
+│   ├── testSettlementsService.js
+│   ├── testTradesAPI.js
+|   |
 ├── .env                       # Environment variables for sensitive configuration
 ├── .gitignore                 # Git ignore file for untracked files/folders
 ├── app.js                     # Main Express server entry point
