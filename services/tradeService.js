@@ -1,28 +1,13 @@
 import db from "../database/db.js";
 
 /**
- * Retrieve all trades, optionally filtered by 'we buy' or 'we sell' with pagination.
- * @param {string} [weBuyWeSell] - Optional filter for 'we buy' or 'we sell'.
- * @param {number} [page=1] - Page number for pagination.
- * @param {number} [size=20] - Number of records per page.
- * @returns {Promise<Array>} - A promise that resolves to a paginated array of trades.
+ * Fetch all trades.
+ * @returns {Promise<Array>} - A promise resolving to an array of trade records.
  */
-export const getAllTrades = (weBuyWeSell, page = 1, size = 20) => {
-  let query = "SELECT * FROM trades";
-  const params = [];
-
-  if (weBuyWeSell) {
-    query += " WHERE weBuyWeSell = ?";
-    params.push(weBuyWeSell);
-  }
-
-  // Add pagination
-  const offset = (page - 1) * size;
-  query += " LIMIT ? OFFSET ?";
-  params.push(size, offset);
-
+export const getAllTrades = () => {
+  const query = "SELECT * FROM trades";
   return new Promise((resolve, reject) => {
-    db.all(query, params, (err, rows) => {
+    db.all(query, [], (err, rows) => {
       if (err) {
         console.error("Error fetching trades:", err.message);
         reject(new Error("Failed to fetch trades"));
@@ -34,17 +19,59 @@ export const getAllTrades = (weBuyWeSell, page = 1, size = 20) => {
 };
 
 /**
- * Retrieve a single trade by its ID.
- * @param {string} tradeId - The ID of the trade to retrieve.
- * @returns {Promise<Object>} - A promise that resolves to the trade object, or null if not found.
+ * Fetch trades for a specific counterparty.
+ * @param {string} counterpartyId - The ID of the counterparty.
+ * @returns {Promise<Array>} - A promise resolving to an array of trade records.
+ */
+export const getTradesByCounterparty = (counterpartyId) => {
+  const query = "SELECT * FROM trades WHERE counterpartyId = ?";
+  return new Promise((resolve, reject) => {
+    db.all(query, [counterpartyId], (err, rows) => {
+      if (err) {
+        console.error(
+          `Error fetching trades for counterparty ${counterpartyId}:`,
+          err.message
+        );
+        reject(new Error("Failed to fetch trades by counterparty"));
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+
+/**
+ * Fetch trades by date range.
+ * @param {string} startDate - The start date of the range.
+ * @param {string} endDate - The end date of the range.
+ * @returns {Promise<Array>} - A promise resolving to an array of trade records.
+ */
+export const getTradesByDateRange = (startDate, endDate) => {
+  const query = "SELECT * FROM trades WHERE tradeDate BETWEEN ? AND ?";
+  return new Promise((resolve, reject) => {
+    db.all(query, [startDate, endDate], (err, rows) => {
+      if (err) {
+        console.error("Error fetching trades by date range:", err.message);
+        reject(new Error("Failed to fetch trades by date range"));
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+
+/**
+ * Fetch a single trade by ID.
+ * @param {string} tradeId - The ID of the trade.
+ * @returns {Promise<Object|null>} - A promise resolving to the trade record or null.
  */
 export const getTradeById = (tradeId) => {
   const query = "SELECT * FROM trades WHERE tradeId = ?";
   return new Promise((resolve, reject) => {
     db.get(query, [tradeId], (err, row) => {
       if (err) {
-        console.error(`Error fetching trade with ID ${tradeId}:`, err.message);
-        reject(new Error("Failed to fetch trade"));
+        console.error(`Error fetching trade ${tradeId}:`, err.message);
+        reject(new Error("Failed to fetch trade by ID"));
       } else {
         resolve(row || null);
       }
@@ -53,17 +80,62 @@ export const getTradeById = (tradeId) => {
 };
 
 /**
- * Parse JSON fields (e.g., nostro account details) in trade rows.
- * @param {Array} rows - Rows of trades to parse.
- * @returns {Array} - Parsed rows with JSON fields converted to objects.
+ * Insert a new trade.
+ * @param {Object} trade - The trade details.
+ * @returns {Promise<void>} - A promise resolving when the operation is complete.
  */
-export const parseTradeRows = (rows) =>
-  rows.map((row) => ({
-    ...row,
-    buyNostroAccount: row.buyNostroAccount
-      ? JSON.parse(row.buyNostroAccount)
-      : null,
-    sellNostroAccount: row.sellNostroAccount
-      ? JSON.parse(row.sellNostroAccount)
-      : null,
-  }));
+export const insertTrade = (trade) => {
+  const query = `
+    INSERT INTO trades (
+      tradeId, tradeType, parentTradeId, tradeDate, settlementDate, weBuyWeSell,
+      counterpartyId, buyCurrency, sellCurrency, buyAmount, sellAmount, exchangeRate,
+      buyNostroAccountId, sellNostroAccountId
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  const params = [
+    trade.tradeId,
+    trade.tradeType,
+    trade.parentTradeId || null,
+    trade.tradeDate,
+    trade.settlementDate,
+    trade.weBuyWeSell,
+    trade.counterpartyId,
+    trade.buyCurrency,
+    trade.sellCurrency,
+    trade.buyAmount,
+    trade.sellAmount,
+    trade.exchangeRate,
+    trade.buyNostroAccountId,
+    trade.sellNostroAccountId,
+  ];
+
+  return new Promise((resolve, reject) => {
+    db.run(query, params, (err) => {
+      if (err) {
+        console.error("Error inserting trade:", err.message);
+        reject(new Error("Failed to insert trade"));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+/**
+ * Delete a trade by ID.
+ * @param {string} tradeId - The ID of the trade.
+ * @returns {Promise<void>} - A promise resolving when the trade is deleted.
+ */
+export const deleteTradeById = (tradeId) => {
+  const query = "DELETE FROM trades WHERE tradeId = ?";
+  return new Promise((resolve, reject) => {
+    db.run(query, [tradeId], (err) => {
+      if (err) {
+        console.error(`Error deleting trade ${tradeId}:`, err.message);
+        reject(new Error("Failed to delete trade"));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
