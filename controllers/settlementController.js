@@ -19,6 +19,9 @@ export const fetchSettlementsByCounterparty = async (req, res) => {
   const { counterpartyId } = req.params;
   try {
     const settlements = await getSettlementsByCounterparty(counterpartyId);
+    if (!settlements.length) {
+      return res.status(404).json({ error: "No settlements found" });
+    }
     res.status(200).json(settlements);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -33,10 +36,9 @@ export const fetchSettlementByCounterpartyAndCurrency = async (req, res) => {
       currency
     );
     if (!settlement) {
-      res.status(404).json({ error: "Settlement not found" });
-    } else {
-      res.status(200).json(settlement);
+      return res.status(404).json({ error: "Settlement not found" });
     }
+    res.status(200).json(settlement);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -58,6 +60,10 @@ export const removeSettlement = async (req, res) => {
     await deleteSettlement(counterpartyId, currency);
     res.status(200).json({ message: "Settlement deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    if (error.message === "Settlement not found") {
+      res.status(404).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
   }
 };

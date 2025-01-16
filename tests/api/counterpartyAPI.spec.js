@@ -1,21 +1,22 @@
+import { expect } from "chai";
+import { describe, it } from "mocha";
 import request from "supertest";
 import app from "../../app.js";
-import { describe, it, expect } from "@jest/globals";
 
 describe("Counterparty Controller API Tests", () => {
   it("should fetch all counterparties", async () => {
     const response = await request(app).get("/api/counterparties");
-    expect(response.status).toBe(200);
-    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.status).to.equal(200);
+    expect(response.body).to.be.an("array");
   });
 
   it("should fetch a specific counterparty by ID", async () => {
     const response = await request(app).get("/api/counterparties/008");
     if (response.status === 404) {
-      expect(response.body.error).toBe("Counterparty not found");
+      expect(response.body.error).to.equal("Counterparty not found");
     } else {
-      expect(response.status).toBe(200);
-      expect(response.body).toMatchObject({
+      expect(response.status).to.equal(200);
+      expect(response.body).to.include({
         id: "008",
         name: "Goldman Sachs",
         city: "New York",
@@ -48,8 +49,8 @@ describe("Counterparty Controller API Tests", () => {
       .post("/api/counterparties")
       .send(newCounterparty);
 
-    expect(response.status).toBe(201);
-    expect(response.body.message).toBe("Counterparty created successfully");
+    expect(response.status).to.equal(201);
+    expect(response.body.message).to.equal("Counterparty created successfully");
   });
 
   it("should not add a duplicate counterparty", async () => {
@@ -70,8 +71,8 @@ describe("Counterparty Controller API Tests", () => {
       .post("/api/counterparties")
       .send(duplicateCounterparty);
 
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe(
+    expect(response.status).to.equal(400);
+    expect(response.body.error).to.equal(
       "Counterparty with this ID already exists."
     );
   });

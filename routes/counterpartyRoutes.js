@@ -1,10 +1,11 @@
 import { Router } from "express";
 import {
-  fetchCounterparties,
+  fetchAllCounterparties,
   fetchCounterpartyById,
   createCounterparty,
+  modifyCounterparty,
+  removeCounterparty,
 } from "../controllers/counterpartyController.js";
-import { body, validationResult } from "express-validator";
 
 const router = Router();
 
@@ -31,7 +32,7 @@ const router = Router();
  *               items:
  *                 type: object
  */
-router.get("/", fetchCounterparties);
+router.get("/", fetchAllCounterparties);
 
 /**
  * @swagger
@@ -79,7 +80,7 @@ router.get("/", fetchCounterparties);
  *       500:
  *         description: Internal server error
  */
-router.get("/:counterpartyId", fetchCounterpartyById);
+router.get("/:id", fetchCounterpartyById);
 
 /**
  * @swagger
@@ -142,23 +143,12 @@ router.get("/:counterpartyId", fetchCounterpartyById);
  *       409:
  *         description: Duplicate record error
  */
-router.post(
-  "/",
-  [
-    body("id").isString().withMessage("ID must be a string"),
-    body("name").isString().withMessage("Name must be a string"),
-    body("country").isString().withMessage("Country must be a string"),
-    body("currency").isString().withMessage("Currency must be a string"),
-    body("email").isEmail().withMessage("Invalid email address"),
-  ],
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
-  createCounterparty
-);
+router.post("/", createCounterparty);
+
+// Route to update an existing counterparty
+router.put("/:id", modifyCounterparty);
+
+// Route to delete a counterparty
+router.delete("/:id", removeCounterparty);
 
 export default router;
