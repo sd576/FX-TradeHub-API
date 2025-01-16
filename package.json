@@ -25,7 +25,10 @@
     "sqlite": "sqlite3 'database/fx_trades.db'",
     "setup-and-start": "npm run db && npm start",
     "dev": "nodemon app.js",
-    "test": "mocha tests/**/*.spec.js"
+    "test:services": "node runServiceTests.js",
+    "test:counterpartyAPI": "npx mocha tests/api/counterpartyAPI.spec.js",
+    "test:settlementAPI": "npx mocha tests/api/settlementAPI.spec.js",
+    "test:tradeAPI": "npx mocha tests/api/tradeAPI.spec.js"
   },
   "dependencies": {
     "better-sqlite3": "^11.7.2",
