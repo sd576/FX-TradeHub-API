@@ -65,3 +65,49 @@ export const addCounterparty = (counterparty) => {
     });
   });
 };
+
+export const updateCounterparty = (counterpartyId, counterparty) => {
+  const query = `
+    UPDATE counterparties
+    SET name = ?, city = ?, country = ?, currency = ?, accountNumber = ?,
+        swiftCode = ?, contactPerson = ?, email = ?, phone = ?
+    WHERE id = ?;
+  `;
+  const params = [
+    counterparty.name,
+    counterparty.city,
+    counterparty.country,
+    counterparty.currency,
+    counterparty.accountNumber,
+    counterparty.swiftCode,
+    counterparty.contactPerson,
+    counterparty.email,
+    counterparty.phone,
+    counterpartyId,
+  ];
+
+  return new Promise((resolve, reject) => {
+    db.run(query, params, (err) => {
+      if (err) {
+        console.error("Error updating counterparty:", err.message);
+        reject(new Error("Failed to update counterparty"));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+export const deleteCounterparty = (counterpartyId) => {
+  const query = "DELETE FROM counterparties WHERE id = ?";
+  return new Promise((resolve, reject) => {
+    db.run(query, [counterpartyId], (err) => {
+      if (err) {
+        console.error("Error deleting counterparty:", err.message);
+        reject(new Error("Failed to delete counterparty"));
+      } else {
+        resolve();
+      }
+    });
+  });
+};

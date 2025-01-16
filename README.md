@@ -108,6 +108,8 @@ fx_trader_server/
 ├── package-lock.json          # Dependency lock file
 ├── package.json               # Node.js project metadata and scripts
 ├── README.md                  # Project overview and utility instructions
+├── runAllTests.js             # Script to run all tests for services and api
+
 
 ```
 

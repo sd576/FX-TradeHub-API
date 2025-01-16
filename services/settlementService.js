@@ -76,16 +76,20 @@ export const getSettlementByCounterpartyAndCurrency = (
  */
 export const replaceSettlement = (settlement, counterpartyId, currency) => {
   const query = `
-    UPDATE settlements
-    SET nostroAccountId = ?, nostroDescription = ?, managedById = ?
-    WHERE counterpartyId = ? AND currency = ?;
+    INSERT INTO settlements (id, counterpartyId, currency, nostroAccountId, nostroDescription, managedById)
+    VALUES (?, ?, ?, ?, ?, ?)
+    ON CONFLICT (id) DO UPDATE SET
+      nostroAccountId = excluded.nostroAccountId,
+      nostroDescription = excluded.nostroDescription,
+      managedById = excluded.managedById;
   `;
   const params = [
+    settlement.id, // Primary key
+    counterpartyId, // Foreign key
+    currency, // Unique key with counterpartyId
     settlement.nostroAccountId,
     settlement.nostroDescription,
     settlement.managedById,
-    counterpartyId,
-    currency,
   ];
 
   return new Promise((resolve, reject) => {
@@ -97,37 +101,7 @@ export const replaceSettlement = (settlement, counterpartyId, currency) => {
         );
         reject(new Error("Failed to replace settlement"));
       } else if (this.changes === 0) {
-        reject(new Error("Settlement not found"));
-      } else {
-        resolve();
-      }
-    });
-  });
-};
-
-/**
- * Partially update settlement details for a specific counterparty and currency.
- * @param {Object} updates - The updates to apply.
- * @param {string} counterpartyId - The counterparty ID.
- * @param {string} currency - The currency code.
- * @returns {Promise<void>} - A promise that resolves when the update is complete.
- */
-export const updateSettlement = (updates, counterpartyId, currency) => {
-  const fields = Object.keys(updates)
-    .map((key) => `${key} = ?`)
-    .join(", ");
-  const query = `UPDATE settlements SET ${fields} WHERE counterpartyId = ? AND currency = ?;`;
-  const params = [...Object.values(updates), counterpartyId, currency];
-
-  return new Promise((resolve, reject) => {
-    db.run(query, params, function (err) {
-      if (err) {
-        console.error(
-          `Error updating settlement for ${counterpartyId} and ${currency}:`,
-          err.message
-        );
-        reject(new Error("Failed to update settlement"));
-      } else if (this.changes === 0) {
+        // Use `function` syntax to access `this`
         reject(new Error("Settlement not found"));
       } else {
         resolve();
