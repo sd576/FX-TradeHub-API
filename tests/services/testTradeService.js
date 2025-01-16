@@ -3,26 +3,45 @@ import {
   getTradesByCounterparty,
   getTradesByDateRange,
   getTradeById,
+  getTradesByCriteria,
   insertTrade,
+  updateTrade,
   deleteTradeById,
 } from "../../services/tradeService.js";
 
-const testTrades = async () => {
+const testTradeService = async () => {
   try {
-    console.log("Fetching all trades:");
-    console.log(await getAllTrades());
+    console.log("Testing getAllTrades:");
+    const allTrades = await getAllTrades();
+    console.log(allTrades);
 
-    console.log("Fetching trades for counterparty 'COUNTERPARTY-001':");
-    console.log(await getTradesByCounterparty("COUNTERPARTY-001"));
+    console.log(
+      "Testing getTradesByCounterparty (Counterparty ID: 'COUNTERPARTY-001'):"
+    );
+    const tradesByCounterparty = await getTradesByCounterparty(
+      "COUNTERPARTY-001"
+    );
+    console.log(tradesByCounterparty);
 
-    console.log("Fetching trades by date range:");
-    console.log(await getTradesByDateRange("2025-01-01", "2025-01-31"));
+    console.log("Testing getTradesByDateRange (2025-01-01 to 2025-01-31):");
+    const tradesByDate = await getTradesByDateRange("2025-01-01", "2025-01-31");
+    console.log(tradesByDate);
 
-    console.log("Fetching trade by ID 'TRADE-001':");
-    console.log(await getTradeById("TRADE-001"));
+    console.log("Testing getTradeById (Trade ID: 'TRADE-001'):");
+    const tradeById = await getTradeById("TRADE-001");
+    console.log(tradeById);
 
-    console.log("Inserting a new trade:");
-    await insertTrade({
+    console.log(
+      "Testing getTradesByCriteria (buyCurrency: 'USD', sellCurrency: 'EUR'):"
+    );
+    const tradesByCriteria = await getTradesByCriteria({
+      buyCurrency: "USD",
+      sellCurrency: "EUR",
+    });
+    console.log(tradesByCriteria);
+
+    console.log("Testing insertTrade:");
+    const newTrade = {
       tradeId: "TRADE-002",
       tradeType: "SPOT",
       parentTradeId: null,
@@ -37,13 +56,25 @@ const testTrades = async () => {
       exchangeRate: 1.1,
       buyNostroAccountId: "NOSTRO-003",
       sellNostroAccountId: "NOSTRO-004",
-    });
+    };
+    await insertTrade(newTrade);
+    console.log("Trade inserted successfully!");
 
-    console.log("Deleting trade with ID 'TRADE-002':");
+    console.log("Testing updateTrade:");
+    const updatedTrade = {
+      ...newTrade,
+      buyAmount: 850000,
+      sellAmount: 765000,
+    };
+    await updateTrade(newTrade.tradeId, updatedTrade);
+    console.log("Trade updated successfully!");
+
+    console.log("Testing deleteTradeById (Trade ID: 'TRADE-002'):");
     await deleteTradeById("TRADE-002");
+    console.log("Trade deleted successfully!");
   } catch (err) {
-    console.error("Error testing trades:", err.message);
+    console.error("Error during trade service tests:", err.message);
   }
 };
 
-testTrades();
+testTradeService();

@@ -80,6 +80,44 @@ export const getTradeById = (tradeId) => {
 };
 
 /**
+ * Fetch trades by criteria.
+ * @param {Object} criteria - Filter criteria for querying trades.
+ * @returns {Promise<Array>} - A promise resolving to an array of matching trade records.
+ */
+export const getTradesByCriteria = (criteria) => {
+  const { buyCurrency, sellCurrency, exchangeRate } = criteria;
+
+  let query = "SELECT * FROM trades WHERE 1=1"; // Base query
+  const params = [];
+
+  if (buyCurrency) {
+    query += " AND buyCurrency = ?";
+    params.push(buyCurrency);
+  }
+
+  if (sellCurrency) {
+    query += " AND sellCurrency = ?";
+    params.push(sellCurrency);
+  }
+
+  if (exchangeRate) {
+    query += " AND exchangeRate = ?";
+    params.push(exchangeRate);
+  }
+
+  return new Promise((resolve, reject) => {
+    db.all(query, params, (err, rows) => {
+      if (err) {
+        console.error("Error fetching trades by criteria:", err.message);
+        reject(new Error("Failed to fetch trades by criteria"));
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+};
+
+/**
  * Insert a new trade.
  * @param {Object} trade - The trade details.
  * @returns {Promise<void>} - A promise resolving when the operation is complete.
@@ -114,6 +152,49 @@ export const insertTrade = (trade) => {
       if (err) {
         console.error("Error inserting trade:", err.message);
         reject(new Error("Failed to insert trade"));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+/**
+ * Update a trade by ID.
+ * @param {string} tradeId - The ID of the trade.
+ * @param {Object} updates - The updated trade details.
+ * @returns {Promise<void>} - A promise resolving when the update is complete.
+ */
+export const updateTrade = (tradeId, updates) => {
+  const query = `
+    UPDATE trades
+    SET tradeType = ?, parentTradeId = ?, tradeDate = ?, settlementDate = ?,
+        weBuyWeSell = ?, counterpartyId = ?, buyCurrency = ?, sellCurrency = ?,
+        buyAmount = ?, sellAmount = ?, exchangeRate = ?, buyNostroAccountId = ?, sellNostroAccountId = ?
+    WHERE tradeId = ?;
+  `;
+  const params = [
+    updates.tradeType,
+    updates.parentTradeId || null,
+    updates.tradeDate,
+    updates.settlementDate,
+    updates.weBuyWeSell,
+    updates.counterpartyId,
+    updates.buyCurrency,
+    updates.sellCurrency,
+    updates.buyAmount,
+    updates.sellAmount,
+    updates.exchangeRate,
+    updates.buyNostroAccountId,
+    updates.sellNostroAccountId,
+    tradeId,
+  ];
+
+  return new Promise((resolve, reject) => {
+    db.run(query, params, (err) => {
+      if (err) {
+        console.error(`Error updating trade ${tradeId}:`, err.message);
+        reject(new Error("Failed to update trade"));
       } else {
         resolve();
       }

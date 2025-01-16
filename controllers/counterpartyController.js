@@ -2,53 +2,58 @@ import {
   getAllCounterparties,
   getCounterpartyById,
   addCounterparty,
+  updateCounterparty,
+  deleteCounterparty,
 } from "../services/counterpartyService.js";
 
-// Fetch all counterparties
-export const fetchCounterparties = async (req, res) => {
+export const fetchAllCounterparties = async (req, res) => {
   try {
     const counterparties = await getAllCounterparties();
-    res.json(counterparties);
-  } catch (err) {
-    console.error("Error fetching counterparties:", err); // Log the error
-    res.status(500).json({ error: "Failed to fetch counterparties" });
+    res.status(200).json(counterparties);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Fetch a single counterparty by ID
 export const fetchCounterpartyById = async (req, res) => {
-  const { counterpartyId } = req.params;
+  const { id } = req.params;
   try {
-    const counterparty = await getCounterpartyById(counterpartyId);
+    const counterparty = await getCounterpartyById(id);
     if (!counterparty) {
-      return res
-        .status(404)
-        .json({ error: `Counterparty with ID ${counterpartyId} not found.` });
+      res.status(404).json({ error: "Counterparty not found" });
+    } else {
+      res.status(200).json(counterparty);
     }
-    res.json(counterparty);
-  } catch (err) {
-    console.error(
-      `Error fetching counterparty with ID ${counterpartyId}:`,
-      err
-    );
-    res.status(500).json({ error: "Failed to fetch counterparty" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Add a new counterparty
 export const createCounterparty = async (req, res) => {
-  const counterparty = req.body;
   try {
-    await addCounterparty(counterparty);
-    res.status(201).json({ message: "Counterparty added successfully!" });
-  } catch (err) {
-    if (err.code === "SQLITE_CONSTRAINT") {
-      res
-        .status(409)
-        .json({ error: "Counterparty with this ID already exists." });
-    } else {
-      console.error("Error adding counterparty:", err); // Log the error
-      res.status(500).json({ error: "Failed to add counterparty" });
-    }
+    await addCounterparty(req.body);
+    res.status(201).json({ message: "Counterparty created successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const modifyCounterparty = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await updateCounterparty(id, req.body);
+    res.status(200).json({ message: "Counterparty updated successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const removeCounterparty = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteCounterparty(id);
+    res.status(200).json({ message: "Counterparty deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

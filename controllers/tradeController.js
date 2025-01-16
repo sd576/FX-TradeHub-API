@@ -1,67 +1,91 @@
-import db from "../database/db.js";
+import {
+  getAllTrades,
+  getTradesByCounterparty,
+  getTradesByDateRange,
+  getTradeById,
+  getTradesByCriteria,
+  insertTrade,
+  updateTrade,
+  deleteTradeById,
+} from "../services/tradeService.js";
 
-/**
- * Helper function to parse JSON fields in the trade rows.
- */
-const parseTradeRows = (rows) =>
-  rows.map((row) => ({
-    ...row,
-    buyNostroAccount: row.buyNostroAccount
-      ? JSON.parse(row.buyNostroAccount)
-      : null,
-    sellNostroAccount: row.sellNostroAccount
-      ? JSON.parse(row.sellNostroAccount)
-      : null,
-  }));
-
-/**
- * Fetch all trades, optionally filtered by 'we buy' or 'we sell'.
- */
-export const fetchAllTrades = (req, res) => {
-  const { weBuyWeSell, page = 1, size = 20 } = req.query;
-  let query = "SELECT * FROM trades";
-  const params = [];
-
-  if (weBuyWeSell) {
-    query += " WHERE weBuyWeSell = ?";
-    params.push(weBuyWeSell);
+export const fetchAllTrades = async (req, res) => {
+  try {
+    const trades = await getAllTrades();
+    res.status(200).json(trades);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
-
-  // Pagination
-  const offset = (page - 1) * size;
-  query += " LIMIT ? OFFSET ?";
-  params.push(size, offset);
-
-  db.all(query, params, (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch trades" });
-    } else {
-      res.json(parseTradeRows(rows));
-    }
-  });
 };
 
-/**
- * Fetch a single trade by ID.
- */
-export const fetchTradeById = (req, res) => {
-  const { id } = req.params;
+export const fetchTradesByCounterparty = async (req, res) => {
+  const { counterpartyId } = req.params;
+  try {
+    const trades = await getTradesByCounterparty(counterpartyId);
+    res.status(200).json(trades);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-  db.get("SELECT * FROM trades WHERE tradeId = ?", [id], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: "Failed to fetch trade" });
-    } else if (!row) {
+export const fetchTradesByDateRange = async (req, res) => {
+  const { startDate, endDate } = req.query;
+  try {
+    const trades = await getTradesByDateRange(startDate, endDate);
+    res.status(200).json(trades);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const fetchTradeById = async (req, res) => {
+  const { tradeId } = req.params;
+  try {
+    const trade = await getTradeById(tradeId);
+    if (!trade) {
       res.status(404).json({ error: "Trade not found" });
     } else {
-      res.json({
-        ...row,
-        buyNostroAccount: row.buyNostroAccount
-          ? JSON.parse(row.buyNostroAccount)
-          : null,
-        sellNostroAccount: row.sellNostroAccount
-          ? JSON.parse(row.sellNostroAccount)
-          : null,
-      });
+      res.status(200).json(trade);
     }
-  });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const fetchTradesByCriteria = async (req, res) => {
+  try {
+    const trades = await getTradesByCriteria(req.body);
+    res.status(200).json(trades);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const createTrade = async (req, res) => {
+  try {
+    await insertTrade(req.body);
+    res.status(201).json({ message: "Trade created successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const modifyTrade = async (req, res) => {
+  const { tradeId } = req.params;
+  try {
+    await updateTrade(tradeId, req.body);
+    res.status(200).json({ message: "Trade updated successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const removeTrade = async (req, res) => {
+  const { tradeId } = req.params;
+  try {
+    await deleteTradeById(tradeId);
+    res.status(200).json({ message: "Trade deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };

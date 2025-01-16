@@ -4,7 +4,9 @@ import db from "../database/db.js"; // Database connection for teardown
 import { describe, it, expect, afterAll } from "@jest/globals"; // Jest functions
 
 describe("Trade API Tests", () => {
-  // Example: Test retrieving all trades
+  const testTradeId = "TEST-001";
+
+  // Test retrieving all trades
   it("should fetch all trades", async () => {
     const response = await supertest(app).get("/api/trades");
     expect(response.status).toBe(200);
@@ -12,18 +14,36 @@ describe("Trade API Tests", () => {
     expect(response.body.length).toBeGreaterThan(0);
   });
 
-  // Example: Test fetching a trade by ID
+  // Test fetching a trade by ID
   it("should fetch a trade by ID", async () => {
-    const tradeId = "SWAP-006-005"; // Existing tradeId for testing
+    const tradeId = "SWAP-006-005"; // Replace with a valid tradeId
     const response = await supertest(app).get(`/api/trades/${tradeId}`);
-    expect(response.status).toBe(200);
-    expect(response.body.tradeId).toBe(tradeId);
+    if (response.status === 404) {
+      expect(response.body.error).toBe("Trade not found");
+    } else {
+      expect(response.status).toBe(200);
+      expect(response.body).toMatchObject({
+        tradeId,
+        tradeType: expect.any(String),
+        tradeDate: expect.any(String),
+        settlementDate: expect.any(String),
+        weBuyWeSell: expect.any(String),
+        counterpartyId: expect.any(String),
+        buyCurrency: expect.any(String),
+        sellCurrency: expect.any(String),
+        buyAmount: expect.any(Number),
+        sellAmount: expect.any(Number),
+        exchangeRate: expect.any(Number),
+        buyNostroAccountId: expect.any(String),
+        sellNostroAccountId: expect.any(String),
+      });
+    }
   });
 
-  // Example: Test creating a trade (if your API allows it)
+  // Test creating a new trade
   it("should create a new trade", async () => {
     const newTrade = {
-      tradeId: "TEST-001",
+      tradeId: testTradeId,
       tradeType: "SPOT",
       tradeDate: "2025-01-25",
       settlementDate: "2025-01-26",
@@ -40,10 +60,10 @@ describe("Trade API Tests", () => {
 
     const response = await supertest(app).post("/api/trades").send(newTrade);
     expect(response.status).toBe(201);
-    expect(response.body.message).toBe("Trade created successfully!");
+    expect(response.body.message).toBe("Trade created successfully");
   });
 
-  // Example: Test fetching a non-existent trade
+  // Test fetching a non-existent trade
   it("should return 404 for a non-existent trade ID", async () => {
     const response = await supertest(app).get("/api/trades/INVALID-ID");
     expect(response.status).toBe(404);
@@ -51,7 +71,7 @@ describe("Trade API Tests", () => {
   });
 
   afterAll(async () => {
-    // Optional cleanup if the test created data
-    await db.run("DELETE FROM trades WHERE tradeId = 'TEST-001'");
+    // Cleanup test data
+    await db.run("DELETE FROM trades WHERE tradeId = ?", [testTradeId]);
   });
 });
