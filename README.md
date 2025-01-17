@@ -3,13 +3,6 @@
 ## Overview
 The FX Trader API Server is a robust application designed to manage trades and counterparties within an FX trading environment. It serves as a comprehensive tool for testing and development, with a fully populated database that mimics realistic trading scenarios. The primary goal of this project is to provide a solid foundation for writing Postman, Cypress, and Playwright API tests.
 
-## Current Development Notice
-⚠️ **Important:** This project is actively undergoing modifications to enhance functionality and streamline workflows. Specifically:
-- Routes and API endpoints are in the process of being updated and optimized.
-- Node.js commands in the `package.json` file are being reviewed and may change.
-
-As a result, certain features or commands may be in flux. Please check back frequently or refer to the latest commit messages for updates.
-
 ## Features
 - **Three main tables:** `trades`, `counterparties` and `settlements`, storing detailed trade, counterparty and settlement information.
 - **Pre-seeded database:** Realistic volume of data for meaningful testing.
@@ -84,6 +77,7 @@ fx_trader_server/
 |   |
 ├── services/
 │   ├── counterpartyService.js # Service layer for managing counterparty-related business logic
+│   ├── settlementService.js   # Service layer for managing settlement-related business logic
 │   ├── tradeService.js        # Service layer for handling trade-related business logic and operations
 |   |
 ├── swagger/
@@ -91,14 +85,19 @@ fx_trader_server/
 |   |
 ├── tests/
 │   ├── api/
-│   ├── testCounterpartiesAPI.js    # Tests for validating Counterparty API endpoints
-│   ├── testSettlementsAPI.js       # Tests for validating Settlement API endpoints
-│   ├── testTradesAPI.js            # Tests for validating Trades API endpoints
+│   ├── testCounterpartiesAPI.spec.js  # Tests for validating Counterparty API endpoints
+│   ├── testSettlementsAPI.spec.js     # Tests for validating Settlement API endpoints
+│   ├── testTradesAPI.spec.js          # Tests for validating Trades API endpoints
 |   |
 │   ├── services/
-│   ├── testCounterpartiesService.js    # Tests for validating service logic for Counterparties
-│   ├── testSettlementsService.js       # Tests for validating service logic for Settlements
-│   ├── testTradesAPI.js                # Tests for validating service logic for Trades
+│   ├── testCounterpartiesService.js   # Tests for validating service logic for Counterparties
+│   ├── testSettlementsService.js      # Tests for validating service logic for Settlements
+│   ├── testTradesAPI.js               # Tests for validating service logic for Trades
+|   |
+│   ├── validators/
+│   ├── counterpartyValidator.js       # Validates requests related to counterparties
+│   ├── settlementValidator.js         # Validates settlement-related requests.
+│   ├── tradeValidator.js              # Ensures trade-related requests meet data requirements
 |   |
 ├── .env                       # Environment variables for sensitive configuration
 ├── .gitignore                 # Git ignore file for untracked files/folders
@@ -108,7 +107,7 @@ fx_trader_server/
 ├── package-lock.json          # Dependency lock file
 ├── package.json               # Node.js project metadata and scripts
 ├── README.md                  # Project overview and utility instructions
-├── runAllTests.js             # Script to run all tests for services and api
+├── runAllTests.js             # Script to run all tests for services at once
 
 
 ```
@@ -162,14 +161,24 @@ Here, you can:
 ## Available API Endpoints
 
 ### Counterparties
-- GET /api/counterparties: Retrieve all counterparties.
-- GET /api/counterparties/{id}: Retrieve a specific counterparty by ID.
-- POST /api/counterparties: Add a new counterparty.
+- GET /counterparties: Retrieve all counterparties
+- POST /counterparties: Add a new counterparty
+- GET /counterparties/{id}: Retrieve a single counterparty by ID
+- PUT /counterparties/{id}: Update an existing counterparty
+- DELETE /counterparties/{id}: Delete a counterparty
+
+### Settlements
+- GET /settlements: Retrieve all settlements
+- GET /settlements/{counterpartyId}: Retrieve settlements by counterparty ID
+- PUT /settlements/{counterpartyId}/{currency}: Update a settlement by counterparty and currency
+- DELETE /settlements/{counterpartyId}/{currency}: Delete a settlement by counterparty and currency
 
 ### Trades
-- GET /api/trades: Retrieve all trades.
-- GET /api/trades/{id}: Retrieve all trades, optionally filtered by 'we buy' or 'we sell'
-- POST /api/trades: Add a new trade. - under development
+- GET /trades: Retrieve all trades
+- POST /trades: Add a new trade
+- GET /trades/{tradeId}: Retrieve a single trade by ID
+- PUT /trades/{tradeId}: Update a trade
+- DELETE /trades/{tradeId}: Delete a trade
 
 ## Testing and Development
 

@@ -30,3 +30,4 @@ test-results/
 # Dist and build directories
 /dist/
 /build/
+database/*.db
