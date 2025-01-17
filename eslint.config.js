@@ -14,6 +14,10 @@ export default [
         ...globals.node, // Node.js globals
       },
     },
+    rules: {
+      // Suppress warnings for unused `next` parameter in middleware
+      "no-unused-vars": ["error", { argsIgnorePattern: "^next$" }],
+    },
   },
   pluginJs.configs.recommended,
 ];

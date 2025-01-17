@@ -1,160 +1,412 @@
-import swaggerJSDoc from "swagger-jsdoc";
-
-// Define Swagger options and API documentation structure
-const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: "3.0.0", // OpenAPI version
-    info: {
-      title: "FX Trader API", // API title
-      version: "1.0.0", // API version
-      description:
-        "API for managing trades, counterparties, and settlements in the FX Trader system", // Brief description
+export default {
+  openapi: "3.0.1",
+  info: {
+    title: "FX Trader API",
+    version: "1.0.0",
+    description: "Comprehensive documentation for the FX Trader backend API",
+  },
+  servers: [
+    {
+      url: "http://localhost:3000/api",
+      description: "Local Development Server",
     },
-    servers: [
-      {
-        url: "http://localhost:3000", // Development server URL
-        description: "Development server", // Server description
-      },
-    ],
-    tags: [
-      {
-        name: "Counterparties",
-        description: "Operations related to counterparties",
-      },
-      {
-        name: "Trades",
-        description: "Operations related to trades",
-      },
-      {
-        name: "Settlements",
-        description: "Account settlement details",
-      },
-    ],
-    components: {
-      schemas: {
-        // Schema for Counterparty
-        Counterparty: {
-          type: "object",
-          properties: {
-            id: {
-              type: "string",
-              description: "Unique identifier for the counterparty",
-              example: "CPTY123",
-            },
-            name: {
-              type: "string",
-              description: "Counterparty name",
-              example: "Acme Trading Co.",
-            },
-            city: {
-              type: "string",
-              description: "City where the counterparty is located",
-              example: "New York",
-            },
-            country: {
-              type: "string",
-              description: "Country of the counterparty",
-              example: "USA",
-            },
-            currency: {
-              type: "string",
-              description: "Default trading currency for the counterparty",
-              example: "USD",
+  ],
+  paths: {
+    "/counterparties": {
+      get: {
+        summary: "Retrieve all counterparties",
+        tags: ["Counterparties"],
+        responses: {
+          200: {
+            description: "A list of counterparties",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Counterparty" },
+                },
+              },
             },
           },
         },
-        // Schema for Trade
-        Trade: {
-          type: "object",
-          properties: {
-            tradeId: {
-              type: "string",
-              description: "Unique identifier for the trade",
-              example: "TRD456",
-            },
-            tradeType: {
-              type: "string",
-              description: "Type of trade (e.g., SPOT, FWD, SWAP)",
-              example: "SPOT",
-            },
-            counterpartyId: {
-              type: "string",
-              description: "ID of the counterparty",
-              example: "CPTY123",
-            },
-            tradeDate: {
-              type: "string",
-              format: "date",
-              description: "Date of the trade",
-              example: "2024-01-01",
-            },
-            buyCurrency: {
-              type: "string",
-              description: "Currency being bought",
-              example: "USD",
-            },
-            sellCurrency: {
-              type: "string",
-              description: "Currency being sold",
-              example: "EUR",
-            },
-            buyAmount: {
-              type: "number",
-              description: "Amount of currency being bought",
-              example: 100000,
-            },
-            sellAmount: {
-              type: "number",
-              description: "Amount of currency being sold",
-              example: 85000,
-            },
-            exchangeRate: {
-              type: "number",
-              description: "Exchange rate for the trade",
-              example: 1.1765,
+      },
+      post: {
+        summary: "Add a new counterparty",
+        tags: ["Counterparties"],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Counterparty" },
             },
           },
         },
-        // Schema for Settlement
-        Settlement: {
-          type: "object",
-          properties: {
-            "Counterparty ID": {
-              type: "string",
-              description: "Unique identifier for the counterparty",
-              example: "001",
+        responses: {
+          201: {
+            description: "Counterparty created successfully",
+          },
+          400: {
+            description: "Validation error",
+          },
+        },
+      },
+    },
+    "/counterparties/{id}": {
+      get: {
+        summary: "Retrieve a single counterparty by ID",
+        tags: ["Counterparties"],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Counterparty ID",
+          },
+        ],
+        responses: {
+          200: {
+            description: "A single counterparty",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Counterparty" },
+              },
             },
-            "Counterparty Name": {
-              type: "string",
-              description: "Name of the counterparty",
-              example: "Barclays Bank",
+          },
+          404: {
+            description: "Counterparty not found",
+          },
+        },
+      },
+      put: {
+        summary: "Update an existing counterparty",
+        tags: ["Counterparties"],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Counterparty ID",
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Counterparty" },
             },
-            City: {
-              type: "string",
-              description: "City of the counterparty",
-              example: "London",
+          },
+        },
+        responses: {
+          200: {
+            description: "Counterparty updated successfully",
+          },
+          400: {
+            description: "Validation error",
+          },
+          404: {
+            description: "Counterparty not found",
+          },
+        },
+      },
+      delete: {
+        summary: "Delete a counterparty",
+        tags: ["Counterparties"],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Counterparty ID",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Counterparty deleted successfully",
+          },
+          404: {
+            description: "Counterparty not found",
+          },
+        },
+      },
+    },
+    "/settlements": {
+      get: {
+        summary: "Retrieve all settlements",
+        tags: ["Settlements"],
+        responses: {
+          200: {
+            description: "A list of settlements",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Settlement" },
+                },
+              },
             },
-            Country: {
-              type: "string",
-              description: "Country of the counterparty",
-              example: "United Kingdom",
+          },
+        },
+      },
+    },
+    "/settlements/{counterpartyId}": {
+      get: {
+        summary: "Retrieve settlements by counterparty ID",
+        tags: ["Settlements"],
+        parameters: [
+          {
+            name: "counterpartyId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Counterparty ID",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Settlements for the counterparty",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Settlement" },
+                },
+              },
             },
-            Takes: {
-              type: "string",
-              description:
-                "Which bank and country the counterparty takes the currency",
-              example:
-                "EUR -> 001EUR, Barclays Bank - EUR | USD -> 001USD, Barclays Bank - USD",
+          },
+          404: {
+            description: "Settlements not found for the counterparty",
+          },
+        },
+      },
+    },
+    "/settlements/{counterpartyId}/{currency}": {
+      put: {
+        summary: "Update a settlement by counterparty and currency",
+        tags: ["Settlements"],
+        parameters: [
+          {
+            name: "counterpartyId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Counterparty ID",
+          },
+          {
+            name: "currency",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Currency code",
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Settlement" },
             },
+          },
+        },
+        responses: {
+          200: {
+            description: "Settlement updated successfully",
+          },
+          404: {
+            description: "Settlement not found",
+          },
+        },
+      },
+      delete: {
+        summary: "Delete a settlement by counterparty and currency",
+        tags: ["Settlements"],
+        parameters: [
+          {
+            name: "counterpartyId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Counterparty ID",
+          },
+          {
+            name: "currency",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Currency code",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Settlement deleted successfully",
+          },
+          404: {
+            description: "Settlement not found",
+          },
+        },
+      },
+    },
+    "/trades": {
+      get: {
+        summary: "Retrieve all trades",
+        tags: ["Trades"],
+        responses: {
+          200: {
+            description: "A list of trades",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "array",
+                  items: { $ref: "#/components/schemas/Trade" },
+                },
+              },
+            },
+          },
+        },
+      },
+      post: {
+        summary: "Add a new trade",
+        tags: ["Trades"],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Trade" },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: "Trade created successfully",
+          },
+          400: {
+            description: "Validation error",
+          },
+        },
+      },
+    },
+    "/trades/{tradeId}": {
+      get: {
+        summary: "Retrieve a single trade by ID",
+        tags: ["Trades"],
+        parameters: [
+          {
+            name: "tradeId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Trade ID",
+          },
+        ],
+        responses: {
+          200: {
+            description: "A single trade",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/Trade" },
+              },
+            },
+          },
+          404: {
+            description: "Trade not found",
+          },
+        },
+      },
+      put: {
+        summary: "Update a trade",
+        tags: ["Trades"],
+        parameters: [
+          {
+            name: "tradeId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Trade ID",
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Trade" },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Trade updated successfully",
+          },
+          404: {
+            description: "Trade not found",
+          },
+        },
+      },
+      delete: {
+        summary: "Delete a trade",
+        tags: ["Trades"],
+        parameters: [
+          {
+            name: "tradeId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Trade ID",
+          },
+        ],
+        responses: {
+          200: {
+            description: "Trade deleted successfully",
+          },
+          404: {
+            description: "Trade not found",
           },
         },
       },
     },
   },
-  apis: ["./routes/**/*.js"], // Path to API route files
+  components: {
+    schemas: {
+      Counterparty: {
+        type: "object",
+        properties: {
+          id: { type: "string", example: "CPTY001" },
+          name: { type: "string", example: "Global Trading Ltd" },
+          email: { type: "string", example: "example@example.com" },
+          city: { type: "string", example: "London" },
+          country: { type: "string", example: "UK" },
+          currency: { type: "string", example: "GBP" },
+          accountNumber: { type: "string", example: "12345678" },
+          swiftCode: { type: "string", example: "GB123456" },
+          contactPerson: { type: "string", example: "John Doe" },
+          phone: { type: "string", example: "+441234567890" },
+        },
+      },
+      Settlement: {
+        type: "object",
+        properties: {
+          id: { type: "string", example: "SET001" },
+          counterpartyId: { type: "string", example: "CPTY001" },
+          currency: { type: "string", example: "USD" },
+          nostroAccountId: { type: "string", example: "NOSTRO123" },
+          nostroDescription: { type: "string", example: "Main USD Account" },
+        },
+      },
+      Trade: {
+        type: "object",
+        properties: {
+          tradeId: { type: "string", example: "TRADE001" },
+          tradeType: { type: "string", example: "spot" },
+          tradeDate: { type: "string", example: "2025-01-16" },
+          settlementDate: { type: "string", example: "2025-01-19" },
+          buyCurrency: { type: "string", example: "USD" },
+          sellCurrency: { type: "string", example: "EUR" },
+          buyAmount: { type: "number", example: 1000.0 },
+          sellAmount: { type: "number", example: 900.0 },
+          exchangeRate: { type: "number", example: 0.9 },
+        },
+      },
+    },
+  },
 };
-
-// Generate Swagger docs
-const swaggerDocs = swaggerJSDoc(swaggerOptions);
-
-export default swaggerDocs;
