@@ -1,7 +1,23 @@
 import db from "../database/db.js";
 
 export const getAllSettlements = () => {
-  const query = "SELECT * FROM settlements";
+  const query = `
+    SELECT 
+      s.id AS settlementId,
+      s.counterpartyId,
+      c.name AS counterpartyName,
+      s.currency,
+      s.nostroAccountId,
+      s.nostroDescription,
+      s.managedById,
+      m.name AS managedByName
+    FROM 
+      settlements s
+    JOIN 
+      counterparties c ON s.counterpartyId = c.id
+    LEFT JOIN 
+      counterparties m ON s.managedById = m.id;
+  `;
   return new Promise((resolve, reject) => {
     db.all(query, [], (err, rows) => {
       if (err) {
@@ -14,7 +30,25 @@ export const getAllSettlements = () => {
 };
 
 export const getSettlementsByCounterparty = (counterpartyId) => {
-  const query = "SELECT * FROM settlements WHERE counterpartyId = ?";
+  const query = `
+    SELECT 
+      s.id AS settlementId,
+      s.counterpartyId,
+      c.name AS counterpartyName,
+      s.currency,
+      s.nostroAccountId,
+      s.nostroDescription,
+      s.managedById,
+      m.name AS managedByName
+    FROM 
+      settlements s
+    JOIN 
+      counterparties c ON s.counterpartyId = c.id
+    LEFT JOIN 
+      counterparties m ON s.managedById = m.id
+    WHERE 
+      s.counterpartyId = ?;
+  `;
   return new Promise((resolve, reject) => {
     db.all(query, [counterpartyId], (err, rows) => {
       if (err) {
@@ -30,8 +64,25 @@ export const getSettlementByCounterpartyAndCurrency = (
   counterpartyId,
   currency
 ) => {
-  const query =
-    "SELECT * FROM settlements WHERE counterpartyId = ? AND currency = ?";
+  const query = `
+    SELECT 
+      s.id AS settlementId,
+      s.counterpartyId,
+      c.name AS counterpartyName,
+      s.currency,
+      s.nostroAccountId,
+      s.nostroDescription,
+      s.managedById,
+      m.name AS managedByName
+    FROM 
+      settlements s
+    JOIN 
+      counterparties c ON s.counterpartyId = c.id
+    LEFT JOIN 
+      counterparties m ON s.managedById = m.id
+    WHERE 
+      s.counterpartyId = ? AND s.currency = ?;
+  `;
   return new Promise((resolve, reject) => {
     db.get(query, [counterpartyId, currency], (err, row) => {
       if (err) {

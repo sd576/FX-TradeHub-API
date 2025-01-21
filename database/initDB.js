@@ -286,6 +286,7 @@ const seedTrades = async (db) => {
 };
 
 // seed settlements
+// seed settlements
 const seedSettlements = async (db) => {
   console.log("Seeding settlements...");
 
@@ -299,21 +300,51 @@ const seedSettlements = async (db) => {
       description,
     } = record;
 
-    await executeQuery(
-      db,
-      `INSERT OR IGNORE INTO settlements (id, counterpartyId, currency, nostroAccountId, nostroDescription, managedById)
-       VALUES (?, ?, ?, ?, ?, ?);`,
-      [
-        compoundKey,
-        counterpartyId,
-        currency,
-        nostroCode,
-        description,
-        managedById,
-      ]
-    );
+    // Validate that counterpartyId and managedById exist in the counterparties table
+    const counterpartyExists = await new Promise((resolve) => {
+      db.get(
+        "SELECT 1 FROM counterparties WHERE id = ?",
+        [counterpartyId],
+        (err, row) => resolve(!err && row !== undefined)
+      );
+    });
 
-    console.log(`Seeded settlement: ${compoundKey}`);
+    const managerExists = await new Promise((resolve) => {
+      db.get(
+        "SELECT 1 FROM counterparties WHERE id = ?",
+        [managedById],
+        (err, row) => resolve(!err && row !== undefined)
+      );
+    });
+
+    if (!counterpartyExists || !managerExists) {
+      console.warn(
+        `Skipping invalid settlement: counterpartyId or managedById not found for ${compoundKey}`
+      );
+      continue;
+    }
+
+    // Insert settlement into the database
+    try {
+      await executeQuery(
+        db,
+        `INSERT OR IGNORE INTO settlements (id, counterpartyId, currency, nostroAccountId, nostroDescription, managedById)
+         VALUES (?, ?, ?, ?, ?, ?);`,
+        [
+          compoundKey,
+          counterpartyId,
+          currency,
+          nostroCode,
+          description,
+          managedById,
+        ]
+      );
+      console.log(`Seeded settlement: ${compoundKey}`);
+    } catch (error) {
+      console.error(
+        `Error seeding settlement ${compoundKey}: ${error.message}`
+      );
+    }
   }
 
   console.log("Settlements seeded successfully.");

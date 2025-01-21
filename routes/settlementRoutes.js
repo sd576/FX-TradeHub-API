@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { validationResult } from "express-validator";
 import {
-  fetchAllSettlements,
-  fetchSettlementsByCounterparty,
-  fetchSettlementByCounterpartyAndCurrency,
+  getAllSettlementsController,
+  getSettlementsByCounterpartyController,
+  getSettlementByCounterpartyAndCurrencyController,
   updateSettlement,
   removeSettlement,
 } from "../controllers/settlementController.js";
@@ -13,10 +13,10 @@ import { validateSettlementParams } from "../validators/settlementValidator.js";
 const router = Router();
 
 // Retrieve all settlements
-router.get("/", fetchAllSettlements);
+router.get("/", getAllSettlementsController);
 
 // Retrieve settlements by counterparty ID
-router.get("/:counterpartyId", fetchSettlementsByCounterparty);
+router.get("/:counterpartyId", getSettlementsByCounterpartyController);
 
 // Retrieve settlement by counterparty ID and currency
 router.get(
@@ -29,7 +29,7 @@ router.get(
     }
     next();
   },
-  fetchSettlementByCounterpartyAndCurrency
+  getSettlementByCounterpartyAndCurrencyController
 );
 
 // Update or replace a settlement

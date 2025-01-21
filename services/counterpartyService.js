@@ -66,7 +66,47 @@ export const addCounterparty = (counterparty) => {
   });
 };
 
+export const patchCounterparty = (counterpartyId, updates) => {
+  // Check if 'id' is included in the update payload
+  if (updates.id && updates.id !== counterpartyId) {
+    return Promise.reject(
+      new Error(
+        "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty."
+      )
+    );
+  }
+
+  const fields = Object.keys(updates);
+  const values = Object.values(updates);
+
+  const query = `
+    UPDATE counterparties
+    SET ${fields.map((field) => `${field} = ?`).join(", ")}
+    WHERE id = ?;
+  `;
+
+  return new Promise((resolve, reject) => {
+    db.run(query, [...values, counterpartyId], (err) => {
+      if (err) {
+        console.error("Error patching counterparty:", err.message);
+        reject(new Error("Failed to patch counterparty"));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
 export const updateCounterparty = (counterpartyId, counterparty) => {
+  // Throw an error if 'id' is part of the update payload
+  if (counterparty.id && counterparty.id !== counterpartyId) {
+    return Promise.reject(
+      new Error(
+        "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty."
+      )
+    );
+  }
+
   const query = `
     UPDATE counterparties
     SET name = ?, city = ?, country = ?, currency = ?, accountNumber = ?,

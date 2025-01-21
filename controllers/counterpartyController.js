@@ -3,6 +3,7 @@ import {
   getCounterpartyById,
   addCounterparty,
   updateCounterparty,
+  patchCounterparty,
   deleteCounterparty,
 } from "../services/counterpartyService.js";
 
@@ -41,8 +42,36 @@ export const createCounterparty = async (req, res) => {
 export const modifyCounterparty = async (req, res) => {
   const { id } = req.params;
   try {
+    if (req.body.id && req.body.id !== id) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty.",
+        });
+    }
+
     await updateCounterparty(id, req.body);
     res.status(200).json({ message: "Counterparty updated successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const patchCounterpartyById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (req.body.id && req.body.id !== id) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty.",
+        });
+    }
+
+    await patchCounterparty(id, req.body);
+    res.status(200).json({ message: "Counterparty patched successfully" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -6,7 +6,7 @@ import {
   deleteSettlement,
 } from "../services/settlementService.js";
 
-export const fetchAllSettlements = async (req, res) => {
+export const getAllSettlementsController = async (req, res) => {
   try {
     const settlements = await getAllSettlements();
     res.status(200).json(settlements);
@@ -15,7 +15,7 @@ export const fetchAllSettlements = async (req, res) => {
   }
 };
 
-export const fetchSettlementsByCounterparty = async (req, res) => {
+export const getSettlementsByCounterpartyController = async (req, res) => {
   const { counterpartyId } = req.params;
   try {
     const settlements = await getSettlementsByCounterparty(counterpartyId);
@@ -28,7 +28,10 @@ export const fetchSettlementsByCounterparty = async (req, res) => {
   }
 };
 
-export const fetchSettlementByCounterpartyAndCurrency = async (req, res) => {
+export const getSettlementByCounterpartyAndCurrencyController = async (
+  req,
+  res
+) => {
   const { counterpartyId, currency } = req.params;
   try {
     const settlement = await getSettlementByCounterpartyAndCurrency(
