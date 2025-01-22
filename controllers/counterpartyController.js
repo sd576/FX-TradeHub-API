@@ -50,7 +50,11 @@ export const modifyCounterpartyController = async (req, res) => {
     }
 
     await updateCounterparty(id, req.body);
-    res.status(200).json({ message: "Counterparty updated successfully" });
+
+    // Fetch the updated record
+    const updatedCounterparty = await getCounterpartyById(id);
+
+    res.status(200).json(updatedCounterparty);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -61,13 +65,16 @@ export const patchCounterpartyController = async (req, res) => {
   try {
     if (req.body.id && req.body.id !== id) {
       return res.status(400).json({
-        error:
-          "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty.",
+        error: "Updating 'id' is not allowed.",
       });
     }
 
     await patchCounterparty(id, req.body);
-    res.status(200).json({ message: "Counterparty patched successfully" });
+
+    // Fetch the updated record
+    const updatedCounterparty = await getCounterpartyById(id);
+
+    res.status(200).json(updatedCounterparty);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

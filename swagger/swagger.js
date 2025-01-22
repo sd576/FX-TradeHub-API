@@ -3,7 +3,7 @@ export default {
   info: {
     title: "FX Trader API",
     version: "1.0.0",
-    description: "Comprehensive documentation for the FX Trader backend API",
+    description: "Comprehensive documentation for the FX Trader backend API.",
   },
   servers: [
     {
@@ -18,7 +18,7 @@ export default {
         tags: ["Counterparties"],
         responses: {
           200: {
-            description: "A list of counterparties",
+            description: "A list of counterparties.",
             content: {
               "application/json": {
                 schema: {
@@ -27,6 +27,9 @@ export default {
                 },
               },
             },
+          },
+          500: {
+            description: "Server error while fetching counterparties.",
           },
         },
       },
@@ -43,10 +46,13 @@ export default {
         },
         responses: {
           201: {
-            description: "Counterparty created successfully",
+            description: "Counterparty created successfully.",
           },
           400: {
-            description: "Validation error",
+            description: "Validation error or missing fields.",
+          },
+          500: {
+            description: "Server error while creating the counterparty.",
           },
         },
       },
@@ -61,12 +67,12 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Counterparty ID",
+            description: "Counterparty ID.",
           },
         ],
         responses: {
           200: {
-            description: "A single counterparty",
+            description: "Details of the specified counterparty.",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Counterparty" },
@@ -74,7 +80,10 @@ export default {
             },
           },
           404: {
-            description: "Counterparty not found",
+            description: "Counterparty not found.",
+          },
+          500: {
+            description: "Server error while fetching the counterparty.",
           },
         },
       },
@@ -87,7 +96,7 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Counterparty ID",
+            description: "Counterparty ID to update.",
           },
         ],
         requestBody: {
@@ -100,13 +109,51 @@ export default {
         },
         responses: {
           200: {
-            description: "Counterparty updated successfully",
+            description: "Counterparty updated successfully.",
           },
           400: {
-            description: "Validation error",
+            description: "Validation error or attempt to change the ID.",
           },
           404: {
-            description: "Counterparty not found",
+            description: "Counterparty not found.",
+          },
+          500: {
+            description: "Server error while updating the counterparty.",
+          },
+        },
+      },
+      patch: {
+        summary: "Partially update an existing counterparty",
+        tags: ["Counterparties"],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Counterparty ID to partially update.",
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Counterparty" },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Counterparty updated successfully.",
+          },
+          400: {
+            description: "Validation error or invalid request.",
+          },
+          404: {
+            description: "Counterparty not found.",
+          },
+          500: {
+            description: "Server error while updating the counterparty.",
           },
         },
       },
@@ -119,15 +166,18 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Counterparty ID",
+            description: "Counterparty ID to delete.",
           },
         ],
         responses: {
           200: {
-            description: "Counterparty deleted successfully",
+            description: "Counterparty deleted successfully.",
           },
           404: {
-            description: "Counterparty not found",
+            description: "Counterparty not found.",
+          },
+          500: {
+            description: "Server error while deleting the counterparty.",
           },
         },
       },
@@ -138,7 +188,7 @@ export default {
         tags: ["Settlements"],
         responses: {
           200: {
-            description: "A list of settlements",
+            description: "A list of settlements.",
             content: {
               "application/json": {
                 schema: {
@@ -147,6 +197,9 @@ export default {
                 },
               },
             },
+          },
+          500: {
+            description: "Server error while fetching settlements.",
           },
         },
       },
@@ -161,12 +214,12 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Counterparty ID",
+            description: "Counterparty ID.",
           },
         ],
         responses: {
           200: {
-            description: "Settlements for the counterparty",
+            description: "List of settlements for the specified counterparty.",
             content: {
               "application/json": {
                 schema: {
@@ -177,7 +230,11 @@ export default {
             },
           },
           404: {
-            description: "Settlements not found for the counterparty",
+            description:
+              "Settlements not found for the specified counterparty.",
+          },
+          500: {
+            description: "Server error while fetching settlements.",
           },
         },
       },
@@ -192,14 +249,14 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Counterparty ID",
+            description: "Counterparty ID.",
           },
           {
             name: "currency",
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Currency code",
+            description: "Currency code.",
           },
         ],
         requestBody: {
@@ -212,10 +269,55 @@ export default {
         },
         responses: {
           200: {
-            description: "Settlement updated successfully",
+            description: "Settlement updated successfully.",
           },
           404: {
-            description: "Settlement not found",
+            description: "Settlement not found.",
+          },
+          500: {
+            description: "Server error while updating the settlement.",
+          },
+        },
+      },
+      patch: {
+        summary: "Partially update a settlement by counterparty and currency",
+        tags: ["Settlements"],
+        parameters: [
+          {
+            name: "counterpartyId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Counterparty ID.",
+          },
+          {
+            name: "currency",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Currency code.",
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Settlement" },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Settlement updated successfully.",
+          },
+          400: {
+            description: "Validation error or invalid request.",
+          },
+          404: {
+            description: "Settlement not found.",
+          },
+          500: {
+            description: "Server error while updating the settlement.",
           },
         },
       },
@@ -228,22 +330,25 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Counterparty ID",
+            description: "Counterparty ID.",
           },
           {
             name: "currency",
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Currency code",
+            description: "Currency code.",
           },
         ],
         responses: {
           200: {
-            description: "Settlement deleted successfully",
+            description: "Settlement deleted successfully.",
           },
           404: {
-            description: "Settlement not found",
+            description: "Settlement not found.",
+          },
+          500: {
+            description: "Server error while deleting the settlement.",
           },
         },
       },
@@ -254,7 +359,7 @@ export default {
         tags: ["Trades"],
         responses: {
           200: {
-            description: "A list of trades",
+            description: "A list of trades.",
             content: {
               "application/json": {
                 schema: {
@@ -263,6 +368,9 @@ export default {
                 },
               },
             },
+          },
+          500: {
+            description: "Server error while fetching trades.",
           },
         },
       },
@@ -279,10 +387,13 @@ export default {
         },
         responses: {
           201: {
-            description: "Trade created successfully",
+            description: "Trade created successfully.",
           },
           400: {
-            description: "Validation error",
+            description: "Validation error.",
+          },
+          500: {
+            description: "Server error while creating the trade.",
           },
         },
       },
@@ -297,12 +408,12 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Trade ID",
+            description: "Trade ID.",
           },
         ],
         responses: {
           200: {
-            description: "A single trade",
+            description: "Details of the specified trade.",
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/Trade" },
@@ -310,7 +421,10 @@ export default {
             },
           },
           404: {
-            description: "Trade not found",
+            description: "Trade not found.",
+          },
+          500: {
+            description: "Server error while fetching the trade.",
           },
         },
       },
@@ -323,7 +437,7 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Trade ID",
+            description: "Trade ID.",
           },
         ],
         requestBody: {
@@ -336,10 +450,48 @@ export default {
         },
         responses: {
           200: {
-            description: "Trade updated successfully",
+            description: "Trade updated successfully.",
           },
           404: {
-            description: "Trade not found",
+            description: "Trade not found.",
+          },
+          500: {
+            description: "Server error while updating the trade.",
+          },
+        },
+      },
+      patch: {
+        summary: "Partially update a trade",
+        tags: ["Trades"],
+        parameters: [
+          {
+            name: "tradeId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Trade ID to partially update.",
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Trade" },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Trade updated successfully.",
+          },
+          400: {
+            description: "Validation error or invalid request.",
+          },
+          404: {
+            description: "Trade not found.",
+          },
+          500: {
+            description: "Server error while updating the trade.",
           },
         },
       },
@@ -352,15 +504,18 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Trade ID",
+            description: "Trade ID.",
           },
         ],
         responses: {
           200: {
-            description: "Trade deleted successfully",
+            description: "Trade deleted successfully.",
           },
           404: {
-            description: "Trade not found",
+            description: "Trade not found.",
+          },
+          500: {
+            description: "Server error while deleting the trade.",
           },
         },
       },
@@ -373,7 +528,6 @@ export default {
         properties: {
           id: { type: "string", example: "CPTY001" },
           name: { type: "string", example: "Global Trading Ltd" },
-          email: { type: "string", example: "example@example.com" },
           city: { type: "string", example: "London" },
           country: { type: "string", example: "UK" },
           currency: { type: "string", example: "GBP" },
@@ -381,6 +535,7 @@ export default {
           swiftCode: { type: "string", example: "GB123456" },
           contactPerson: { type: "string", example: "John Doe" },
           phone: { type: "string", example: "+441234567890" },
+          email: { type: "string", example: "contact@globaltrading.com" },
         },
       },
       Settlement: {
@@ -393,19 +548,17 @@ export default {
           nostroDescription: { type: "string", example: "Main USD Account" },
         },
       },
-      Trade: {
-        type: "object",
-        properties: {
-          tradeId: { type: "string", example: "TRADE001" },
-          tradeType: { type: "string", example: "spot" },
-          tradeDate: { type: "string", example: "2025-01-16" },
-          settlementDate: { type: "string", example: "2025-01-19" },
-          buyCurrency: { type: "string", example: "USD" },
-          sellCurrency: { type: "string", example: "EUR" },
-          buyAmount: { type: "number", example: 1000.0 },
-          sellAmount: { type: "number", example: 900.0 },
-          exchangeRate: { type: "number", example: 0.9 },
-        },
+      type: "object",
+      properties: {
+        tradeId: { type: "string", example: "TRADE001" },
+        tradeType: { type: "string", example: "spot" },
+        tradeDate: { type: "string", example: "2025-01-19" },
+        settlementDate: { type: "string", example: "2025-01-22" },
+        buyCurrency: { type: "string", example: "USD" },
+        sellCurrency: { type: "string", example: "EUR" },
+        buyAmount: { type: "number", example: 1000.0 },
+        sellAmount: { type: "number", example: 900.0 },
+        exchangeRate: { type: "number", example: 0.9 },
       },
     },
   },

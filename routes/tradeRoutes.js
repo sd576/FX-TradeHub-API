@@ -8,7 +8,7 @@ import {
   getTradesByCriteriaController,
   createTrade,
   modifyTrade,
-  patchTrade,
+  patchTradeController, // Correct name
   deleteTradeByIdHandler,
 } from "../controllers/tradeController.js";
 import { validateTrade } from "../validators/tradeValidator.js";
@@ -77,7 +77,7 @@ router.patch(
     }
     next();
   },
-  patchTrade
+  patchTradeController // Correct controller
 );
 
 // Delete a trade by ID
