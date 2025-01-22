@@ -160,6 +160,38 @@ export const insertTrade = (trade) => {
 };
 
 /**
+ * Patch a trade by ID (partial update).
+ * @param {string} tradeId - The ID of the trade.
+ * @param {Object} updates - The fields to update.
+ * @returns {Promise<void>} - A promise resolving when the update is complete.
+ */
+export const patchTrade = (tradeId, updates) => {
+  const fields = Object.keys(updates);
+  const values = Object.values(updates);
+
+  if (fields.length === 0) {
+    return Promise.reject(new Error("No fields to update"));
+  }
+
+  const query = `
+    UPDATE trades
+    SET ${fields.map((field) => `${field} = ?`).join(", ")}
+    WHERE tradeId = ?;
+  `;
+
+  return new Promise((resolve, reject) => {
+    db.run(query, [...values, tradeId], (err) => {
+      if (err) {
+        console.error(`Error patching trade ${tradeId}:`, err.message);
+        reject(new Error("Failed to patch trade"));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+/**
  * Update a trade by ID.
  * @param {string} tradeId - The ID of the trade.
  * @param {Object} updates - The updated trade details.

@@ -5,12 +5,21 @@ import {
   getSettlementsByCounterpartyController,
   getSettlementByCounterpartyAndCurrencyController,
   updateSettlement,
+  patchSettlement,
   removeSettlement,
 } from "../controllers/settlementController.js";
-
 import { validateSettlementParams } from "../validators/settlementValidator.js";
 
 const router = Router();
+
+// Helper middleware for validation
+const handleValidation = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
 
 // Retrieve all settlements
 router.get("/", getAllSettlementsController);
@@ -22,13 +31,7 @@ router.get("/:counterpartyId", getSettlementsByCounterpartyController);
 router.get(
   "/:counterpartyId/:currency",
   validateSettlementParams,
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
+  handleValidation,
   getSettlementByCounterpartyAndCurrencyController
 );
 
@@ -36,27 +39,18 @@ router.get(
 router.put(
   "/:counterpartyId/:currency",
   validateSettlementParams,
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
+  handleValidation,
   updateSettlement
 );
+
+// Partially update a settlement
+router.patch("/:id", patchSettlement);
 
 // Delete a settlement
 router.delete(
   "/:counterpartyId/:currency",
   validateSettlementParams,
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
+  handleValidation,
   removeSettlement
 );
 

@@ -123,6 +123,27 @@ export const replaceSettlement = (settlement, counterpartyId, currency) => {
   });
 };
 
+export const patchSettlement = (id, updates) => {
+  const fields = Object.keys(updates);
+  const values = Object.values(updates);
+
+  const query = `
+    UPDATE settlements
+    SET ${fields.map((field) => `${field} = ?`).join(", ")}
+    WHERE id = ?;
+  `;
+
+  return new Promise((resolve, reject) => {
+    db.run(query, [...values, id], (err) => {
+      if (err) {
+        reject(new Error("Failed to patch settlement"));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
 export const deleteSettlement = (counterpartyId, currency) => {
   const query =
     "DELETE FROM settlements WHERE counterpartyId = ? AND currency = ?";

@@ -7,7 +7,7 @@ import {
   deleteCounterparty,
 } from "../services/counterpartyService.js";
 
-export const fetchAllCounterparties = async (req, res) => {
+export const getAllCounterpartiesController = async (req, res) => {
   try {
     const counterparties = await getAllCounterparties();
     res.status(200).json(counterparties);
@@ -16,7 +16,7 @@ export const fetchAllCounterparties = async (req, res) => {
   }
 };
 
-export const fetchCounterpartyById = async (req, res) => {
+export const getCounterpartyByIdController = async (req, res) => {
   const { id } = req.params;
   try {
     const counterparty = await getCounterpartyById(id);
@@ -30,7 +30,7 @@ export const fetchCounterpartyById = async (req, res) => {
   }
 };
 
-export const createCounterparty = async (req, res) => {
+export const createCounterpartyController = async (req, res) => {
   try {
     await addCounterparty(req.body);
     res.status(201).json({ message: "Counterparty created successfully" });
@@ -39,16 +39,14 @@ export const createCounterparty = async (req, res) => {
   }
 };
 
-export const modifyCounterparty = async (req, res) => {
+export const modifyCounterpartyController = async (req, res) => {
   const { id } = req.params;
   try {
     if (req.body.id && req.body.id !== id) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty.",
-        });
+      return res.status(400).json({
+        error:
+          "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty.",
+      });
     }
 
     await updateCounterparty(id, req.body);
@@ -58,16 +56,14 @@ export const modifyCounterparty = async (req, res) => {
   }
 };
 
-export const patchCounterpartyById = async (req, res) => {
+export const patchCounterpartyController = async (req, res) => {
   const { id } = req.params;
   try {
     if (req.body.id && req.body.id !== id) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty.",
-        });
+      return res.status(400).json({
+        error:
+          "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty.",
+      });
     }
 
     await patchCounterparty(id, req.body);
@@ -77,7 +73,7 @@ export const patchCounterpartyById = async (req, res) => {
   }
 };
 
-export const removeCounterparty = async (req, res) => {
+export const removeCounterpartyController = async (req, res) => {
   const { id } = req.params;
   try {
     await deleteCounterparty(id);
