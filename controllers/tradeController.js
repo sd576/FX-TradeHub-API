@@ -86,8 +86,18 @@ export const createTrade = async (req, res) => {
 export const modifyTrade = async (req, res) => {
   const { tradeId } = req.params;
   try {
+    // Update the trade
     await updateTrade(tradeId, req.body);
-    res.status(200).json({ message: "Trade updated successfully" });
+
+    // Fetch the updated trade
+    const updatedTrade = await getTradeById(tradeId);
+
+    if (!updatedTrade) {
+      return res.status(404).json({ error: "Trade not found after update" });
+    }
+
+    // Return the updated trade
+    res.status(200).json(updatedTrade);
   } catch (error) {
     res.status(400).json({
       error: error.message || `Failed to update trade with ID ${tradeId}`,
@@ -98,13 +108,19 @@ export const modifyTrade = async (req, res) => {
 // Partially update a trade
 export const patchTradeController = async (req, res) => {
   const { tradeId } = req.params;
+
   try {
     if (!Object.keys(req.body).length) {
       return res.status(400).json({ error: "No fields to update" });
     }
 
-    await patchTrade(tradeId, req.body);
-    res.status(200).json({ message: "Trade patched successfully" });
+    const updatedTrade = await patchTrade(tradeId, req.body);
+
+    if (!updatedTrade) {
+      return res.status(404).json({ error: "Trade not found" });
+    }
+
+    res.status(200).json(updatedTrade); // Return the updated trade
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -180,12 +180,29 @@ export const patchTrade = (tradeId, updates) => {
   `;
 
   return new Promise((resolve, reject) => {
-    db.run(query, [...values, tradeId], (err) => {
+    db.run(query, [...values, tradeId], function (err) {
       if (err) {
         console.error(`Error patching trade ${tradeId}:`, err.message);
         reject(new Error("Failed to patch trade"));
+      } else if (this.changes === 0) {
+        reject(new Error("No trade found to patch"));
       } else {
-        resolve();
+        // Fetch the updated record after the patch
+        db.get(
+          "SELECT * FROM trades WHERE tradeId = ?",
+          [tradeId],
+          (err, row) => {
+            if (err) {
+              console.error(
+                `Error fetching updated trade ${tradeId}:`,
+                err.message
+              );
+              reject(new Error("Failed to fetch updated trade"));
+            } else {
+              resolve(row);
+            }
+          }
+        );
       }
     });
   });
