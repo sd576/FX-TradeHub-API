@@ -286,7 +286,6 @@ const seedTrades = async (db) => {
 };
 
 // seed settlements
-// seed settlements
 const seedSettlements = async (db) => {
   console.log("Seeding settlements...");
 
@@ -309,6 +308,15 @@ const seedSettlements = async (db) => {
       );
     });
 
+    // Validate nostroCode and managedById
+    const nostroAccountExists = await new Promise((resolve) => {
+      db.get(
+        "SELECT 1 FROM counterparties WHERE id = ?",
+        [nostroCode],
+        (err, row) => resolve(!err && row !== undefined)
+      );
+    });
+
     const managerExists = await new Promise((resolve) => {
       db.get(
         "SELECT 1 FROM counterparties WHERE id = ?",
@@ -317,9 +325,11 @@ const seedSettlements = async (db) => {
       );
     });
 
-    if (!counterpartyExists || !managerExists) {
+    // Skip invalid settlements
+    if (!counterpartyExists || !nostroAccountExists || !managerExists) {
       console.warn(
-        `Skipping invalid settlement: counterpartyId or managedById not found for ${compoundKey}`
+        `Skipping invalid settlement: compoundKey=${compoundKey}, ` +
+          `counterpartyId=${counterpartyId}, nostroCode=${nostroCode}, managedById=${managedById}`
       );
       continue;
     }

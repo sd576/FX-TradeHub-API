@@ -13,7 +13,6 @@ const counterpartyFields = [
   "contactPerson",
   "email",
   "phone",
-  "nostroAccounts",
 ];
 
 // Validation function for counterparty data
@@ -29,7 +28,6 @@ const validateCounterparty = (counterparty) => {
     "contactPerson",
     "email",
     "phone",
-    "nostroAccounts",
   ];
   requiredFields.forEach((field) => {
     if (!counterparty[field]) {
@@ -56,14 +54,6 @@ const initialCounterpartyData = [
     contactPerson: "John Smith",
     email: "john.smith@barclays.co.uk",
     phone: "+44 20 7116 1000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "002",
@@ -76,14 +66,6 @@ const initialCounterpartyData = [
     contactPerson: "Jane Doe",
     email: "jane.doe@hsbc.co.uk",
     phone: "+44 20 7991 8888",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "003",
@@ -96,14 +78,6 @@ const initialCounterpartyData = [
     contactPerson: "Richard Miles",
     email: "richard.miles@lloydsbank.co.uk",
     phone: "+44 20 7626 1500",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "004",
@@ -116,14 +90,6 @@ const initialCounterpartyData = [
     contactPerson: "Emily White",
     email: "emily.white@natwest.com",
     phone: "+44 20 7930 4000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "005",
@@ -136,14 +102,6 @@ const initialCounterpartyData = [
     contactPerson: "Michael Brown",
     email: "michael.brown@sc.com",
     phone: "+44 20 7885 8888",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   // New York Banks
   {
@@ -157,14 +115,6 @@ const initialCounterpartyData = [
     contactPerson: "Amanda Lee",
     email: "amanda.lee@jpmorgan.com",
     phone: "+1 212 270 6000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "007",
@@ -177,14 +127,6 @@ const initialCounterpartyData = [
     contactPerson: "James Harris",
     email: "james.harris@citi.com",
     phone: "+1 212 559 1000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "008",
@@ -197,14 +139,6 @@ const initialCounterpartyData = [
     contactPerson: "Sophia Turner",
     email: "sophia.turner@goldmansachs.com",
     phone: "+1 212 902 1000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "009",
@@ -217,14 +151,6 @@ const initialCounterpartyData = [
     contactPerson: "Brian Carter",
     email: "brian.carter@morganstanley.com",
     phone: "+1 212 761 4000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "010",
@@ -237,14 +163,6 @@ const initialCounterpartyData = [
     contactPerson: "Liam Bennett",
     email: "liam.bennett@bankofamerica.com",
     phone: "+1 704 386 5681",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   // Paris Banks
   {
@@ -258,14 +176,6 @@ const initialCounterpartyData = [
     contactPerson: "Alice Martin",
     email: "alice.martin@bnpparibas.com",
     phone: "+33 1 42 98 12 34",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "012",
@@ -278,14 +188,6 @@ const initialCounterpartyData = [
     contactPerson: "Charlotte Dupont",
     email: "charlotte.dupont@socgen.com",
     phone: "+33 1 42 14 20 00",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "013",
@@ -298,14 +200,6 @@ const initialCounterpartyData = [
     contactPerson: "Julien Laurent",
     email: "julien.laurent@creditagricole.fr",
     phone: "+33 1 43 23 56 78",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "014",
@@ -318,14 +212,6 @@ const initialCounterpartyData = [
     contactPerson: "Amelie Rousseau",
     email: "amelie.rousseau@natixis.com",
     phone: "+33 1 42 14 67 89",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "015",
@@ -338,14 +224,6 @@ const initialCounterpartyData = [
     contactPerson: "Louis Martin",
     email: "louis.martin@labanquepostale.fr",
     phone: "+33 1 44 45 56 67",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   // Frankfurt Banks
   {
@@ -359,14 +237,6 @@ const initialCounterpartyData = [
     contactPerson: "Hans Müller",
     email: "hans.mueller@db.com",
     phone: "+49 69 910 1000",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "017",
@@ -379,14 +249,6 @@ const initialCounterpartyData = [
     contactPerson: "Katrin Fischer",
     email: "katrin.fischer@commerzbank.com",
     phone: "+49 69 136 2000",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "018",
@@ -399,14 +261,6 @@ const initialCounterpartyData = [
     contactPerson: "Stefan Weber",
     email: "stefan.weber@kfw.de",
     phone: "+49 69 7431 0",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "019",
@@ -419,14 +273,6 @@ const initialCounterpartyData = [
     contactPerson: "Laura Klein",
     email: "laura.klein@dzbank.de",
     phone: "+49 69 7447 01",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "020",
@@ -439,14 +285,6 @@ const initialCounterpartyData = [
     contactPerson: "Maximilian Bauer",
     email: "max.bauer@helaba.de",
     phone: "+49 69 9132 01",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   // Amsterdam Banks
   {
@@ -460,14 +298,6 @@ const initialCounterpartyData = [
     contactPerson: "Sanne de Vries",
     email: "sanne.vries@abnamro.nl",
     phone: "+31 20 628 9393",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "022",
@@ -480,14 +310,6 @@ const initialCounterpartyData = [
     contactPerson: "Jeroen Bos",
     email: "jeroen.bos@ing.nl",
     phone: "+31 20 563 9111",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "023",
@@ -500,14 +322,6 @@ const initialCounterpartyData = [
     contactPerson: "Anouk Visser",
     email: "anouk.visser@rabobank.nl",
     phone: "+31 30 216 0000",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "024",
@@ -520,14 +334,6 @@ const initialCounterpartyData = [
     contactPerson: "Tom Groen",
     email: "tom.groen@bunq.com",
     phone: "+31 20 240 0650",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "025",
@@ -540,14 +346,6 @@ const initialCounterpartyData = [
     contactPerson: "Maaike van der Berg",
     email: "maaike.berg@vanlanschot.com",
     phone: "+31 20 354 4500",
-    nostroAccounts: {
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   // Sydney Banks
   {
@@ -561,14 +359,6 @@ const initialCounterpartyData = [
     contactPerson: "Sarah Johnson",
     email: "sarah.johnson@commbank.com.au",
     phone: "+61 2 9374 2000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "027",
@@ -581,14 +371,6 @@ const initialCounterpartyData = [
     contactPerson: "James Wilson",
     email: "james.wilson@westpac.com.au",
     phone: "+61 2 8253 0888",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "028",
@@ -601,14 +383,6 @@ const initialCounterpartyData = [
     contactPerson: "Emily Davis",
     email: "emily.davis@nab.com.au",
     phone: "+61 3 8641 9083",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "029",
@@ -621,14 +395,6 @@ const initialCounterpartyData = [
     contactPerson: "Daniel Brown",
     email: "daniel.brown@anz.com",
     phone: "+61 3 9273 5555",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "030",
@@ -641,14 +407,6 @@ const initialCounterpartyData = [
     contactPerson: "Isabella Taylor",
     email: "isabella.taylor@macquarie.com",
     phone: "+61 2 8232 3333",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   // Wellington Banks
   {
@@ -662,14 +420,6 @@ const initialCounterpartyData = [
     contactPerson: "Oliver Moore",
     email: "oliver.moore@bnz.co.nz",
     phone: "+64 4 474 6747",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "032",
@@ -682,14 +432,6 @@ const initialCounterpartyData = [
     contactPerson: "Charlotte Evans",
     email: "charlotte.evans@anz.co.nz",
     phone: "+64 4 496 7000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "033",
@@ -702,14 +444,6 @@ const initialCounterpartyData = [
     contactPerson: "Jacob Roberts",
     email: "jacob.roberts@kiwibank.co.nz",
     phone: "+64 4 473 1133",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "034",
@@ -722,14 +456,6 @@ const initialCounterpartyData = [
     contactPerson: "Sophia Green",
     email: "sophia.green@westpac.co.nz",
     phone: "+64 4 496 2000",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "035",
@@ -742,14 +468,6 @@ const initialCounterpartyData = [
     contactPerson: "Emma Thompson",
     email: "emma.thompson@asbbank.co.nz",
     phone: "+64 4 472 0029",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "036",
@@ -762,14 +480,6 @@ const initialCounterpartyData = [
     contactPerson: "Hiroshi Tanaka",
     email: "hiroshi.tanaka@mizuhobank.co.jp",
     phone: "+81 3 3242 1111",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
   {
     id: "037",
@@ -782,14 +492,6 @@ const initialCounterpartyData = [
     contactPerson: "Sarah Johnson",
     email: "sarah.johnson@rbc.com",
     phone: "+1 416 974 5151",
-    nostroAccounts: {
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      GBP: "001", // Barclays Bank, London
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-    },
   },
   {
     id: "999", // Unique ID for your bank
@@ -802,15 +504,6 @@ const initialCounterpartyData = [
     contactPerson: "Your Name",
     email: "info@globaltradebank.co.uk",
     phone: "+44 20 1234 5678",
-    nostroAccounts: {
-      GBP: "001", // Barclays Bank, London
-      EUR: "016", // Deutsche Bank, Frankfurt
-      USD: "010", // Bank of America, New York
-      JPY: "036", // Mizuho Bank, Tokyo
-      AUD: "026", // Commonwealth Bank of Australia, Sydney
-      NZD: "034", // Westpac New Zealand, Wellington
-      CAD: "037", // Royal Bank of Canada, Ontario
-    },
   },
 ];
 
@@ -832,25 +525,6 @@ const populateCounterpartyTable = () => {
 
 // Populate the counterpartyData array
 populateCounterpartyTable();
-
-// Function to populate nostroData
-const populateNostroData = () => {
-  counterpartyData.forEach((cp) => {
-    Object.entries(cp.nostroAccounts).forEach(([currency, nostroCode]) => {
-      nostroData.push({
-        currency,
-        nostroCode, // The nostro account's unique identifier
-        counterpartyId: cp.id, // The counterparty that owns this nostro account
-        managedById: nostroCode, // Assume nostroCode is valid
-      });
-    });
-  });
-
-  console.log("Nostro data populated.");
-};
-
-// Populate the nostroData array
-populateNostroData();
 
 // Export both counterpartyData and nostroData
 export { counterpartyData, counterpartyFields, nostroData };

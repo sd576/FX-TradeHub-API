@@ -1209,8 +1209,8 @@ export const nostroData = [
     compoundKey: "026-EUR",
     counterpartyId: "026",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
+    nostroCode: "016",
+    managedById: "016",
     description:
       "Deutsche Bank, Frankfurt - EUR Nostro Account managed by Commonwealth Bank of Australia",
   },
@@ -1263,10 +1263,10 @@ export const nostroData = [
     compoundKey: "027-EUR",
     counterpartyId: "027",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
+    nostroCode: "016",
+    managedById: "016",
     description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by Westpac Banking Corporation",
+      "016 - EUR Nostro Account managed by Westpac Banking Corporation",
   },
   {
     compoundKey: "027-USD",
@@ -1317,10 +1317,10 @@ export const nostroData = [
     compoundKey: "028-EUR",
     counterpartyId: "028",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
+    nostroCode: "016",
+    managedById: "016",
     description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by National Australia Bank (NAB)",
+      "016 - EUR Nostro Account managed by National Australia Bank (NAB)",
   },
   {
     compoundKey: "028-USD",
@@ -1371,10 +1371,9 @@ export const nostroData = [
     compoundKey: "029-EUR",
     counterpartyId: "029",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
-    description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by ANZ Banking Group",
+    nostroCode: "016",
+    managedById: "016",
+    description: "016 - EUR Nostro Account managed by ANZ Banking Group",
   },
   {
     compoundKey: "029-USD",
@@ -1420,10 +1419,9 @@ export const nostroData = [
     compoundKey: "030-EUR",
     counterpartyId: "030",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
-    description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by Macquarie Bank",
+    nostroCode: "016",
+    managedById: "016",
+    description: "016 - EUR Nostro Account managed by Macquarie Bank",
   },
   {
     compoundKey: "030-USD",
@@ -1469,10 +1467,10 @@ export const nostroData = [
     compoundKey: "031-EUR",
     counterpartyId: "031",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
+    nostroCode: "016",
+    managedById: "016",
     description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by Bank of New Zealand (BNZ)",
+      "016 - EUR Nostro Account managed by Bank of New Zealand (BNZ)",
   },
   {
     compoundKey: "031-USD",
@@ -1523,10 +1521,9 @@ export const nostroData = [
     compoundKey: "032-EUR",
     counterpartyId: "032",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
-    description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by ANZ Bank New Zealand",
+    nostroCode: "016",
+    managedById: "016",
+    description: "016 - EUR Nostro Account managed by ANZ Bank New Zealand",
   },
   {
     compoundKey: "032-USD",
@@ -1572,10 +1569,9 @@ export const nostroData = [
     compoundKey: "033-EUR",
     counterpartyId: "033",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
-    description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by Kiwibank",
+    nostroCode: "016",
+    managedById: "016",
+    description: "016 - EUR Nostro Account managed by Kiwibank",
   },
   {
     compoundKey: "033-USD",
@@ -1621,10 +1617,9 @@ export const nostroData = [
     compoundKey: "034-EUR",
     counterpartyId: "034",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
-    description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by Westpac New Zealand",
+    nostroCode: "016",
+    managedById: "016",
+    description: "016 - EUR Nostro Account managed by Westpac New Zealand",
   },
   {
     compoundKey: "034-USD",
@@ -1670,10 +1665,9 @@ export const nostroData = [
     compoundKey: "035-EUR",
     counterpartyId: "035",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
-    description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by ASB Bank",
+    nostroCode: "016",
+    managedById: "016",
+    description: "016 - EUR Nostro Account managed by ASB Bank",
   },
   {
     compoundKey: "035-USD",
@@ -1719,10 +1713,9 @@ export const nostroData = [
     compoundKey: "036-EUR",
     counterpartyId: "036",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
-    description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by Mizuho Bank",
+    nostroCode: "016",
+    managedById: "016",
+    description: "016 - EUR Nostro Account managed by Mizuho Bank",
   },
   {
     compoundKey: "036-USD",
@@ -1768,10 +1761,9 @@ export const nostroData = [
     compoundKey: "037-EUR",
     counterpartyId: "037",
     currency: "EUR",
-    nostroCode: "Deutsche Bank, Frankfurt",
-    managedById: "Deutsche Bank, Frankfurt",
-    description:
-      "Deutsche Bank, Frankfurt - EUR Nostro Account managed by Royal Bank of Canada",
+    nostroCode: "016",
+    managedById: "016",
+    description: "016 - EUR Nostro Account managed by Royal Bank of Canada",
   },
   {
     compoundKey: "037-USD",
