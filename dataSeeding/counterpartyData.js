@@ -562,7 +562,7 @@ const initialCounterpartyData = [
     email: "sarah.johnson@commbank.com.au",
     phone: "+61 2 9374 2000",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -582,7 +582,7 @@ const initialCounterpartyData = [
     email: "james.wilson@westpac.com.au",
     phone: "+61 2 8253 0888",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -602,7 +602,7 @@ const initialCounterpartyData = [
     email: "emily.davis@nab.com.au",
     phone: "+61 3 8641 9083",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -622,7 +622,7 @@ const initialCounterpartyData = [
     email: "daniel.brown@anz.com",
     phone: "+61 3 9273 5555",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -642,7 +642,7 @@ const initialCounterpartyData = [
     email: "isabella.taylor@macquarie.com",
     phone: "+61 2 8232 3333",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -663,7 +663,7 @@ const initialCounterpartyData = [
     email: "oliver.moore@bnz.co.nz",
     phone: "+64 4 474 6747",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -683,7 +683,7 @@ const initialCounterpartyData = [
     email: "charlotte.evans@anz.co.nz",
     phone: "+64 4 496 7000",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -703,7 +703,7 @@ const initialCounterpartyData = [
     email: "jacob.roberts@kiwibank.co.nz",
     phone: "+64 4 473 1133",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -723,7 +723,7 @@ const initialCounterpartyData = [
     email: "sophia.green@westpac.co.nz",
     phone: "+64 4 496 2000",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -743,7 +743,7 @@ const initialCounterpartyData = [
     email: "emma.thompson@asbbank.co.nz",
     phone: "+64 4 472 0029",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
@@ -763,7 +763,7 @@ const initialCounterpartyData = [
     email: "hiroshi.tanaka@mizuhobank.co.jp",
     phone: "+81 3 3242 1111",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       AUD: "026", // Commonwealth Bank of Australia, Sydney
@@ -783,7 +783,7 @@ const initialCounterpartyData = [
     email: "sarah.johnson@rbc.com",
     phone: "+1 416 974 5151",
     nostroAccounts: {
-      EUR: "Deutsche Bank, Frankfurt",
+      EUR: "016", // Deutsche Bank, Frankfurt
       USD: "010", // Bank of America, New York
       GBP: "001", // Barclays Bank, London
       JPY: "036", // Mizuho Bank, Tokyo
