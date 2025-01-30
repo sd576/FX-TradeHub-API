@@ -84,8 +84,9 @@ export const removeCounterpartyController = async (req, res) => {
   const { id } = req.params;
   try {
     await deleteCounterparty(id);
-    res.status(200).json({ message: "Counterparty deleted successfully" });
+    res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
