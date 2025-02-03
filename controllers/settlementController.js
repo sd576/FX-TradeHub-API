@@ -74,6 +74,16 @@ export const patchSettlement = async (req, res) => {
         .json({ error: true, message: "No fields to update" });
     }
 
+    // Check if the settlement exists before updating
+    const existingSettlement = await getSettlementByCounterpartyAndCurrency(
+      id,
+      updates.currency
+    );
+
+    if (!existingSettlement) {
+      return res.status(404).json({ error: "Settlement not found" });
+    }
+
     await patchSettlementService(id, updates);
     res.status(200).json({ message: "Settlement updated successfully" });
   } catch (error) {
@@ -84,6 +94,16 @@ export const patchSettlement = async (req, res) => {
 export const updateSettlement = async (req, res) => {
   const { counterpartyId, currency } = req.params;
   try {
+    // Check if settlement exist before updating
+    const existingSettlement = await getSettlementByCounterpartyAndCurrency(
+      counterpartyId,
+      currency
+    );
+
+    if (!existingSettlement) {
+      return res.status(404).json({ error: "Settlement not found" });
+    }
+
     await replaceSettlement(req.body, counterpartyId, currency);
     res.status(200).json({ message: "Settlement updated successfully" });
   } catch (error) {
@@ -94,6 +114,16 @@ export const updateSettlement = async (req, res) => {
 export const removeSettlement = async (req, res) => {
   const { counterpartyId, currency } = req.params;
   try {
+    // Check if settlement exists before deleting
+    const existingSettlement = await getSettlementByCounterpartyAndCurrency(
+      counterpartyId,
+      currency
+    );
+
+    if (!existingSettlement) {
+      return res.status(404).json({ error: "Settlement not found" });
+    }
+
     await deleteSettlement(counterpartyId, currency);
     res.status(200).json({ message: "Settlement deleted successfully" });
   } catch (error) {

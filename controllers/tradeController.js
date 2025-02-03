@@ -86,17 +86,18 @@ export const createTrade = async (req, res) => {
 export const modifyTrade = async (req, res) => {
   const { tradeId } = req.params;
   try {
+    // Check if trade exist before updating
+    const existingTrade = await getTradeById(tradeId);
+
+    if (!existingTrade) {
+      return res.status(404).json({ error: "Trade not found" });
+    }
+
     // Update the trade
     await updateTrade(tradeId, req.body);
 
     // Fetch the updated trade
     const updatedTrade = await getTradeById(tradeId);
-
-    if (!updatedTrade) {
-      return res.status(404).json({ error: "Trade not found after update" });
-    }
-
-    // Return the updated trade
     res.status(200).json(updatedTrade);
   } catch (error) {
     res.status(400).json({
@@ -114,12 +115,13 @@ export const patchTradeController = async (req, res) => {
       return res.status(400).json({ error: "No fields to update" });
     }
 
-    const updatedTrade = await patchTrade(tradeId, req.body);
-
-    if (!updatedTrade) {
+    // Check if trade exists before updating
+    const existingTrade = await getTradeById(tradeId);
+    if (!existingTrade) {
       return res.status(404).json({ error: "Trade not found" });
     }
 
+    const updatedTrade = await patchTrade(tradeId, req.body);
     res.status(200).json(updatedTrade); // Return the updated trade
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -130,8 +132,14 @@ export const patchTradeController = async (req, res) => {
 export const deleteTradeByIdHandler = async (req, res) => {
   const { tradeId } = req.params;
   try {
+    // Check if trade exists first
+    const { tradeId } = await getTradeById(tradeId);
+    if (!existingTrade) {
+      return res.status(404).json({ error: "Trade not found" });
+    }
+
     await deleteTradeById(tradeId);
-    res.status(200).json({ message: "Trade deleted successfully" });
+    res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

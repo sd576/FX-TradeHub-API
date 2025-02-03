@@ -1,3 +1,4 @@
+import { error } from "console";
 import {
   getAllCounterparties,
   getCounterpartyById,
@@ -49,6 +50,12 @@ export const modifyCounterpartyController = async (req, res) => {
       });
     }
 
+    // Check if the counterparty exists before updating
+    const existingCounterparty = await getCounterpartyById(id);
+    if (!existingCounterparty) {
+      return res.status(404).json({ error: "Counterparty not found" });
+    }
+
     await updateCounterparty(id, req.body);
 
     // Fetch the updated record
@@ -69,6 +76,12 @@ export const patchCounterpartyController = async (req, res) => {
       });
     }
 
+    // Check if the counterparty exists before updating
+    const existingCounterparty = await getCounterpartyById(id);
+    if (!existingCounterparty) {
+      return res.status(404).json({ error: "Counterparty not found" });
+    }
+
     await patchCounterparty(id, req.body);
 
     // Fetch the updated record
@@ -83,10 +96,18 @@ export const patchCounterpartyController = async (req, res) => {
 export const removeCounterpartyController = async (req, res) => {
   const { id } = req.params;
   try {
+    // Check if the counterparty exists before deleting
+    const existingCounterparty = await getCounterpartyById(id);
+    if (!existingCounterparty) {
+      return res.status(404).json({ error: "Counterparty not found" });
+    }
+
     await deleteCounterparty(id);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
 
+  await deleteCounterparty(id);
+  res.status(204).send();
+};
