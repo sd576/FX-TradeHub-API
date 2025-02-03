@@ -139,15 +139,35 @@ export const updateCounterparty = (counterpartyId, counterparty) => {
 };
 
 export const deleteCounterparty = (counterpartyId) => {
-  const query = "DELETE FROM counterparties WHERE id = ?";
   return new Promise((resolve, reject) => {
-    db.run(query, [counterpartyId], (err) => {
-      if (err) {
-        console.error("Error deleting counterparty:", err.message);
-        reject(new Error("Failed to delete counterparty"));
-      } else {
-        resolve();
+    // First, check if the counterparty exists
+    db.get(
+      "SELECT * FROM counterparties WHERE id = ?",
+      [counterpartyId],
+      (err, row) => {
+        if (err) {
+          console.error("Error checking counterparty existence:", err.message);
+          return reject(new Error("Failed to check counterparty existence"));
+        }
+
+        if (!row) {
+          console.log(`Counterparty with ID ${counterpartyId} not found.`);
+          return reject(new Error("Counterparty not found"));
+        }
+
+        // Proceed with deletion
+        db.run(
+          "DELETE FROM counterparties WHERE id = ?",
+          [counterpartyId],
+          (delErr) => {
+            if (delErr) {
+              console.error("Error deleting counterparty:", delErr.message);
+              return reject(new Error("Failed to delete counterparty"));
+            }
+            resolve();
+          }
+        );
       }
-    });
+    );
   });
 };

@@ -6,7 +6,7 @@ import {
   createCounterpartyController,
   modifyCounterpartyController,
   patchCounterpartyController,
-  removeCounterpartyController,
+  deleteCounterpartyController,
 } from "../controllers/counterpartyController.js";
 
 import {
@@ -54,6 +54,6 @@ router.patch(
 );
 
 // Delete a counterparty
-router.delete("/:id", removeCounterpartyController);
+router.delete("/:id", deleteCounterpartyController);
 
 export default router;

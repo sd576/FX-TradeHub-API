@@ -96,18 +96,12 @@ export const patchCounterpartyController = async (req, res) => {
 export const removeCounterpartyController = async (req, res) => {
   const { id } = req.params;
   try {
-    // Check if the counterparty exists before deleting
-    const existingCounterparty = await getCounterpartyById(id);
-    if (!existingCounterparty) {
-      return res.status(404).json({ error: "Counterparty not found" });
-    }
-
     await deleteCounterparty(id);
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    if (error.message === "Counterparty not found") {
+      return res.status(404).json({ error: "Counterparty not found" });
+    }
+    res.status(500).json({ error: "Failed to delete counterparty" });
   }
-
-  await deleteCounterparty(id);
-  res.status(204).send();
 };
