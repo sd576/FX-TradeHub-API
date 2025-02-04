@@ -93,7 +93,7 @@ export const patchCounterpartyController = async (req, res) => {
   }
 };
 
-export const removeCounterpartyController = async (req, res) => {
+export const deleteCounterpartyController = async (req, res) => {
   const { id } = req.params;
   try {
     await deleteCounterparty(id);
