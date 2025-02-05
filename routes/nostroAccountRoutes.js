@@ -2,11 +2,10 @@ import { Router } from "express";
 import { validationResult } from "express-validator";
 import {
   getAllNostroAccountsController,
-  getNostrosByCounterpartyController,
-  getNostroByCounterpartyAndCurrencyController,
+  getNostroAccountByIdController,
   createNostroAccountController,
-  updateNostro,
-  patchNostro,
+  updateNostroAccountController,
+  patchNostroAccountController,
   deleteNostroAccountController,
 } from "../controllers/nostroAccountController.js";
 import { validateNostroParams } from "../validators/nostroAccountValidator.js";
@@ -28,31 +27,28 @@ router.post("/", createNostroAccountController);
 // ✅ Retrieve all Nostro accounts
 router.get("/", getAllNostroAccountsController);
 
-// ✅ Retrieve Nostro accounts by counterparty ID
-router.get("/:counterpartyId", getNostrosByCounterpartyController);
-
-// ✅ Retrieve a single Nostro account by counterparty ID and currency
-router.get(
-  "/:counterpartyId/:currency",
-  validateNostroParams,
-  handleValidation,
-  getNostroByCounterpartyAndCurrencyController
-);
+// ✅ Retrieve a single Nostro account by ID
+router.get("/:id", getNostroAccountByIdController); // 🆕 Correct route
 
 // ✅ Update (replace) a Nostro account
 router.put(
-  "/:counterpartyId/:currency",
+  "/:id",
   validateNostroParams,
   handleValidation,
-  updateNostro
-);
+  updateNostroAccountController
+); // ✅ Fix incorrect reference
 
 // ✅ Partially update a Nostro account
-router.patch("/:id", patchNostro);
+router.patch(
+  "/:id",
+  validateNostroParams,
+  handleValidation,
+  patchNostroAccountController
+); // ✅ Fix incorrect reference
 
 // ✅ Delete a Nostro account
 router.delete(
-  "/:counterpartyId/:currency",
+  "/:id",
   validateNostroParams,
   handleValidation,
   deleteNostroAccountController

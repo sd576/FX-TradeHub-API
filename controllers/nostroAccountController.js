@@ -34,7 +34,7 @@ export const getNostroAccountByIdController = async (req, res) => {
 // ✅ Create a new Nostro Account
 export const createNostroAccountController = async (req, res) => {
   try {
-    await createNostroAccount(req.body); // Calls the service function
+    await createNostroAccount(req.body);
     res.status(201).json({ message: "Nostro Account created successfully" });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -72,14 +72,4 @@ export const deleteNostroAccountController = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to delete Nostro Account" });
   }
-};
-
-// ✅ Export all controllers
-export {
-  getAllNostroAccountsController,
-  getNostroAccountByIdController,
-  createNostroAccountController,
-  updateNostroAccountController,
-  patchNostroAccountController,
-  deleteNostroAccountController,
 };
