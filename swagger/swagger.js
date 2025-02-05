@@ -28,6 +28,15 @@ export default {
               },
             },
           },
+          400: {
+            description: "Invalid Counterparty request body or parameters.",
+          },
+          404: {
+            description: "Counterparty not found.",
+          },
+          500: {
+            description: "Server error while updating Counterparty.",
+          },
           500: {
             description: "Server error while fetching counterparties.",
           },
@@ -49,10 +58,13 @@ export default {
             description: "Counterparty created successfully.",
           },
           400: {
-            description: "Validation error or missing fields.",
+            description: "Invalid Counterparty request body or parameters.",
+          },
+          404: {
+            description: "Counterparty not found.",
           },
           500: {
-            description: "Server error while creating the counterparty.",
+            description: "Server error while updating Counterparty.",
           },
         },
       },
@@ -79,11 +91,14 @@ export default {
               },
             },
           },
+          400: {
+            description: "Invalid Counterparty request body or parameters.",
+          },
           404: {
             description: "Counterparty not found.",
           },
           500: {
-            description: "Server error while fetching the counterparty.",
+            description: "Server error while updating Counterparty.",
           },
         },
       },
@@ -112,13 +127,13 @@ export default {
             description: "Counterparty updated successfully.",
           },
           400: {
-            description: "Validation error or attempt to change the ID.",
+            description: "Invalid Counterparty request body or parameters.",
           },
           404: {
             description: "Counterparty not found.",
           },
           500: {
-            description: "Server error while updating the counterparty.",
+            description: "Server error while updating Counterparty.",
           },
         },
       },
@@ -173,6 +188,9 @@ export default {
           200: {
             description: "Counterparty deleted successfully.",
           },
+          400: {
+            description: "Invalid counterparty request parameters.",
+          },
           404: {
             description: "Counterparty not found.",
           },
@@ -182,13 +200,13 @@ export default {
         },
       },
     },
-    "/nostroAccounts": {
+    "/nostro-accounts": {
       get: {
-        summary: "Retrieve all nostroAccounts",
-        tags: ["NostroAccounts"],
+        summary: "Retrieve all Nostro Accounts",
+        tags: ["Nostro Accounts"],
         responses: {
           200: {
-            description: "A list of nostroAccounts.",
+            description: "A list of Nostro Accounts.",
             content: {
               "application/json": {
                 schema: {
@@ -198,16 +216,23 @@ export default {
               },
             },
           },
+          400: {
+            description: "Invalid Nostro Account request parameters.",
+          },
+          404: {
+            description:
+              "Nostro Account not found for the specified counterparty.",
+          },
           500: {
-            description: "Server error while fetching nostroAccounts.",
+            description: "Server error while fetching Nostro Account.",
           },
         },
       },
     },
-    "/nostroAccounts/{counterpartyId}": {
+    "/nostro-accounts/{counterpartyId}": {
       get: {
-        summary: "Retrieve Nostro Accounts by counterparty ID",
-        tags: ["NostroAccounts"],
+        summary: "Retrieve Nostro Accounts by Counterparty ID",
+        tags: ["Nostro Accounts"],
         parameters: [
           {
             name: "counterpartyId",
@@ -230,20 +255,23 @@ export default {
               },
             },
           },
+          400: {
+            description: "Invalid Nostro Account request parameters.",
+          },
           404: {
             description:
-              "NostroAccounts not found for the specified counterparty.",
+              "Nostro Account not found for the specified counterparty.",
           },
           500: {
-            description: "Server error while fetching nostroAccounts.",
+            description: "Server error while fetching Nostro Accouns.",
           },
         },
       },
     },
-    "/nostroAccounts/{counterpartyId}/{currency}": {
+    "/nostro-accounts/{counterpartyId}/{currency}": {
       put: {
-        summary: "Update a Nostro Account by counterparty and currency",
-        tags: ["NostroAccounts"],
+        summary: "Update a Nostro Account by Counterparty and Currency",
+        tags: ["Nostro Accounts"],
         parameters: [
           {
             name: "counterpartyId",
@@ -272,18 +300,22 @@ export default {
           200: {
             description: "Nostro Account updated successfully.",
           },
+          400: {
+            description: "Invalid Nostro Account request parameters.",
+          },
           404: {
-            description: "Nostro Accountnot found.",
+            description:
+              "Nostro Account not found for the specified counterparty.",
           },
           500: {
-            description: "Server error while updating the Nostro Account.",
+            description: "Server error while fetching Nostro Account.",
           },
         },
       },
       patch: {
         summary:
-          "Partially update a Nostro Account by counterparty and currency",
-        tags: ["NostroAccounts"],
+          "Partially Update a Nostro Account by Counterparty and Currency",
+        tags: ["Nostro Accounts"],
         parameters: [
           {
             name: "counterpartyId",
@@ -310,13 +342,13 @@ export default {
         },
         responses: {
           200: {
-            description: "Nostro updated successfully.",
+            description: "Nostro Account updated successfully.",
           },
           400: {
-            description: "Validation error or invalid request.",
+            description: "Invalid Nostro Account request parameters.",
           },
           404: {
-            description: "Nostro not found.",
+            description: "Nostro Account not found.",
           },
           500: {
             description: "Server error while updating the Nostro Account.",
@@ -324,33 +356,29 @@ export default {
         },
       },
       delete: {
-        summary: "Delete a Nostro Account by counterparty and currency",
-        tags: ["NostroAccounts"],
+        summary: "Delete a Nostro Account by ID",
+        tags: ["Nostro Accounts"],
         parameters: [
           {
-            name: "counterpartyId",
+            name: "id",
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Counterparty ID.",
-          },
-          {
-            name: "currency",
-            in: "path",
-            required: true,
-            schema: { type: "string" },
-            description: "Currency code.",
+            description: "Full Nostro Account ID (e.g., '002-CHF').",
           },
         ],
         responses: {
           200: {
-            description: "Nostro deleted successfully.",
+            description: "Nostro Account deleted successfully.",
+          },
+          400: {
+            description: "Invalid Nostro Account request parameters.",
           },
           404: {
-            description: "Nostro not found.",
+            description: "Nostro Account not found.",
           },
           500: {
-            description: "Server error while deleting the Nostro Account.",
+            description: "Server error while updating Nostro Account.",
           },
         },
       },
@@ -371,8 +399,14 @@ export default {
               },
             },
           },
+          400: {
+            description: "Invalid Trade request parameters.",
+          },
+          404: {
+            description: "Trade not found.",
+          },
           500: {
-            description: "Server error while fetching trades.",
+            description: "Server error while updating Trade.",
           },
         },
       },
@@ -392,7 +426,10 @@ export default {
             description: "Trade created successfully.",
           },
           400: {
-            description: "Validation error.",
+            description: "Trade Validation error.",
+          },
+          404: {
+            description: "Trade not found.",
           },
           500: {
             description: "Server error while creating the trade.",
@@ -421,6 +458,9 @@ export default {
                 schema: { $ref: "#/components/schemas/Trade" },
               },
             },
+          },
+          400: {
+            description: "Trade Validation error.",
           },
           404: {
             description: "Trade not found.",
@@ -453,6 +493,9 @@ export default {
         responses: {
           200: {
             description: "Trade updated successfully.",
+          },
+          400: {
+            description: "Trade Validation error.",
           },
           404: {
             description: "Trade not found.",
@@ -487,7 +530,7 @@ export default {
             description: "Trade updated successfully.",
           },
           400: {
-            description: "Validation error or invalid request.",
+            description: "Trade Validation error.",
           },
           404: {
             description: "Trade not found.",
@@ -512,6 +555,9 @@ export default {
         responses: {
           200: {
             description: "Trade deleted successfully.",
+          },
+          400: {
+            description: "Trade Validation error.",
           },
           404: {
             description: "Trade not found.",

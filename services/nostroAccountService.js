@@ -134,26 +134,15 @@ export const updateNostroAccount = (id, nostroAccount) => {
 // ✅ Delete a Nostro Account
 export const deleteNostroAccount = (id) => {
   return new Promise((resolve, reject) => {
-    // Check if the nostro account exists
-    db.get("SELECT * FROM nostroAccounts WHERE id = ?", [id], (err, row) => {
+    db.run("DELETE FROM nostroAccounts WHERE id = ?", [id], function (err) {
       if (err) {
-        console.error("Error checking nostroAccount existence:", err.message);
-        return reject(new Error("Failed to check nostroAccount existence"));
-      }
-
-      if (!row) {
-        console.log(`Nostro Account with ID ${id} not found.`);
-        return reject(new Error("Nostro Account not found"));
-      }
-
-      // Proceed with deletion
-      db.run("DELETE FROM nostroAccounts WHERE id = ?", [id], (delErr) => {
-        if (delErr) {
-          console.error("Error deleting nostroAccount:", delErr.message);
-          return reject(new Error("Failed to delete nostroAccount"));
-        }
+        console.error("Error deleting nostroAccount:", err.message);
+        reject(new Error("Failed to delete Nostro Account"));
+      } else if (this.changes === 0) {
+        reject(new Error("Nostro Account not found"));
+      } else {
         resolve();
-      });
+      }
     });
   });
 };

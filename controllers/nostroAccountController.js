@@ -68,8 +68,8 @@ export const deleteNostroAccountController = async (req, res) => {
   const { id } = req.params;
   try {
     await deleteNostroAccount(id);
-    res.status(204).send();
+    res.status(200).json({ message: "Nostro Account deleted successfully." });
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete Nostro Account" });
+    res.status(404).json({ error: "Nostro Account not found." });
   }
 };

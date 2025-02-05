@@ -47,11 +47,6 @@ router.patch(
 ); // ✅ Fix incorrect reference
 
 // ✅ Delete a Nostro account
-router.delete(
-  "/:id",
-  validateNostroParams,
-  handleValidation,
-  deleteNostroAccountController
-);
+router.delete("/:id", deleteNostroAccountController);
 
 export default router;
