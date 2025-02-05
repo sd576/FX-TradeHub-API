@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import sqlite3 from "sqlite3";
 import counterpartyRoutes from "./routes/counterpartyRoutes.js";
-import settlementRoutes from "./routes/settlementRoutes.js";
+import nostroAccountRoutes from "./routes/nostroAccountRoutes.js";
 import tradeRoutes from "./routes/tradeRoutes.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger/swagger.js";
@@ -34,7 +34,7 @@ console.log("Swagger UI available at http://localhost:3000/api-docs");
 
 // Routes
 app.use("/api/counterparties", counterpartyRoutes);
-app.use("/api/settlements", settlementRoutes);
+app.use("/api/nostro-accounts", nostroAccountRoutes);
 app.use("/api/trades", tradeRoutes);
 
 // Error handling middleware

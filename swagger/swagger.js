@@ -182,32 +182,32 @@ export default {
         },
       },
     },
-    "/settlements": {
+    "/nostroAccounts": {
       get: {
-        summary: "Retrieve all settlements",
-        tags: ["Settlements"],
+        summary: "Retrieve all nostroAccounts",
+        tags: ["NostroAccounts"],
         responses: {
           200: {
-            description: "A list of settlements.",
+            description: "A list of nostroAccounts.",
             content: {
               "application/json": {
                 schema: {
                   type: "array",
-                  items: { $ref: "#/components/schemas/Settlement" },
+                  items: { $ref: "#/components/schemas/Nostro" },
                 },
               },
             },
           },
           500: {
-            description: "Server error while fetching settlements.",
+            description: "Server error while fetching nostroAccounts.",
           },
         },
       },
     },
-    "/settlements/{counterpartyId}": {
+    "/nostroAccounts/{counterpartyId}": {
       get: {
-        summary: "Retrieve settlements by counterparty ID",
-        tags: ["Settlements"],
+        summary: "Retrieve Nostro Accounts by counterparty ID",
+        tags: ["NostroAccounts"],
         parameters: [
           {
             name: "counterpartyId",
@@ -219,30 +219,31 @@ export default {
         ],
         responses: {
           200: {
-            description: "List of settlements for the specified counterparty.",
+            description:
+              "List of Nostro Accounts for the specified counterparty.",
             content: {
               "application/json": {
                 schema: {
                   type: "array",
-                  items: { $ref: "#/components/schemas/Settlement" },
+                  items: { $ref: "#/components/schemas/Nostro" },
                 },
               },
             },
           },
           404: {
             description:
-              "Settlements not found for the specified counterparty.",
+              "NostroAccounts not found for the specified counterparty.",
           },
           500: {
-            description: "Server error while fetching settlements.",
+            description: "Server error while fetching nostroAccounts.",
           },
         },
       },
     },
-    "/settlements/{counterpartyId}/{currency}": {
+    "/nostroAccounts/{counterpartyId}/{currency}": {
       put: {
-        summary: "Update a settlement by counterparty and currency",
-        tags: ["Settlements"],
+        summary: "Update a Nostro Account by counterparty and currency",
+        tags: ["NostroAccounts"],
         parameters: [
           {
             name: "counterpartyId",
@@ -263,25 +264,26 @@ export default {
           required: true,
           content: {
             "application/json": {
-              schema: { $ref: "#/components/schemas/Settlement" },
+              schema: { $ref: "#/components/schemas/Nostro" },
             },
           },
         },
         responses: {
           200: {
-            description: "Settlement updated successfully.",
+            description: "Nostro Account updated successfully.",
           },
           404: {
-            description: "Settlement not found.",
+            description: "Nostro Accountnot found.",
           },
           500: {
-            description: "Server error while updating the settlement.",
+            description: "Server error while updating the Nostro Account.",
           },
         },
       },
       patch: {
-        summary: "Partially update a settlement by counterparty and currency",
-        tags: ["Settlements"],
+        summary:
+          "Partially update a Nostro Account by counterparty and currency",
+        tags: ["NostroAccounts"],
         parameters: [
           {
             name: "counterpartyId",
@@ -302,28 +304,28 @@ export default {
           required: true,
           content: {
             "application/json": {
-              schema: { $ref: "#/components/schemas/Settlement" },
+              schema: { $ref: "#/components/schemas/Nostro" },
             },
           },
         },
         responses: {
           200: {
-            description: "Settlement updated successfully.",
+            description: "Nostro updated successfully.",
           },
           400: {
             description: "Validation error or invalid request.",
           },
           404: {
-            description: "Settlement not found.",
+            description: "Nostro not found.",
           },
           500: {
-            description: "Server error while updating the settlement.",
+            description: "Server error while updating the Nostro Account.",
           },
         },
       },
       delete: {
-        summary: "Delete a settlement by counterparty and currency",
-        tags: ["Settlements"],
+        summary: "Delete a Nostro Account by counterparty and currency",
+        tags: ["NostroAccounts"],
         parameters: [
           {
             name: "counterpartyId",
@@ -342,13 +344,13 @@ export default {
         ],
         responses: {
           200: {
-            description: "Settlement deleted successfully.",
+            description: "Nostro deleted successfully.",
           },
           404: {
-            description: "Settlement not found.",
+            description: "Nostro not found.",
           },
           500: {
-            description: "Server error while deleting the settlement.",
+            description: "Server error while deleting the Nostro Account.",
           },
         },
       },
@@ -538,7 +540,7 @@ export default {
           email: { type: "string", example: "contact@globaltrading.com" },
         },
       },
-      Settlement: {
+      Nostro: {
         type: "object",
         properties: {
           id: { type: "string", example: "SET001" },

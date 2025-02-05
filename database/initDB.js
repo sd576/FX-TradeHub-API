@@ -28,7 +28,7 @@ const executeQuery = (db, query, params = []) =>
 // Drop existing tables and views
 const dropTables = async (db) => {
   console.log("Dropping existing tables...");
-  const tables = ["counterparties", "trades", "settlements"];
+  const tables = ["counterparties", "trades", "nostroAccounts"];
   for (const table of tables) {
     await executeQuery(db, `DROP TABLE IF EXISTS ${table};`);
   }
@@ -67,10 +67,10 @@ const createTables = async (db) => {
       buyNostroAccountId TEXT,
       sellNostroAccountId TEXT,
       FOREIGN KEY (counterpartyId) REFERENCES counterparties(id),
-      FOREIGN KEY (buyNostroAccountId) REFERENCES settlements(id),
-      FOREIGN KEY (sellNostroAccountId) REFERENCES settlements(id)
+      FOREIGN KEY (buyNostroAccountId) REFERENCES nostroAccounts(id),
+      FOREIGN KEY (sellNostroAccountId) REFERENCES nostroAccounts(id)
     );`,
-    `CREATE TABLE IF NOT EXISTS settlements (
+    `CREATE TABLE IF NOT EXISTS nostroAccounts (
       id TEXT PRIMARY KEY,
       counterpartyId TEXT NOT NULL,
       currency TEXT NOT NULL,
@@ -285,9 +285,20 @@ const seedTrades = async (db) => {
   console.log("Trades seeded successfully.");
 };
 
-// seed settlements
-const seedSettlements = async (db) => {
-  console.log("Seeding settlements...");
+// 🌍 Define a mapping of which bank manages which currency
+const currencyManagers = {
+  USD: "010", // USD -> Bank of America (example)
+  EUR: "016", // EUR -> Deutsche Bank
+  GBP: "001", // GBP -> Barclays Bank
+  JPY: "036", // JPY -> Mizuho Bank
+  AUD: "026", // AUD -> Commonwealth Bank of Australia
+  NZD: "034", // NZD -> Westpac New Zealand
+  CAD: "037", // CAD -> Royal Bank of Canada
+};
+
+// 🌍 Seed nostroAccounts
+const seedNostros = async (db) => {
+  console.log("Seeding nostroAccounts...");
 
   for (const record of nostroData) {
     const {
@@ -295,11 +306,11 @@ const seedSettlements = async (db) => {
       counterpartyId,
       currency,
       nostroCode,
-      managedById,
+      managedById: providedManagedById,
       description,
     } = record;
 
-    // Validate that counterpartyId and managedById exist in the counterparties table
+    // 🔎 Validate counterpartyId exists
     const counterpartyExists = await new Promise((resolve) => {
       db.get(
         "SELECT 1 FROM counterparties WHERE id = ?",
@@ -308,7 +319,7 @@ const seedSettlements = async (db) => {
       );
     });
 
-    // Validate nostroCode and managedById
+    // 🔎 Validate nostroCode (nostroAccountId) exists
     const nostroAccountExists = await new Promise((resolve) => {
       db.get(
         "SELECT 1 FROM counterparties WHERE id = ?",
@@ -317,28 +328,37 @@ const seedSettlements = async (db) => {
       );
     });
 
+    // 🔎 Assign correct `managedById` (fallback to the currency manager if missing)
+    let correctedManagedById = providedManagedById;
+    if (!correctedManagedById || !currencyManagers[currency]) {
+      console.warn(
+        `⚠️ Warning: managedById missing for ${compoundKey}. Assigning default managing bank for ${currency}.`
+      );
+      correctedManagedById = currencyManagers[currency] || "UNKNOWN";
+    }
+
+    // 🔎 Validate `managedById`
     const managerExists = await new Promise((resolve) => {
       db.get(
         "SELECT 1 FROM counterparties WHERE id = ?",
-        [managedById],
+        [correctedManagedById],
         (err, row) => resolve(!err && row !== undefined)
       );
     });
 
-    // Skip invalid settlements
     if (!counterpartyExists || !nostroAccountExists || !managerExists) {
       console.warn(
-        `Skipping invalid settlement: compoundKey=${compoundKey}, ` +
-          `counterpartyId=${counterpartyId}, nostroCode=${nostroCode}, managedById=${managedById}`
+        `Skipping invalid nostro: compoundKey=${compoundKey}, ` +
+          `counterpartyId=${counterpartyId}, nostroCode=${nostroCode}, managedById=${correctedManagedById}`
       );
       continue;
     }
 
-    // Insert settlement into the database
+    // 🟢 Insert nostro into the database
     try {
       await executeQuery(
         db,
-        `INSERT OR IGNORE INTO settlements (id, counterpartyId, currency, nostroAccountId, nostroDescription, managedById)
+        `INSERT OR IGNORE INTO nostroAccounts (id, counterpartyId, currency, nostroAccountId, nostroDescription, managedById)
          VALUES (?, ?, ?, ?, ?, ?);`,
         [
           compoundKey,
@@ -346,25 +366,25 @@ const seedSettlements = async (db) => {
           currency,
           nostroCode,
           description,
-          managedById,
+          correctedManagedById,
         ]
       );
-      console.log(`Seeded settlement: ${compoundKey}`);
-    } catch (error) {
-      console.error(
-        `Error seeding settlement ${compoundKey}: ${error.message}`
+      console.log(
+        `✅ Seeded nostro: ${compoundKey} (Managed by: ${correctedManagedById})`
       );
+    } catch (error) {
+      console.error(`❌ Error seeding nostro ${compoundKey}: ${error.message}`);
     }
   }
 
-  console.log("Settlements seeded successfully.");
+  console.log("✅ Nostro Accounts seeded successfully.");
 };
 
 const main = async () => {
   const db = new sqlite3.Database(dbPath);
 
   try {
-    console.log("Starting database initialization...");
+    console.log("Starting database initialisation...");
 
     // Drop tables and views
     await dropTables(db);
@@ -375,11 +395,11 @@ const main = async () => {
     // Seed data
     await seedCounterparties(db);
     await seedTrades(db);
-    await seedSettlements(db);
+    await seedNostros(db);
 
     console.log("Database initialization completed successfully.");
   } catch (error) {
-    console.error("Error during database initialization:", error.message);
+    console.error("Error during database initialisation:", error.message);
   } finally {
     db.close((err) => {
       if (err) {
