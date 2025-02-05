@@ -18,9 +18,8 @@ const testTradeService = async () => {
     console.log(
       "Testing getTradesByCounterparty (Counterparty ID: 'COUNTERPARTY-001'):"
     );
-    const tradesByCounterparty = await getTradesByCounterparty(
-      "COUNTERPARTY-001"
-    );
+    const tradesByCounterparty =
+      await getTradesByCounterparty("COUNTERPARTY-001");
     console.log(tradesByCounterparty);
 
     console.log("Testing getTradesByDateRange (2025-01-01 to 2025-01-31):");

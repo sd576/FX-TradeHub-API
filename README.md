@@ -1,38 +1,52 @@
 # FX Trader API Server
 
 ## Overview
+
 The FX Trader API Server is a robust application designed to manage trades and counterparties within an FX trading environment. It serves as a comprehensive tool for testing and development, with a fully populated database that mimics realistic trading scenarios. The primary goal of this project is to provide a solid foundation for writing Postman, Cypress, and Playwright API tests.
 
 ## Features
+
 - **Three main tables:** `trades`, `counterparties` and `settlements`, storing detailed trade, counterparty and settlement information.
 - **Pre-seeded database:** Realistic volume of data for meaningful testing.
 - **Fully documented API:** Accessible via Swagger on the local development server.
 - **Utility tools:** For resetting and reseeding the database.
 
 ## Purpose
+
 This project bridges the gap between simplistic "toy" datasets and fully-fledged production systems. By including a significant amount of realistic data and providing tools to interact with it, the FX Trader API Server is ideal for:
+
 - **API Testing:** Using tools like Postman, Cypress, and Playwright.
 - **Automation Practice:** Developing robust test suites with realistic scenarios.
 - **Learning and Experimentation:** Serving as a sandbox for API and database exploration.
 
 ## Getting Started
+
 ### Clone the Repository:
+
 In your terminal, run the command:
+
 ```bash
 git clone https://github.com/sd576/FX-TradeHub-API.git
 ```
+
 ### Navigate to the Project Directory:
+
 ```bash
 cd FX-TradeHub-API
 ```
+
 ### Install Dependencies:
+
 ```bash
 npm install
 ```
+
 ### Start the Server:
+
 ```bash
 npm start
 ```
+
 By default, the server will run on http://localhost:3000. </br> You can access the Swagger API documentation at http://localhost:3000/api-docs.
 
 ### Folder Structure
@@ -112,7 +126,6 @@ fx_trader_server/
 
 ```
 
-
 ## Commands
 
 ### Resetting and Reseeding the Database
@@ -120,33 +133,36 @@ fx_trader_server/
 Run the following commands in sequence to reset the database, generate new trade data, and seed the database with fresh data:
 
 Open SQLite database for direct queries:
+
 ```bash
 npm run db
 ```
 
 Start the API server:
+
 ```bash
 npm start
 ```
+
 Seed the database and start the server:
+
 ```bash
 npm run setup-and-start
 ```
 
 Work with SQLite Database directly:
+
 ```bash
 npm run sqlite
 ```
 
 Run the server in Development Mode:
+
 ```bash
 npm run dev
 ```
 
-
-
 - The server will run at http://localhost:3000.
-
 
 ### Accessing Swagger Documentation
 
@@ -161,6 +177,7 @@ Here, you can:
 ## Available API Endpoints
 
 ### Counterparties
+
 - GET /counterparties: Retrieve all counterparties
 - POST /counterparties: Add a new counterparty
 - GET /counterparties/{id}: Retrieve a single counterparty by ID
@@ -168,12 +185,14 @@ Here, you can:
 - DELETE /counterparties/{id}: Delete a counterparty
 
 ### Settlements
+
 - GET /settlements: Retrieve all settlements
 - GET /settlements/{counterpartyId}: Retrieve settlements by counterparty ID
 - PUT /settlements/{counterpartyId}/{currency}: Update a settlement by counterparty and currency
 - DELETE /settlements/{counterpartyId}/{currency}: Delete a settlement by counterparty and currency
 
 ### Trades
+
 - GET /trades: Retrieve all trades
 - POST /trades: Add a new trade
 - GET /trades/{tradeId}: Retrieve a single trade by ID
