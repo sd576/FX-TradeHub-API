@@ -49,7 +49,7 @@ export const createNostroAccount = (nostroAccount) => {
   ];
 
   return new Promise((resolve, reject) => {
-    db.run(query, params, function (err) {
+    db.run(query, params, (err) => {
       if (err) {
         console.error("Error adding nostroAccount:", err.message);
         return reject(
@@ -67,29 +67,54 @@ export const createNostroAccount = (nostroAccount) => {
 
 // ✅ Patch (Partial Update) a Nostro Account
 export const patchNostroAccount = (id, updates) => {
-  if (updates.id && updates.id !== id) {
-    return Promise.reject(
-      new Error(
-        "Updating 'id' is not allowed. Use DELETE and POST to create a new Nostro Account."
-      )
-    );
-  }
-
-  const fields = Object.keys(updates);
-  const values = Object.values(updates);
-
-  const query = `
-    UPDATE nostroAccounts
-    SET ${fields.map((field) => `${field} = ?`).join(", ")}
-    WHERE id = ?;
-  `;
-
   return new Promise((resolve, reject) => {
-    db.run(query, [...values, id], (err) => {
+    console.log("[🔍 PATCH] Received updates:", updates);
+
+    const allowedFields = [
+      "counterpartyId",
+      "currency",
+      "nostroAccountId",
+      "nostroDescription",
+      "managedById",
+    ];
+
+    const fields = Object.keys(updates);
+    const values = Object.values(updates);
+
+    console.log("[🧐 PATCH] Fields in request:", fields);
+    console.log("[🧐 PATCH] Values in request:", values);
+
+    const filteredFields = fields.filter((field) =>
+      allowedFields.includes(field)
+    );
+    const filteredValues = filteredFields.map((field) => updates[field]); // Ensure values match fields
+
+    console.log("[🛠️ PATCH] Allowed fields for update:", filteredFields);
+    console.log("[🛠️ PATCH] Filtered values:", filteredValues);
+
+    if (filteredFields.length === 0) {
+      console.log("[❌ PATCH ERROR] No valid fields provided for update.");
+      return reject(new Error("No valid fields to update."));
+    }
+
+    const query = `
+      UPDATE nostroAccounts
+      SET ${filteredFields.map((field) => `${field} = ?`).join(", ")}
+      WHERE id = ?;
+    `;
+
+    console.log("[🚀 PATCH QUERY]:", query);
+    console.log("[🚀 PATCH PARAMS]:", [...filteredValues, id]);
+
+    db.run(query, [...filteredValues, id], function (err) {
       if (err) {
-        console.error("Error patching nostroAccount:", err.message);
-        reject(new Error("Failed to patch nostroAccount"));
+        console.error("[❌ PATCH ERROR] Database error:", err.message);
+        return reject(new Error("Failed to patch nostroAccount"));
+      } else if (this.changes === 0) {
+        console.log("[❌ PATCH ERROR] No changes detected, record not found.");
+        return reject(new Error("Nostro Account not found"));
       } else {
+        console.log("[✅ PATCH SUCCESS] Nostro Account Updated");
         resolve();
       }
     });
@@ -98,33 +123,27 @@ export const patchNostroAccount = (id, updates) => {
 
 // ✅ Update (PUT) a Nostro Account
 export const updateNostroAccount = (id, nostroAccount) => {
-  if (nostroAccount.id && nostroAccount.id !== id) {
-    return Promise.reject(
-      new Error(
-        "Updating 'id' is not allowed. Use DELETE and POST to create a new Nostro Account."
-      )
-    );
-  }
-
-  const query = `
-    UPDATE nostroAccounts
-    SET counterpartyId = ?, currency = ?, nostroAccountId = ?, nostroDescription = ?, managedById = ?
-    WHERE id = ?;
-  `;
-  const params = [
-    nostroAccount.counterpartyId,
-    nostroAccount.currency,
-    nostroAccount.nostroAccountId,
-    nostroAccount.nostroDescription,
-    nostroAccount.managedById,
-    id,
-  ];
-
   return new Promise((resolve, reject) => {
-    db.run(query, params, (err) => {
+    const query = `
+      UPDATE nostroAccounts
+      SET counterpartyId = ?, currency = ?, nostroAccountId = ?, nostroDescription = ?, managedById = ?
+      WHERE id = ?;
+    `;
+    const params = [
+      nostroAccount.counterpartyId,
+      nostroAccount.currency,
+      nostroAccount.nostroAccountId,
+      nostroAccount.nostroDescription,
+      nostroAccount.managedById,
+      id,
+    ];
+
+    db.run(query, params, function (err) {
       if (err) {
         console.error("Error updating nostroAccount:", err.message);
         reject(new Error("Failed to update nostroAccount"));
+      } else if (this.changes === 0) {
+        reject(new Error("Nostro Account not found"));
       } else {
         resolve();
       }

@@ -1,12 +1,29 @@
-import { check } from "express-validator";
+import { body } from "express-validator";
 
-// Validation rules for settlement parameters
-export const validateNostroParams = [
-  check("counterpartyId")
+export const patchNostroAccountValidator = [
+  body("counterpartyId")
+    .optional()
     .isString()
     .withMessage("Counterparty ID must be a string"),
-  check("currency")
+  body("currency")
+    .optional()
     .isString()
-    .isLength({ max: 3 })
-    .withMessage("Currency must be a valid 3-letter code"),
+    .withMessage("Currency must be a string"),
+  body("nostroAccountId")
+    .optional()
+    .isString()
+    .withMessage("Nostro Account ID must be a string"),
+  body("nostroDescription")
+    .optional()
+    .isString()
+    .withMessage("Nostro Description must be a string"),
+  body("managedById")
+    .optional()
+    .isString()
+    .withMessage("Managed By ID must be a string"),
+];
+
+// If validateNostroParams doesn't exist, either define it or remove its import
+export const validateNostroParams = [
+  body("id").optional().isString().withMessage("ID must be a string"),
 ];

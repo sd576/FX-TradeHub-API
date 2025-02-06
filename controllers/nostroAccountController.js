@@ -52,9 +52,28 @@ export const createNostroAccountController = async (req, res) => {
 // ✅ Update (PUT) a Nostro Account
 export const updateNostroAccountController = async (req, res) => {
   const { id } = req.params;
+
   try {
+    // Prevent updating the ID field
+    if (req.body.id && req.body.id !== id) {
+      return res.status(400).json({
+        error:
+          "Updating 'id' is not allowed. Use DELETE and POST to create a new Nostro Account.",
+      });
+    }
+
+    // Check if the Nostro Account exists before updating
+    const existingNostroAccount = await getNostroAccountById(id);
+    if (!existingNostroAccount) {
+      return res.status(404).json({ error: "Nostro Account not found" });
+    }
+
+    // Perform the update
     await updateNostroAccount(id, req.body);
-    res.status(200).json({ message: "Nostro Account updated successfully" });
+
+    // Fetch the updated record
+    const updatedNostroAccount = await getNostroAccountById(id);
+    res.status(200).json(updatedNostroAccount);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -63,10 +82,48 @@ export const updateNostroAccountController = async (req, res) => {
 // ✅ Patch (PATCH) a Nostro Account
 export const patchNostroAccountController = async (req, res) => {
   const { id } = req.params;
+
   try {
+    console.log(`[🛠️ PATCH Controller] Incoming PATCH request for ID: ${id}`);
+    console.log("[🔍 PATCH Payload Received]", req.body);
+
+    // ✅ Ensure request body is not empty
+    if (!Object.keys(req.body).length) {
+      console.error("[❌ ERROR] No fields provided for update.");
+      return res.status(400).json({ error: "No fields to update." });
+    }
+
+    // ✅ Ensure `id` is not being updated
+    if (req.body.id && req.body.id !== id) {
+      console.error(
+        "[❌ ERROR] Attempted to update 'id'. This is not allowed."
+      );
+      return res.status(400).json({ error: "Updating 'id' is not allowed." });
+    }
+
+    // ✅ Check if the Nostro Account exists
+    const existingNostroAccount = await getNostroAccountById(id);
+    if (!existingNostroAccount) {
+      console.error("[❌ ERROR] Nostro Account not found.");
+      return res.status(404).json({ error: "Nostro Account not found" });
+    }
+
+    // ✅ Perform the PATCH update
     await patchNostroAccount(id, req.body);
-    res.status(200).json({ message: "Nostro Account updated successfully" });
+
+    // ✅ Fetch the updated record
+    const updatedNostroAccount = await getNostroAccountById(id);
+    console.log(
+      "[✅ SUCCESS] PATCH - Updated Nostro Account:",
+      updatedNostroAccount
+    );
+
+    res.status(200).json(updatedNostroAccount);
   } catch (error) {
+    console.error(
+      "[❌ ERROR] Unexpected error in PATCH controller:",
+      error.message
+    );
     res.status(400).json({ error: error.message });
   }
 };
