@@ -49,17 +49,18 @@ export const createNostroAccount = (nostroAccount) => {
   ];
 
   return new Promise((resolve, reject) => {
-    db.run(query, params, (err) => {
+    db.run(query, params, function (err) {
       if (err) {
         console.error("Error adding nostroAccount:", err.message);
-        reject(
+        return reject(
           err.code === "SQLITE_CONSTRAINT"
             ? new Error("Nostro Account with this ID already exists.")
             : new Error("Failed to add nostroAccount")
         );
-      } else {
-        resolve();
       }
+
+      console.log("Successfully added Nostro Account: ", nostroAccount);
+      resolve(nostroAccount);
     });
   });
 };

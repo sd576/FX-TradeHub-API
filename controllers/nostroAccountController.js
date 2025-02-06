@@ -34,8 +34,16 @@ export const getNostroAccountByIdController = async (req, res) => {
 // ✅ Create a new Nostro Account
 export const createNostroAccountController = async (req, res) => {
   try {
-    await createNostroAccount(req.body);
-    res.status(201).json({ message: "Nostro Account created successfully" });
+    const createdNostroAccount = await createNostroAccount(req.body);
+
+    if (!createdNostroAccount || !createdNostroAccount.id) {
+      return res.status(400).json({ error: "Failed to create Nostro Account" });
+    }
+
+    res.status(201).json({
+      message: "Nostro Account created successfully",
+      id: createdNostroAccount.id,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
