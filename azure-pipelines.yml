@@ -31,6 +31,7 @@ steps:
     displayName: "Wait for API Server to Start"
 
   - script: |
+      if [ -d "tests" ]; then rm -rf tests; fi  # Remove existing 'tests' directory if it exists
       git clone https://github.com/YOUR-USERNAME/YOUR-PLAYWRIGHT-REPO.git tests
     displayName: "Clone Playwright Tests Repo"
 
