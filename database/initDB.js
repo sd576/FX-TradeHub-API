@@ -356,6 +356,9 @@ const seedNostros = async (db) => {
 
     // 🟢 Insert nostro into the database
     try {
+      console.log(
+        `🔍 Inserting: id=${compoundKey}, counterpartyId=${counterpartyId}, currency=${currency}, nostroAccountId=${nostroCode}, nostroDescription=${description}, managedById=${correctedManagedById}`
+      );
       await executeQuery(
         db,
         `INSERT OR IGNORE INTO nostroAccounts (id, counterpartyId, currency, nostroAccountId, nostroDescription, managedById)

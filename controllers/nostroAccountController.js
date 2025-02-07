@@ -1,5 +1,6 @@
 import {
   getAllNostroAccounts,
+  getNostrosByCpty,
   getNostroAccountById,
   createNostroAccount,
   updateNostroAccount,
@@ -11,6 +12,20 @@ import {
 export const getAllNostroAccountsController = async (req, res) => {
   try {
     const nostroAccounts = await getAllNostroAccounts();
+    res.status(200).json(nostroAccounts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// ✅ Fetch Nostro Accounts by Counterparty ID
+export const getNostroAccountsByCounterpartyController = async (req, res) => {
+  const { counterpartyId } = req.params;
+  try {
+    const nostroAccounts = await getNostrosByCpty(counterpartyId);
+    if (!nostroAccounts) {
+      return res.status(404).json({ error: "Nostro Account not found" });
+    }
     res.status(200).json(nostroAccounts);
   } catch (error) {
     res.status(500).json({ error: error.message });

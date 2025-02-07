@@ -33,6 +33,24 @@ export const getNostroAccountById = (id) => {
   });
 };
 
+// ✅ Get all Nostro Accounts for a given counterpartyId
+export const getNostrosByCpty = (counterpartyId) => {
+  const query = "SELECT * FROM nostroAccounts WHERE counterpartyId = ?";
+  return new Promise((resolve, reject) => {
+    db.all(query, [counterpartyId], (err, rows) => {
+      if (err) {
+        console.error(
+          `Error fetching nostroAccounts for counterpartyId ${counterpartyId}:`,
+          err.message
+        );
+        reject(new Error("Failed to fetch nostroAccounts for counterparty"));
+      } else {
+        resolve(rows.length ? rows : null); // Return null if no records found
+      }
+    });
+  });
+};
+
 // ✅ Create a new Nostro Account
 export const createNostroAccount = (nostroAccount) => {
   const query = `

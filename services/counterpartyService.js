@@ -1,5 +1,6 @@
 import db from "../database/db.js";
 
+// ✅ Get all Counterparties
 export const getAllCounterparties = () => {
   const query = "SELECT * FROM counterparties";
   return new Promise((resolve, reject) => {
@@ -14,13 +15,15 @@ export const getAllCounterparties = () => {
   });
 };
 
-export const getCounterpartyById = (counterpartyId) => {
+// ✅ Get a single Counterparty by ID
+export const getCounterpartyById = (id) => {
+  // ✅ Changed counterpartyId → id
   const query = "SELECT * FROM counterparties WHERE id = ?";
   return new Promise((resolve, reject) => {
-    db.get(query, [counterpartyId], (err, row) => {
+    db.get(query, [id], (err, row) => {
       if (err) {
         console.error(
-          `Error fetching counterparty with ID ${counterpartyId}:`,
+          `Error fetching counterparty with ID ${id}:`,
           err.message
         );
         reject(new Error("Failed to fetch counterparty"));
@@ -31,7 +34,8 @@ export const getCounterpartyById = (counterpartyId) => {
   });
 };
 
-export const addCounterparty = (counterparty) => {
+// ✅ Create a new Counterparty (Renamed from addCounterparty)
+export const createCounterparty = (counterparty) => {
   const query = `
     INSERT INTO counterparties (
       id, name, city, country, currency, accountNumber, swiftCode, contactPerson, email, phone
@@ -66,13 +70,12 @@ export const addCounterparty = (counterparty) => {
   });
 };
 
-export const patchCounterparty = (counterpartyId, updates) => {
-  // Check if 'id' is included in the update payload
-  if (updates.id && updates.id !== counterpartyId) {
+// ✅ Patch (Partial Update) a Counterparty
+export const patchCounterparty = (id, updates) => {
+  // ✅ Changed counterpartyId → id
+  if (updates.id && updates.id !== id) {
     return Promise.reject(
-      new Error(
-        "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty."
-      )
+      new Error("Updating 'id' is not allowed. Use DELETE and POST instead.")
     );
   }
 
@@ -86,7 +89,7 @@ export const patchCounterparty = (counterpartyId, updates) => {
   `;
 
   return new Promise((resolve, reject) => {
-    db.run(query, [...values, counterpartyId], (err) => {
+    db.run(query, [...values, id], (err) => {
       if (err) {
         console.error("Error patching counterparty:", err.message);
         reject(new Error("Failed to patch counterparty"));
@@ -97,14 +100,32 @@ export const patchCounterparty = (counterpartyId, updates) => {
   });
 };
 
-export const updateCounterparty = (counterpartyId, counterparty) => {
-  // Throw an error if 'id' is part of the update payload
+// ✅ Update (PUT) a Counterparty
+export const updateCounterparty = async (counterpartyId, counterparty) => {
+  console.log(`[🔍 UPDATE] Updating Counterparty ID: ${counterpartyId}`);
+  console.log(`[🧐 DATA] Incoming Data:`, counterparty);
+
   if (counterparty.id && counterparty.id !== counterpartyId) {
-    return Promise.reject(
-      new Error(
-        "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty."
-      )
+    throw new Error(
+      "Updating 'id' is not allowed. Use DELETE to remove and POST to create a new counterparty."
     );
+  }
+
+  // Step 1: Fetch existing counterparty to merge missing fields
+  const existingCounterparty = await getCounterpartyById(counterpartyId);
+  if (!existingCounterparty) {
+    throw new Error("Counterparty not found");
+  }
+
+  // Step 2: Merge existing data with incoming updates
+  const updatedData = {
+    ...existingCounterparty, // Preserve existing values
+    ...counterparty, // Overwrite with new values
+  };
+
+  // Ensure required fields are not missing
+  if (!updatedData.name || !updatedData.currency) {
+    throw new Error("Name and currency are required fields.");
   }
 
   const query = `
@@ -113,61 +134,60 @@ export const updateCounterparty = (counterpartyId, counterparty) => {
         swiftCode = ?, contactPerson = ?, email = ?, phone = ?
     WHERE id = ?;
   `;
+
   const params = [
-    counterparty.name,
-    counterparty.city,
-    counterparty.country,
-    counterparty.currency,
-    counterparty.accountNumber,
-    counterparty.swiftCode,
-    counterparty.contactPerson,
-    counterparty.email,
-    counterparty.phone,
+    updatedData.name,
+    updatedData.city,
+    updatedData.country,
+    updatedData.currency,
+    updatedData.accountNumber,
+    updatedData.swiftCode,
+    updatedData.contactPerson,
+    updatedData.email,
+    updatedData.phone,
     counterpartyId,
   ];
 
+  console.log(`[🚀 QUERY]`, query);
+  console.log(`[🚀 PARAMS]`, params);
+
   return new Promise((resolve, reject) => {
-    db.run(query, params, (err) => {
+    db.run(query, params, function (err) {
       if (err) {
-        console.error("Error updating counterparty:", err.message);
-        reject(new Error("Failed to update counterparty"));
+        console.error("[❌ ERROR] Failed to update counterparty:", err.message);
+        return reject(new Error("Failed to update counterparty"));
+      } else if (this.changes === 0) {
+        console.error("[⚠️ WARNING] No changes detected.");
+        return reject(new Error("Counterparty not updated"));
       } else {
+        console.log("[✅ SUCCESS] Counterparty updated.");
         resolve();
       }
     });
   });
 };
 
-export const deleteCounterparty = (counterpartyId) => {
+// ✅ Delete a Counterparty
+export const deleteCounterparty = (id) => {
+  // ✅ Changed counterpartyId → id
   return new Promise((resolve, reject) => {
-    // First, check if the counterparty exists
-    db.get(
-      "SELECT * FROM counterparties WHERE id = ?",
-      [counterpartyId],
-      (err, row) => {
-        if (err) {
-          console.error("Error checking counterparty existence:", err.message);
-          return reject(new Error("Failed to check counterparty existence"));
-        }
-
-        if (!row) {
-          console.log(`Counterparty with ID ${counterpartyId} not found.`);
-          return reject(new Error("Counterparty not found"));
-        }
-
-        // Proceed with deletion
-        db.run(
-          "DELETE FROM counterparties WHERE id = ?",
-          [counterpartyId],
-          (delErr) => {
-            if (delErr) {
-              console.error("Error deleting counterparty:", delErr.message);
-              return reject(new Error("Failed to delete counterparty"));
-            }
-            resolve();
-          }
-        );
+    db.get("SELECT * FROM counterparties WHERE id = ?", [id], (err, row) => {
+      if (err) {
+        console.error("Error checking counterparty existence:", err.message);
+        return reject(new Error("Failed to check counterparty existence"));
       }
-    );
+
+      if (!row) {
+        return reject(new Error("Counterparty not found"));
+      }
+
+      db.run("DELETE FROM counterparties WHERE id = ?", [id], (delErr) => {
+        if (delErr) {
+          console.error("Error deleting counterparty:", delErr.message);
+          return reject(new Error("Failed to delete counterparty"));
+        }
+        resolve();
+      });
+    });
   });
 };

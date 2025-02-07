@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { validationResult } from "express-validator";
+
+// ✅ Import Controllers
 import {
   getAllCounterpartiesController,
   getCounterpartyByIdController,
@@ -9,6 +11,7 @@ import {
   deleteCounterpartyController,
 } from "../controllers/counterpartyController.js";
 
+// ✅ Import Validators
 import {
   validateCounterparty,
   validatePatchCounterparty,
@@ -16,44 +19,58 @@ import {
 
 const router = Router();
 
-// Retrieve all counterparties
-router.get("/", getAllCounterpartiesController);
+// ✅ Helper middleware for validation
+const handleValidation = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
 
-// Retrieve a single counterparty by ID
-router.get("/:id", getCounterpartyByIdController);
+// ✅ Routes
 
-// Add a new counterparty with validation
+// 🔹 Create a new Counterparty
 router.post(
   "/",
+  validateCounterparty,
+  handleValidation, // ✅ Use helper function for cleaner code
+  createCounterpartyController
+);
+
+// 🔹 Retrieve all Counterparties
+router.get("/", getAllCounterpartiesController);
+
+// 🔹 Retrieve a single Counterparty by ID
+router.get("/:id", getCounterpartyByIdController);
+
+// 🔹 Update (replace) a Counterparty (PUT)
+router.put(
+  "/:id",
   validateCounterparty,
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.error(
+        "[❌ PUT Validation Error] Received invalid data:",
+        errors.array()
+      );
       return res.status(400).json({ errors: errors.array() });
     }
     next();
   },
-  createCounterpartyController
+  modifyCounterpartyController
 );
 
-// Update an existing counterparty
-router.put("/:id", modifyCounterpartyController);
-
-// Partial update to an existing counterparty
+// 🔹 Partially update a Counterparty (PATCH)
 router.patch(
   "/:id",
   validatePatchCounterparty,
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
+  handleValidation,
   patchCounterpartyController
 );
 
-// Delete a counterparty
+// 🔹 Delete a Counterparty
 router.delete("/:id", deleteCounterpartyController);
 
 export default router;
