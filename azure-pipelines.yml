@@ -6,7 +6,14 @@
 trigger:
   branches:
     include:
-      - main  # Adjust if needed
+      - main  # Runs pipeline when code is pushed to 'main' branch
+
+resources:
+  repositories:
+    - repository: Playwright_Tests_Repo
+      type: git
+      name: Playwright_Tests_Repo  # Use the exact repo name in Azure DevOps
+      ref: main  # Adjust if Playwright repo uses a different branch
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -30,11 +37,10 @@ steps:
       sleep 5
     displayName: "Wait for API Server to Start"
 
-  # ✅ Cloning Playwright Tests from Azure DevOps (NOT GitHub)
-  - script: |
-      if [ -d "tests" ]; then rm -rf tests; fi  # Remove existing 'tests' directory if it exists
-      git clone https://dev.azure.com/sd5760195/Playwright_Tests_Repo/_git/Playwright_Tests_Repo tests
-    displayName: "Clone Playwright Tests Repo"
+  # ✅ Cloning Playwright Tests from Azure DevOps (Using `checkout`)
+  - checkout: Playwright_Tests_Repo
+    path: tests
+    displayName: "Checkout Playwright Tests Repo"
 
   - script: |
       npm install
@@ -51,5 +57,6 @@ steps:
       pathToPublish: tests/playwright-report/
       artifactName: playwright-results
     displayName: "Upload Test Results"
+
 
 
