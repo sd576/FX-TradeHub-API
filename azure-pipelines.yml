@@ -4,18 +4,49 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- main
+  branches:
+    include:
+      - main  # Adjust if needed
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+  - checkout: self  # Check out the API repo
 
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+  - task: UseNode@1
+    inputs:
+      version: '18'  # Adjust Node.js version if needed
+
+  - script: |
+      npm install
+    displayName: "Install Dependencies"
+
+  - script: |
+      npm run start &
+    displayName: "Start API Server in Background"
+
+  - script: |
+      sleep 5
+    displayName: "Wait for API Server to Start"
+
+  - script: |
+      git clone https://github.com/YOUR-USERNAME/YOUR-PLAYWRIGHT-REPO.git tests
+    displayName: "Clone Playwright Tests Repo"
+
+  - script: |
+      npm install
+    workingDirectory: tests
+    displayName: "Install Playwright Dependencies"
+
+  - script: |
+      npx playwright test
+    workingDirectory: tests
+    displayName: "Run Playwright API Tests"
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: tests/playwright-report/
+      artifactName: playwright-results
+    displayName: "Upload Test Results"
+
