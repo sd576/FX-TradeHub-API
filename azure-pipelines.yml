@@ -30,9 +30,10 @@ steps:
       sleep 5
     displayName: "Wait for API Server to Start"
 
+  # ✅ Cloning Playwright Tests from Azure DevOps (NOT GitHub)
   - script: |
       if [ -d "tests" ]; then rm -rf tests; fi  # Remove existing 'tests' directory if it exists
-      git clone https://github.com/YOUR-USERNAME/YOUR-PLAYWRIGHT-REPO.git tests
+      git clone https://dev.azure.com/sd5760195/Playwright_Tests_Repo/_git/Playwright_Tests_Repo tests
     displayName: "Clone Playwright Tests Repo"
 
   - script: |
@@ -50,4 +51,5 @@ steps:
       pathToPublish: tests/playwright-report/
       artifactName: playwright-results
     displayName: "Upload Test Results"
+
 
