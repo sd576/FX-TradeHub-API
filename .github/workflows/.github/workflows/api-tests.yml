@@ -1,0 +1,45 @@
+name: Playwright API Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Playwright Test Repo
+        uses: actions/checkout@v4
+
+      - name: Checkout API Server Repo
+        uses: actions/checkout@v4
+        with:
+          repository: sd576/FX-TradeHub-API
+          path: fx_server
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install API Server Dependencies
+        run: |
+          cd fx_server
+          npm install
+
+      - name: Setup and Start API Server
+        run: |
+          cd fx_server
+          npm run setup-and-start &
+          sleep 5
+
+      - name: Install Playwright Test Dependencies
+        run: npm install
+
+      - name: Run Playwright API Tests
+        run: npm test
