@@ -43,7 +43,8 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-spec-validator": "^5.0.0",
     "swagger-ui-express": "^5.0.1",
-    "uuid": "^11.0.5"
+    "uuid": "^11.0.5",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

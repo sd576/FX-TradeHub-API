@@ -2,11 +2,21 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import sqlite3 from "sqlite3";
+import { fileURLToPath } from "url";
+import path from "path";
+import yamljs from "yamljs";
 import counterpartyRoutes from "./routes/counterpartyRoutes.js";
 import nostroAccountRoutes from "./routes/nostroAccountRoutes.js";
 import tradeRoutes from "./routes/tradeRoutes.js";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "./swagger/swagger.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load swagger.yml
+const swaggerDocument = yamljs.load(
+  path.join(__dirname, "swagger", "swagger.yml")
+);
 
 const app = express();
 
@@ -18,14 +28,13 @@ app.use(bodyParser.json());
 let db;
 if (process.env.NODE_ENV === "test") {
   console.log("Using in-memory SQLite database for testing.");
-  db = new sqlite3.Database(":memory:"); // Use in-memory database for tests
+  db = new sqlite3.Database(":memory:");
 } else {
   const dbPath = "./database/fx_trades.db";
   console.log(`Connected to SQLite database at: ${dbPath}`);
-  db = new sqlite3.Database(dbPath); // Production database
+  db = new sqlite3.Database(dbPath);
 }
 
-// Pass `db` instance to routes or globally attach it if needed
 app.set("db", db);
 
 // Swagger UI setup
@@ -39,37 +48,15 @@ app.use("/api/trades", tradeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Log the error stack for debugging
+  console.error(err.stack);
   res.status(500).json({ error: "Something went wrong!" });
 });
 
-// Graceful shutdown
 process.on("SIGINT", () => {
   db.close(() => {
     console.log("Database connection closed.");
     process.exit(0);
   });
-});
-
-// Log all registered routes
-app._router.stack.forEach((middleware) => {
-  if (middleware.route) {
-    console.log(
-      `${Object.keys(middleware.route.methods).join(", ").toUpperCase()} ${
-        middleware.route.path
-      }`
-    );
-  } else if (middleware.name === "router") {
-    middleware.handle.stack.forEach((handler) => {
-      if (handler.route) {
-        console.log(
-          `${Object.keys(handler.route.methods).join(", ").toUpperCase()} ${
-            handler.route.path
-          }`
-        );
-      }
-    });
-  }
 });
 
 // Start the server (skip during tests)
