@@ -6,10 +6,16 @@ The FX Trader API Server is a robust application designed to manage trades and c
 
 ## Features
 
-- **Three main tables:** `trades`, `counterparties` and `settlements`, storing detailed trade, counterparty and settlement information.
-- **Pre-seeded database:** Realistic volume of data for meaningful testing.
-- **Fully documented API:** Accessible via Swagger on the local development server.
-- **Utility tools:** For resetting and reseeding the database.
+- **Four Main Tables**:
+
+  1. `counterparties`: Stores information about counterparties, such as name, location, currency, and contact details.
+  2. `nostroAccounts`: Represents nostro accounts with details like associated counterparty, currency, account ID, and the managing counterparty.
+  3. `trades`: Tracks all trade-related information, including type, trade date, currencies, amounts, and associated nostro accounts.
+  4. `settlements`
+
+- **Pre-seeded Database**: Contains a realistic dataset of counterparties, nostro accounts, and trades for meaningful testing and development.
+- **Fully Documented API**: Swagger documentation is available at `http://localhost:3000/api-docs` for easy exploration and testing of all endpoints.
+- **Utility Tools**: Scripts for resetting and reseeding the database (`npm run db`), ensuring you always have a clean and consistent test environment.
 
 ## Purpose
 
