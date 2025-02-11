@@ -1,0 +1,736 @@
+openapi: 3.0.1
+info:
+  title: FX Trader API
+  version: 1.0.0
+  description: Comprehensive documentation for the FX Trader backend API.
+servers:
+  - url: "http://localhost:3000/api"
+    description: Local Development Server
+paths:
+  /counterparties:
+    get:
+      tags:
+        - Counterparties
+      summary: Retrieve a list of counterparties
+      operationId: getCounterparties
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    id:
+                      type: integer
+        "400":
+          description: Invalid request. Bad parameters or malformed request.
+        "404":
+          description: No counterparties found.
+        "500":
+          description: Server error. Something went wrong.
+  /counterparties/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Counterparties
+      summary: Retrieve a single counterparty by ID
+      operationId: getCounterpartyById
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: integer
+        "400":
+          description: Invalid request.
+        "404":
+          description: Counterparty not found.
+        "500":
+          description: Server error.
+    post:
+      tags:
+        - Counterparties
+      summary: Create a new counterparty
+      operationId: createCounterparty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                id:
+                  type: string
+                city:
+                  type: string
+                country:
+                  type: string
+                currency:
+                  type: string
+                accountNumber:
+                  type: string
+                swiftCode:
+                  type: string
+                contactPerson:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+      responses:
+        "201":
+          description: Counterparty created successfully
+        "400":
+          description: Invalid input
+        "409":
+          description: Counterparty already exists
+        "500":
+          description: Internal server error. Something went wrong.
+    put:
+      tags:
+        - Counterparties
+      summary: Update an existing counterparty
+      operationId: updateCounterparty
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Counterparty ID to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - city
+                - country
+                - currency
+                - accountNumber
+                - swiftCode
+                - contactPerson
+                - phone
+                - email
+              properties:
+                name:
+                  type: string
+                city:
+                  type: string
+                country:
+                  type: string
+                currency:
+                  type: string
+                accountNumber:
+                  type: string
+                swiftCode:
+                  type: string
+                contactPerson:
+                  type: string
+                phone:
+                  type: string
+                email:
+                  type: string
+            example:
+              name: Updated Bank
+              city: Ontario
+              country: Canada
+              currency: CAD
+              accountNumber: "44556677"
+              swiftCode: ROYCCAT2
+              contactPerson: Sarah Johnson
+              email: sarah.johnson@rbc.com
+              phone: +1 416 974 5151
+      responses:
+        "200":
+          description: Counterparty updated successfully.
+        "400":
+          description: Invalid Counterparty request body or parameters.
+        "404":
+          description: Counterparty not found.
+        "500":
+          description: Server error while updating Counterparty.
+    patch:
+      tags:
+        - Counterparties
+      summary: Partially update an existing counterparty
+      operationId: patchCounterparty
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Counterparty ID to partially update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Counterparty"
+            example:
+              name: Updated Bank
+              city: Ontario
+              country: Canada
+              currency: CAD
+              accountNumber: "44556677"
+              swiftCode: ROYCCAT2
+              contactPerson: Sarah Johnson
+              email: sarah.johnson@rbc.com
+              phone: +1 416 974 5151
+      responses:
+        "200":
+          description: Counterparty updated successfully.
+        "400":
+          description: Validation error or invalid request.
+        "404":
+          description: Counterparty not found.
+        "500":
+          description: Server error while updating the counterparty.
+    delete:
+      tags:
+        - Counterparties
+      summary: Delete a counterparty
+      operationId: deleteCounterparty
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Counterparty ID to delete.
+      responses:
+        "204":
+          description: Counterparty deleted successfully.
+        "400":
+          description: Invalid counterparty request parameters.
+        "404":
+          description: Counterparty not found.
+        "500":
+          description: Server error while deleting the counterparty.
+/nostro-accounts:
+  get:
+    summary: "Retrieve all Nostro Accounts"
+    tags:
+      - "Nostro Accounts"
+    responses:
+      "200":
+        description: "A list of Nostro Accounts."
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/Nostro"
+      "400":
+        description: "Invalid Nostro Account request parameters."
+      "404":
+        description: "Nostro Accounts not found."
+      "500":
+        description: "Server error while fetching Nostro Accounts."
+  post:
+    summary: "Create a new Nostro Account"
+    tags:
+      - "Nostro Accounts"
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Nostro"
+    responses:
+      "201":
+        description: "Nostro Account created successfully."
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Nostro"
+      "400":
+        description: "Invalid input."
+      "500":
+        description: "Server error while creating Nostro Account."
+/nostro-accounts/{counterpartyId}-{currency}:
+  get:
+    summary: "Retrieve a Nostro Account by its ID (counterpartyId and currency)"
+    tags:
+      - "Nostro Accounts"
+    parameters:
+      - name: "counterpartyId"
+        in: "path"
+        required: true
+        schema:
+          type: string
+        description: "The counterparty ID (e.g., '001')."
+      - name: "currency"
+        in: "path"
+        required: true
+        schema:
+          type: string
+        description: "The currency (e.g., 'USD')."
+    responses:
+      "200":
+        description: "Nostro Account retrieved successfully."
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Nostro"
+      "400":
+        description: "Invalid request parameters."
+      "404":
+        description: "Nostro Account not found."
+      "500":
+        description: "Server error while retrieving the Nostro Account."
+  patch:
+    summary: "Update a Nostro Account (partial update)"
+    tags:
+      - "Nostro Accounts"
+    parameters:
+      - name: "counterpartyId"
+        in: "path"
+        required: true
+        schema:
+          type: string
+        description: "The counterparty ID (e.g., '001')."
+      - name: "currency"
+        in: "path"
+        required: true
+        schema:
+          type: string
+        description: "The currency (e.g., 'USD')."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Nostro"
+    responses:
+      "200":
+        description: "Nostro Account updated successfully."
+      "400":
+        description: "Invalid request parameters."
+      "404":
+        description: "Nostro Account not found."
+      "500":
+        description: "Server error while updating the Nostro Account."
+  put:
+    summary: "Update a Nostro Account (full update)"
+    tags:
+      - "Nostro Accounts"
+    parameters:
+      - name: "counterpartyId"
+        in: "path"
+        required: true
+        schema:
+          type: string
+        description: "The counterparty ID (e.g., '001')."
+      - name: "currency"
+        in: "path"
+        required: true
+        schema:
+          type: string
+        description: "The currency (e.g., 'USD')."
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Nostro"
+    responses:
+      "200":
+        description: "Nostro Account fully updated successfully."
+      "400":
+        description: "Invalid request parameters."
+      "404":
+        description: "Nostro Account not found."
+      "500":
+        description: "Server error while updating the Nostro Account."
+  delete:
+    summary: "Delete a Nostro Account"
+    tags:
+      - "Nostro Accounts"
+    parameters:
+      - name: "counterpartyId"
+        in: "path"
+        required: true
+        schema:
+          type: string
+        description: "The counterparty ID (e.g., '001')."
+      - name: "currency"
+        in: "path"
+        required: true
+        schema:
+          type: string
+        description: "The currency (e.g., 'USD')."
+    responses:
+      "204":
+        description: "Nostro Account deleted successfully."
+      "400":
+        description: "Invalid request parameters."
+      "404":
+        description: "Nostro Account not found."
+      "500":
+        description: "Server error while deleting the Nostro Account."
+  /trades:
+    get:
+      summary: "Retrieve a list of all trades"
+      tags:
+        - "Trades"
+      responses:
+        200:
+          description: "A list of trades."
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Trade"
+        400:
+          description: "Invalid Trade request parameters."
+        500:
+          description: "Server error while fetching trades."
+    post:
+      summary: "Create a new Spot, Forward, or Swap trade"
+      tags:
+        - "Trades"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tradeId:
+                  type: string
+                  example: "SPOT-002-001"
+                tradeType:
+                  type: string
+                  enum:
+                    - "SPOT"
+                    - "FORWARD"
+                    - "SWAP"
+                parentTradeId:
+                  type: string
+                  nullable: true
+                  example: null
+                tradeDate:
+                  type: string
+                  format: date
+                  example: "2025-02-21"
+                settlementDate:
+                  type: string
+                  format: date
+                  example: "2025-02-24"
+                weBuyWeSell:
+                  type: string
+                  enum:
+                    - "we buy"
+                    - "we sell"
+                counterpartyId:
+                  type: string
+                  example: "002"
+                buyCurrency:
+                  type: string
+                  example: "GBP"
+                sellCurrency:
+                  type: string
+                  example: "USD"
+                buyAmount:
+                  type: number
+                  format: float
+                  example: 1000000
+                sellAmount:
+                  type: number
+                  format: float
+                  example: 1262000
+                exchangeRate:
+                  type: number
+                  format: float
+                  example: 1.262
+                buyNostroAccountId:
+                  type: string
+                  example: "002-GBP"
+                sellNostroAccountId:
+                  type: string
+                  example: "002-USD"
+                # For Swap trades, you need an additional object to represent the second side of the swap
+                swapTradeDetails:
+                  type: object
+                  nullable: true
+                  properties:
+                    tradeId:
+                      type: string
+                      example: "SWAP-031-068-FAR"
+                    tradeType:
+                      type: string
+                      enum:
+                        - "SWAP"
+                    parentTradeId:
+                      type: string
+                      nullable: true
+                      example: "SWAP-031-068"
+                    counterpartyId:
+                      type: string
+                      example: "031"
+                    buyCurrency:
+                      type: string
+                      example: "USD"
+                    sellCurrency:
+                      type: string
+                      example: "NZD"
+                    buyAmount:
+                      type: number
+                      format: float
+                      example: 593500
+                    sellAmount:
+                      type: number
+                      format: float
+                      example: 1000000
+                    exchangeRate:
+                      type: number
+                      format: float
+                      example: 0.5935
+                    buyNostroAccountId:
+                      type: string
+                      example: "031-USD"
+                    sellNostroAccountId:
+                      type: string
+                      example: "031-NZD"
+      responses:
+        201:
+          description: "Trade created successfully"
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal server error. Something went wrong."
+  /trades/{tradeId}:
+    get:
+      summary: "Retrieve a trade by ID"
+      tags:
+        - "Trades"
+      parameters:
+        - name: "tradeId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "Trade ID to retrieve the specific trade."
+      responses:
+        200:
+          description: "Successfully retrieved the trade."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Trade"
+        404:
+          description: "Trade not found."
+        500:
+          description: "Server error while fetching the trade."
+    put:
+      summary: "Update an existing trade"
+      tags:
+        - "Trades"
+      parameters:
+        - name: "tradeId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "Trade ID to update the specific trade."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Trade"
+      responses:
+        200:
+          description: "Trade updated successfully."
+        400:
+          description: "Invalid input."
+        404:
+          description: "Trade not found."
+        500:
+          description: "Server error while updating the trade."
+    patch:
+      summary: "Partially update a trade"
+      tags:
+        - "Trades"
+      parameters:
+        - name: "tradeId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "Trade ID to partially update the trade."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Trade"
+      responses:
+        200:
+          description: "Trade partially updated successfully."
+        400:
+          description: "Invalid input."
+        404:
+          description: "Trade not found."
+        500:
+          description: "Server error while partially updating the trade."
+    delete:
+      summary: "Delete a trade"
+      tags:
+        - "Trades"
+      parameters:
+        - name: "tradeId"
+          in: "path"
+          required: true
+          schema:
+            type: string
+          description: "Trade ID to delete the specific trade."
+      responses:
+        204:
+          description: "Trade deleted successfully."
+        400:
+          description: "Invalid trade ID."
+        404:
+          description: "Trade not found."
+        500:
+          description: "Server error while deleting the trade."
+components:
+  schemas:
+    Counterparty:
+      type: "object"
+      properties:
+        id:
+          type: "string"
+          example: "CPTY001"
+        name:
+          type: "string"
+          example: "Global Trading Ltd"
+        city:
+          type: "string"
+          example: "London"
+        country:
+          type: "string"
+          example: "UK"
+        currency:
+          type: "string"
+          example: "GBP"
+        accountNumber:
+          type: "string"
+          example: "12345678"
+        swiftCode:
+          type: "string"
+          example: "GB123456"
+        contactPerson:
+          type: "string"
+          example: "John Doe"
+        phone:
+          type: "string"
+          example: "+441234567890"
+        email:
+          type: "string"
+          example: "contact@globaltrading.com"
+    Nostro:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "001-USD"
+        counterpartyId:
+          type: string
+          example: "001"
+        currency:
+          type: string
+          example: "USD"
+        nostroAccountId:
+          type: string
+          example: "016"
+        nostroDescription:
+          type: string
+          example: "016 - USD Nostro Account managed by Barclays Bank"
+        managedById:
+          type: string
+          example: "016"
+        managedByName:
+          type: string
+          example: "Barclays Bank"
+    Trade:
+      type: "object"
+      properties:
+        tradeId:
+          type: "string"
+          example: "SPOT-002-001"
+        tradeType:
+          type: "string"
+          enum:
+            - "SPOT"
+            - "FORWARD"
+            - "SWAP"
+        parentTradeId:
+          type: "string"
+          nullable: true
+          example: null
+        tradeDate:
+          type: "string"
+          format: date
+          example: "2025-02-21"
+        settlementDate:
+          type: "string"
+          format: date
+          example: "2025-02-24"
+        weBuyWeSell:
+          type: "string"
+          enum:
+            - "we buy"
+            - "we sell"
+        counterpartyId:
+          type: "string"
+          example: "002"
+        buyCurrency:
+          type: "string"
+          example: "GBP"
+        sellCurrency:
+          type: "string"
+          example: "USD"
+        buyAmount:
+          type: "number"
+          format: float
+          example: 1000000
+        sellAmount:
+          type: "number"
+          format: float
+          example: 1262000
+        exchangeRate:
+          type: "number"
+          format: float
+          example: 1.262
+        buyNostroAccountId:
+          type: "string"
+          example: "002-GBP"
+        sellNostroAccountId:
+          type: "string"
+          example: "002-USD"

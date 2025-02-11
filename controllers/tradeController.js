@@ -78,7 +78,8 @@ export const createTrade = async (req, res) => {
     await insertTrade(req.body);
     res.status(201).json({ message: "Trade created successfully" });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error("Failed to create trade:", error.message); // Log the error
+    res.status(400).json({ error: error.message }); // Return the specific error message to the client
   }
 };
 
@@ -131,16 +132,24 @@ export const patchTradeController = async (req, res) => {
 // Delete a trade by ID
 export const deleteTradeByIdHandler = async (req, res) => {
   const { tradeId } = req.params;
+
   try {
-    // Check if trade exists first
-    const { tradeId } = await getTradeById(tradeId);
+    const existingTrade = await getTradeById(tradeId);
     if (!existingTrade) {
-      return res.status(404).json({ error: "Trade not found" });
+      return res
+        .status(404)
+        .json({ error: `Trade with ID '${tradeId}' not found.` });
     }
 
-    await deleteTradeById(tradeId);
-    res.status(204).send();
+    const deletedRows = await deleteTradeById(tradeId);
+    res
+      .status(200)
+      .json({
+        message: `Trade with ID '${tradeId}' deleted successfully.`,
+        deletedRows,
+      });
   } catch (error) {
+    console.error(`Error deleting trade ${tradeId}:`, error.message);
     res.status(500).json({ error: error.message });
   }
 };

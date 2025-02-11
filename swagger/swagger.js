@@ -35,9 +35,6 @@ export default {
             description: "Counterparty not found.",
           },
           500: {
-            description: "Server error while updating Counterparty.",
-          },
-          500: {
             description: "Server error while fetching counterparties.",
           },
         },
@@ -229,28 +226,28 @@ export default {
         },
       },
     },
-    "/nostro-accounts/{counterpartyId}": {
+    "/nostro-accounts/{nostroAccountId}": {
       get: {
-        summary: "Retrieve Nostro Accounts by Counterparty ID",
+        summary: "Retrieve a Nostro Account by Nostro Account ID",
         tags: ["Nostro Accounts"],
         parameters: [
           {
-            name: "counterpartyId",
+            name: "nostroAccountId",
             in: "path",
             required: true,
-            schema: { type: "string" },
-            description: "Counterparty ID.",
+            schema: {
+              type: "string",
+            },
+            description: "Unique identifier for the Nostro Account.",
           },
         ],
         responses: {
           200: {
-            description:
-              "List of Nostro Accounts for the specified counterparty.",
+            description: "Details of the specified Nostro Account.",
             content: {
               "application/json": {
                 schema: {
-                  type: "array",
-                  items: { $ref: "#/components/schemas/Nostro" },
+                  $ref: "#/components/schemas/Nostro",
                 },
               },
             },
@@ -259,40 +256,34 @@ export default {
             description: "Invalid Nostro Account request parameters.",
           },
           404: {
-            description:
-              "Nostro Account not found for the specified counterparty.",
+            description: "Nostro Account not found for the specified ID.",
           },
           500: {
-            description: "Server error while fetching Nostro Accouns.",
+            description: "Server error while fetching the Nostro Account.",
           },
         },
       },
-    },
-    "/nostro-accounts/{counterpartyId}/{currency}": {
       put: {
-        summary: "Update a Nostro Account by Counterparty and Currency",
+        summary: "Update a Nostro Account by Nostro Account ID",
         tags: ["Nostro Accounts"],
         parameters: [
           {
-            name: "counterpartyId",
+            name: "nostroAccountId",
             in: "path",
             required: true,
-            schema: { type: "string" },
-            description: "Counterparty ID.",
-          },
-          {
-            name: "currency",
-            in: "path",
-            required: true,
-            schema: { type: "string" },
-            description: "Currency code.",
+            schema: {
+              type: "string",
+            },
+            description: "Unique identifier for the Nostro Account.",
           },
         ],
         requestBody: {
           required: true,
           content: {
             "application/json": {
-              schema: { $ref: "#/components/schemas/Nostro" },
+              schema: {
+                $ref: "#/components/schemas/Nostro",
+              },
             },
           },
         },
@@ -304,54 +295,50 @@ export default {
             description: "Invalid Nostro Account request parameters.",
           },
           404: {
-            description:
-              "Nostro Account not found for the specified counterparty.",
+            description: "Nostro Account not found for the specified ID.",
           },
           500: {
-            description: "Server error while fetching Nostro Account.",
+            description: "Server error while updating the Nostro Account.",
           },
         },
       },
       patch: {
-        summary:
-          "Partially Update a Nostro Account by Counterparty and Currency",
+        summary: "Partially Update a Nostro Account by Nostro Account ID",
         tags: ["Nostro Accounts"],
         parameters: [
           {
-            name: "counterpartyId",
+            name: "nostroAccountId",
             in: "path",
             required: true,
-            schema: { type: "string" },
-            description: "Counterparty ID.",
-          },
-          {
-            name: "currency",
-            in: "path",
-            required: true,
-            schema: { type: "string" },
-            description: "Currency code.",
+            schema: {
+              type: "string",
+            },
+            description: "Unique identifier for the Nostro Account.",
           },
         ],
         requestBody: {
           required: true,
           content: {
             "application/json": {
-              schema: { $ref: "#/components/schemas/Nostro" },
+              schema: {
+                $ref: "#/components/schemas/Nostro",
+              },
             },
           },
         },
         responses: {
           200: {
-            description: "Nostro Account updated successfully.",
+            description: "Nostro Account partially updated successfully.",
           },
           400: {
             description: "Invalid Nostro Account request parameters.",
           },
           404: {
-            description: "Nostro Account not found.",
+            description: "Nostro Account not found for the specified ID.",
           },
           500: {
-            description: "Server error while updating the Nostro Account.",
+            description:
+              "Server error while partially updating the Nostro Account.",
           },
         },
       },
@@ -389,7 +376,7 @@ export default {
         tags: ["Trades"],
         responses: {
           200: {
-            description: "A list of trades.",
+            description: "A list of all trades.",
             content: {
               "application/json": {
                 schema: {
@@ -399,41 +386,43 @@ export default {
               },
             },
           },
-          400: {
-            description: "Invalid Trade request parameters.",
-          },
-          404: {
-            description: "Trade not found.",
-          },
-          500: {
-            description: "Server error while updating Trade.",
-          },
+          400: { description: "Invalid request parameters." },
+          500: { description: "Server error while fetching trades." },
         },
       },
       post: {
-        summary: "Add a new trade",
+        summary: "Add a new trade (SPOT, FWD, or SWAP)",
         tags: ["Trades"],
         requestBody: {
           required: true,
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/Trade" },
+              examples: {
+                spotTrade: {
+                  summary: "SPOT trade example",
+                  value: {
+                    tradeId: "SPOT-002-001",
+                    tradeDate: "2025-01-01",
+                    tradeType: "SPOT",
+                    weBuyWeSell: "we buy",
+                    counterpartyId: "002",
+                    settlementDate: "2025-01-02",
+                    buyCurrency: "GBP",
+                    sellCurrency: "USD",
+                    buyAmount: 1000000,
+                    sellAmount: 1262000,
+                    exchangeRate: 1.262,
+                  },
+                },
+              },
             },
           },
         },
         responses: {
-          201: {
-            description: "Trade created successfully.",
-          },
-          400: {
-            description: "Trade Validation error.",
-          },
-          404: {
-            description: "Trade not found.",
-          },
-          500: {
-            description: "Server error while creating the trade.",
-          },
+          201: { description: "Trade created successfully." },
+          400: { description: "Trade validation error." },
+          500: { description: "Server error while creating the trade." },
         },
       },
     },
@@ -459,54 +448,12 @@ export default {
               },
             },
           },
-          400: {
-            description: "Trade Validation error.",
-          },
-          404: {
-            description: "Trade not found.",
-          },
-          500: {
-            description: "Server error while fetching the trade.",
-          },
-        },
-      },
-      put: {
-        summary: "Update a trade",
-        tags: ["Trades"],
-        parameters: [
-          {
-            name: "tradeId",
-            in: "path",
-            required: true,
-            schema: { type: "string" },
-            description: "Trade ID.",
-          },
-        ],
-        requestBody: {
-          required: true,
-          content: {
-            "application/json": {
-              schema: { $ref: "#/components/schemas/Trade" },
-            },
-          },
-        },
-        responses: {
-          200: {
-            description: "Trade updated successfully.",
-          },
-          400: {
-            description: "Trade Validation error.",
-          },
-          404: {
-            description: "Trade not found.",
-          },
-          500: {
-            description: "Server error while updating the trade.",
-          },
+          404: { description: "Trade not found." },
+          500: { description: "Server error while fetching the trade." },
         },
       },
       patch: {
-        summary: "Partially update a trade",
+        summary: "Partially update a trade (excluding the key)",
         tags: ["Trades"],
         parameters: [
           {
@@ -522,22 +469,71 @@ export default {
           content: {
             "application/json": {
               schema: { $ref: "#/components/schemas/Trade" },
+              examples: {
+                partialUpdateSpot: {
+                  summary: "Partial update for a SPOT trade",
+                  value: {
+                    exchangeRate: 1.265,
+                    buyAmount: 1200000,
+                    sellAmount: 1518000,
+                  },
+                },
+              },
             },
           },
         },
         responses: {
-          200: {
-            description: "Trade updated successfully.",
+          200: { description: "Trade updated successfully." },
+          400: { description: "Trade validation error." },
+          404: { description: "Trade not found." },
+          500: { description: "Server error while updating the trade." },
+        },
+      },
+      put: {
+        summary: "Replace a trade",
+        tags: ["Trades"],
+        parameters: [
+          {
+            name: "tradeId",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "Trade ID to replace.",
           },
-          400: {
-            description: "Trade Validation error.",
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/Trade" },
+              examples: {
+                replaceTradeExample: {
+                  summary: "Replace a trade with new details",
+                  value: {
+                    tradeId: "TRADE001",
+                    tradeType: "SPOT",
+                    tradeDate: "2025-01-19",
+                    settlementDate: "2025-01-22",
+                    weBuyWeSell: "we buy",
+                    counterpartyId: "CPTY001",
+                    buyCurrency: "USD",
+                    sellCurrency: "EUR",
+                    buyAmount: 1000,
+                    sellAmount: 900,
+                    exchangeRate: 0.9,
+                    buyNostroAccountId: "BNK123",
+                    sellNostroAccountId: "BNK456",
+                  },
+                },
+              },
+            },
           },
-          404: {
-            description: "Trade not found.",
-          },
-          500: {
-            description: "Server error while updating the trade.",
-          },
+        },
+        responses: {
+          200: { description: "Trade replaced successfully." },
+          400: { description: "Trade validation error." },
+          404: { description: "Trade not found." },
+          500: { description: "Server error while replacing the trade." },
         },
       },
       delete: {
@@ -549,22 +545,13 @@ export default {
             in: "path",
             required: true,
             schema: { type: "string" },
-            description: "Trade ID.",
+            description: "Trade ID to delete.",
           },
         ],
         responses: {
-          200: {
-            description: "Trade deleted successfully.",
-          },
-          400: {
-            description: "Trade Validation error.",
-          },
-          404: {
-            description: "Trade not found.",
-          },
-          500: {
-            description: "Server error while deleting the trade.",
-          },
+          200: { description: "Trade deleted successfully." },
+          404: { description: "Trade not found." },
+          500: { description: "Server error while deleting the trade." },
         },
       },
     },
@@ -585,56 +572,92 @@ export default {
           phone: { type: "string", example: "+441234567890" },
           email: { type: "string", example: "contact@globaltrading.com" },
         },
+        required: ["id", "name", "currency"],
       },
+
       Nostro: {
         type: "object",
         properties: {
-          id: { type: "string", example: "SET001" },
-          counterpartyId: { type: "string", example: "CPTY001" },
-          currency: { type: "string", example: "USD" },
-          nostroAccountId: { type: "string", example: "NOSTRO123" },
-          nostroDescription: { type: "string", example: "Main USD Account" },
-          managedById: { type: "string", example: "CPTY003" },
-          managedByName: { type: "string", example: "John Manager" },
+          id: { type: "string", example: "001-EUR" },
+          counterpartyId: { type: "string", example: "001" },
+          currency: { type: "string", example: "EUR" },
+          nostroAccountId: { type: "string", example: "016" },
+          nostroDescription: {
+            type: "string",
+            example: "016 - EUR Nostro Account managed by Barclays Bank",
+          },
+          managedById: { type: "string", example: "016" },
         },
+        required: ["id", "counterpartyId", "currency", "managedById"],
       },
+
       Trade: {
         type: "object",
         properties: {
           tradeId: { type: "string", example: "TRADE001" },
-          tradeType: { type: "string", example: "spot" },
+          tradeType: {
+            type: "string",
+            enum: ["SPOT", "FORWARD", "SWAP"],
+            example: "SPOT",
+          },
           tradeDate: { type: "string", format: "date", example: "2025-01-19" },
           settlementDate: {
             type: "string",
             format: "date",
             example: "2025-01-22",
           },
-          weBuyWeSell: { type: "string", example: "Buy" },
+          weBuyWeSell: {
+            type: "string",
+            enum: ["we buy", "we sell"],
+            example: "we buy",
+          },
           counterpartyId: { type: "string", example: "CPTY001" },
           buyCurrency: { type: "string", example: "USD" },
           sellCurrency: { type: "string", example: "EUR" },
-          buyAmount: { type: "number", format: "float", example: 1000.0 },
-          sellAmount: { type: "number", format: "float", example: 900.0 },
-          exchangeRate: { type: "number", format: "float", example: 0.9 },
+          buyAmount: { type: "number", example: 1000 },
+          sellAmount: { type: "number", example: 900 },
+          exchangeRate: { type: "number", example: 0.9 },
           buyNostroAccountId: { type: "string", example: "BNK123" },
           sellNostroAccountId: { type: "string", example: "BNK456" },
         },
+        required: [
+          "tradeId",
+          "tradeType",
+          "tradeDate",
+          "settlementDate",
+          "weBuyWeSell",
+          "counterpartyId",
+          "buyCurrency",
+          "sellCurrency",
+          "buyAmount",
+          "sellAmount",
+          "exchangeRate",
+        ],
       },
+
       TradePatch: {
         type: "object",
         properties: {
-          tradeType: { type: "string", example: "forward" },
+          tradeType: {
+            type: "string",
+            enum: ["SPOT", "FORWARD", "SWAP"],
+            example: "FORWARD",
+          },
           settlementDate: {
             type: "string",
             format: "date",
             example: "2025-01-25",
           },
-          weBuyWeSell: { type: "string", example: "Sell" },
+          weBuyWeSell: {
+            type: "string",
+            enum: ["we buy", "we sell"],
+            example: "we sell",
+          },
           buyCurrency: { type: "string", example: "USD" },
           sellCurrency: { type: "string", example: "EUR" },
-          buyAmount: { type: "number", format: "float", example: 2000.0 },
-          sellAmount: { type: "number", format: "float", example: 1800.0 },
-          exchangeRate: { type: "number", format: "float", example: 0.9 },
+          buyAmount: { type: "number", example: 2000 },
+          sellAmount: { type: "number", example: 1800 },
+          exchangeRate: { type: "number", example: 0.9 },
         },
       },
     },

@@ -122,41 +122,62 @@ export const getTradesByCriteria = (criteria) => {
  * @param {Object} trade - The trade details.
  * @returns {Promise<void>} - A promise resolving when the operation is complete.
  */
-export const insertTrade = (trade) => {
-  const query = `
-    INSERT INTO trades (
-      tradeId, tradeType, parentTradeId, tradeDate, settlementDate, weBuyWeSell,
-      counterpartyId, buyCurrency, sellCurrency, buyAmount, sellAmount, exchangeRate,
-      buyNostroAccountId, sellNostroAccountId
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
-  const params = [
-    trade.tradeId,
-    trade.tradeType,
-    trade.parentTradeId || null,
-    trade.tradeDate,
-    trade.settlementDate,
-    trade.weBuyWeSell,
-    trade.counterpartyId,
-    trade.buyCurrency,
-    trade.sellCurrency,
-    trade.buyAmount,
-    trade.sellAmount,
-    trade.exchangeRate,
-    trade.buyNostroAccountId,
-    trade.sellNostroAccountId,
-  ];
+export const insertTrade = async (trade) => {
+  try {
+    const existingTrade = await getTradeById(trade.tradeId);
 
-  return new Promise((resolve, reject) => {
-    db.run(query, params, (err) => {
-      if (err) {
-        console.error("Error inserting trade:", err.message);
-        reject(new Error("Failed to insert trade"));
-      } else {
-        resolve();
-      }
+    if (existingTrade) {
+      console.log(
+        `Trade with ID '${trade.tradeId}' already exists. Aborting insertion.`
+      );
+      throw new Error(`Trade with ID '${trade.tradeId}' already exists.`);
+    }
+
+    const query = `
+      INSERT INTO trades (
+        tradeId, tradeType, parentTradeId, tradeDate, settlementDate, weBuyWeSell,
+        counterpartyId, buyCurrency, sellCurrency, buyAmount, sellAmount, exchangeRate,
+        buyNostroAccountId, sellNostroAccountId
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const params = [
+      trade.tradeId,
+      trade.tradeType,
+      trade.parentTradeId || null,
+      trade.tradeDate,
+      trade.settlementDate,
+      trade.weBuyWeSell,
+      trade.counterpartyId,
+      trade.buyCurrency,
+      trade.sellCurrency,
+      trade.buyAmount,
+      trade.sellAmount,
+      trade.exchangeRate,
+      trade.buyNostroAccountId,
+      trade.sellNostroAccountId,
+    ];
+
+    return new Promise((resolve, reject) => {
+      db.run(query, params, (err) => {
+        if (err) {
+          console.error(
+            "Error inserting trade:",
+            err.message,
+            "Params:",
+            params
+          );
+          reject(new Error("Failed to insert trade"));
+        } else {
+          console.log(`Trade '${trade.tradeId}' inserted successfully.`);
+          resolve();
+        }
+      });
     });
-  });
+  } catch (error) {
+    console.error("Error in insertTrade:", error.message);
+    throw error;
+  }
 };
 
 /**
@@ -259,12 +280,18 @@ export const updateTrade = (tradeId, updates) => {
 export const deleteTradeById = (tradeId) => {
   const query = "DELETE FROM trades WHERE tradeId = ?";
   return new Promise((resolve, reject) => {
-    db.run(query, [tradeId], (err) => {
+    db.run(query, [tradeId], function (err) {
       if (err) {
-        console.error(`Error deleting trade ${tradeId}:`, err.message);
+        console.error(
+          `Error deleting trade with ID '${tradeId}':`,
+          err.message
+        );
         reject(new Error("Failed to delete trade"));
+      } else if (this.changes === 0) {
+        reject(new Error(`No trade found with ID '${tradeId}'`));
       } else {
-        resolve();
+        console.log(`Trade with ID '${tradeId}' deleted successfully.`);
+        resolve(this.changes); // Returns the number of deleted rows
       }
     });
   });

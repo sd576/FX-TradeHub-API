@@ -41,6 +41,7 @@
     "morgan": "^1.10.0",
     "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
+    "swagger-spec-validator": "^5.0.0",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^11.0.5"
   },
