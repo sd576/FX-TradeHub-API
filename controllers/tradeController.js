@@ -142,8 +142,6 @@ export const deleteTradeByIdHandler = async (req, res) => {
     }
 
     await deleteTradeById(tradeId);
-
-    // Return 204 No Content
     res.status(204).send();
   } catch (error) {
     console.error(`Error deleting trade ${tradeId}:`, error.message);
