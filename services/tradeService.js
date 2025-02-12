@@ -1,8 +1,15 @@
 import db from "../database/db.js";
+import { format } from "date-fns"; // Install with: npm install date-fns
+
+// Utility to format dates to 'YYYY-MM-DD'
+const formatDate = (date) => {
+  if (!date) return null;
+  const parsedDate = new Date(date);
+  return isNaN(parsedDate.getTime()) ? null : format(parsedDate, "yyyy-MM-dd");
+};
 
 /**
  * Fetch all trades.
- * @returns {Promise<Array>} - A promise resolving to an array of trade records.
  */
 export const getAllTrades = () => {
   const query = "SELECT * FROM trades";
@@ -20,8 +27,6 @@ export const getAllTrades = () => {
 
 /**
  * Fetch trades for a specific counterparty.
- * @param {string} counterpartyId - The ID of the counterparty.
- * @returns {Promise<Array>} - A promise resolving to an array of trade records.
  */
 export const getTradesByCounterparty = (counterpartyId) => {
   const query = "SELECT * FROM trades WHERE counterpartyId = ?";
@@ -42,9 +47,6 @@ export const getTradesByCounterparty = (counterpartyId) => {
 
 /**
  * Fetch trades by date range.
- * @param {string} startDate - The start date of the range.
- * @param {string} endDate - The end date of the range.
- * @returns {Promise<Array>} - A promise resolving to an array of trade records.
  */
 export const getTradesByDateRange = (startDate, endDate) => {
   const query = "SELECT * FROM trades WHERE tradeDate BETWEEN ? AND ?";
@@ -62,8 +64,6 @@ export const getTradesByDateRange = (startDate, endDate) => {
 
 /**
  * Fetch a single trade by ID.
- * @param {string} tradeId - The ID of the trade.
- * @returns {Promise<Object|null>} - A promise resolving to the trade record or null.
  */
 export const getTradeById = (tradeId) => {
   const query = "SELECT * FROM trades WHERE tradeId = ?";
@@ -81,25 +81,20 @@ export const getTradeById = (tradeId) => {
 
 /**
  * Fetch trades by criteria.
- * @param {Object} criteria - Filter criteria for querying trades.
- * @returns {Promise<Array>} - A promise resolving to an array of matching trade records.
  */
 export const getTradesByCriteria = (criteria) => {
   const { buyCurrency, sellCurrency, exchangeRate } = criteria;
-
-  let query = "SELECT * FROM trades WHERE 1=1"; // Base query
+  let query = "SELECT * FROM trades WHERE 1=1";
   const params = [];
 
   if (buyCurrency) {
     query += " AND buyCurrency = ?";
     params.push(buyCurrency);
   }
-
   if (sellCurrency) {
     query += " AND sellCurrency = ?";
     params.push(sellCurrency);
   }
-
   if (exchangeRate) {
     query += " AND exchangeRate = ?";
     params.push(exchangeRate);
@@ -119,17 +114,11 @@ export const getTradesByCriteria = (criteria) => {
 
 /**
  * Insert a new trade.
- * @param {Object} trade - The trade details.
- * @returns {Promise<void>} - A promise resolving when the operation is complete.
  */
 export const insertTrade = async (trade) => {
   try {
     const existingTrade = await getTradeById(trade.tradeId);
-
     if (existingTrade) {
-      console.log(
-        `Trade with ID '${trade.tradeId}' already exists. Aborting insertion.`
-      );
       throw new Error(`Trade with ID '${trade.tradeId}' already exists.`);
     }
 
@@ -145,8 +134,8 @@ export const insertTrade = async (trade) => {
       trade.tradeId,
       trade.tradeType,
       trade.parentTradeId || null,
-      trade.tradeDate,
-      trade.settlementDate,
+      formatDate(trade.tradeDate),
+      formatDate(trade.settlementDate),
       trade.weBuyWeSell,
       trade.counterpartyId,
       trade.buyCurrency,
@@ -161,15 +150,9 @@ export const insertTrade = async (trade) => {
     return new Promise((resolve, reject) => {
       db.run(query, params, (err) => {
         if (err) {
-          console.error(
-            "Error inserting trade:",
-            err.message,
-            "Params:",
-            params
-          );
+          console.error("Error inserting trade:", err.message);
           reject(new Error("Failed to insert trade"));
         } else {
-          console.log(`Trade '${trade.tradeId}' inserted successfully.`);
           resolve();
         }
       });
@@ -182,9 +165,6 @@ export const insertTrade = async (trade) => {
 
 /**
  * Patch a trade by ID (partial update).
- * @param {string} tradeId - The ID of the trade.
- * @param {Object} updates - The fields to update.
- * @returns {Promise<void>} - A promise resolving when the update is complete.
  */
 export const patchTrade = (tradeId, updates) => {
   const fields = Object.keys(updates);
@@ -208,22 +188,7 @@ export const patchTrade = (tradeId, updates) => {
       } else if (this.changes === 0) {
         reject(new Error("No trade found to patch"));
       } else {
-        // Fetch the updated record after the patch
-        db.get(
-          "SELECT * FROM trades WHERE tradeId = ?",
-          [tradeId],
-          (err, row) => {
-            if (err) {
-              console.error(
-                `Error fetching updated trade ${tradeId}:`,
-                err.message
-              );
-              reject(new Error("Failed to fetch updated trade"));
-            } else {
-              resolve(row);
-            }
-          }
-        );
+        resolve();
       }
     });
   });
@@ -231,9 +196,6 @@ export const patchTrade = (tradeId, updates) => {
 
 /**
  * Update a trade by ID.
- * @param {string} tradeId - The ID of the trade.
- * @param {Object} updates - The updated trade details.
- * @returns {Promise<void>} - A promise resolving when the update is complete.
  */
 export const updateTrade = (tradeId, updates) => {
   const query = `
@@ -246,8 +208,8 @@ export const updateTrade = (tradeId, updates) => {
   const params = [
     updates.tradeType,
     updates.parentTradeId || null,
-    updates.tradeDate,
-    updates.settlementDate,
+    formatDate(updates.tradeDate),
+    formatDate(updates.settlementDate),
     updates.weBuyWeSell,
     updates.counterpartyId,
     updates.buyCurrency,
@@ -274,24 +236,19 @@ export const updateTrade = (tradeId, updates) => {
 
 /**
  * Delete a trade by ID.
- * @param {string} tradeId - The ID of the trade.
- * @returns {Promise<void>} - A promise resolving when the trade is deleted.
  */
 export const deleteTradeById = (tradeId) => {
   const query = "DELETE FROM trades WHERE tradeId = ?";
   return new Promise((resolve, reject) => {
     db.run(query, [tradeId], function (err) {
       if (err) {
-        console.error(
-          `Error deleting trade with ID '${tradeId}':`,
-          err.message
-        );
+        console.error(`❌ Error deleting trade ${tradeId}:`, err.message);
         reject(new Error("Failed to delete trade"));
       } else if (this.changes === 0) {
-        reject(new Error(`No trade found with ID '${tradeId}'`));
+        reject(new Error(`No trade found with ID '${tradeId}'`)); // Add this check
       } else {
-        console.log(`Trade with ID '${tradeId}' deleted successfully.`);
-        resolve(this.changes); // Returns the number of deleted rows
+        console.log(`✅ Trade with ID '${tradeId}' deleted.`);
+        resolve(this.changes);
       }
     });
   });

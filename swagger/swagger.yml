@@ -294,15 +294,52 @@ paths:
                 value:
                   tradeId: SPOT-002-001
                   tradeDate: "2025-01-01"
-                  tradeType: SPOT
-                  weBuyWeSell: we buy
+                  tradeType: "SPOT"
+                  weBuyWeSell: "we buy"
                   counterpartyId: "002"
+                  counterpartyName: "HSBC Bank"
                   settlementDate: "2025-01-02"
-                  buyCurrency: GBP
-                  sellCurrency: USD
+                  buyCurrency: "GBP"
+                  sellCurrency: "USD"
                   buyAmount: 1000000
                   sellAmount: 1262000
                   exchangeRate: 1.262
+                  buyNostroAccountId: "001"
+                  sellNostroAccountId: "010"
+              forwardTrade:
+                summary: FORWARD trade example
+                value:
+                  tradeId: "FWD-002-001"
+                  tradeDate: "2025-01-01"
+                  tradeType: "FORWARD"
+                  weBuyWeSell: "we sell"
+                  counterpartyId: "003"
+                  counterpartyName: "Barclays Bank"
+                  settlementDate: "2025-06-01"
+                  buyCurrency: "USD"
+                  sellCurrency: "EUR"
+                  buyAmount: 2000000
+                  sellAmount: 2200000
+                  exchangeRate: 1.1
+                  buyNostroAccountId: "002"
+                  sellNostroAccountId: "011"
+              swapTrade:
+                summary: SWAP trade example
+                value:
+                  tradeId: "SWAP-002-001"
+                  tradeDate: "2025-01-01"
+                  tradeType: "SWAP"
+                  weBuyWeSell: "we buy"
+                  counterpartyId: "004"
+                  counterpartyName: "Lloyds Bank"
+                  settlementDate: "2025-12-01"
+                  buyCurrency: "JPY"
+                  sellCurrency: "GBP"
+                  buyAmount: 5000000
+                  sellAmount: 35000
+                  exchangeRate: 0.007
+                  buyNostroAccountId: "003"
+                  sellNostroAccountId: "012"
       responses:
         "201":
           description: Trade created successfully.

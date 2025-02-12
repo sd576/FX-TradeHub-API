@@ -8,12 +8,12 @@ export const validateCounterparty = [
     .isLength({ max: 20 })
     .withMessage("ID must be a string with a maximum length of 20"),
   check("name")
-    .optional() // 👈 Now optional for PUT
+    .optional() // 👈 optional for PUT
     .isString()
     .isLength({ max: 100 })
     .withMessage("Name must be a string with a maximum length of 100"),
   check("email")
-    .optional() // 👈 Now optional for PUT
+    .optional() // 👈 optional for PUT
     .isEmail()
     .withMessage("Email must be a valid email address"),
   check("city")
