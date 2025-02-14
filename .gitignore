@@ -31,3 +31,5 @@ test-results/
 /dist/
 /build/
 database/*.db
+ssh_key
+ssh_key.pub
