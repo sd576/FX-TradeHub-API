@@ -8,13 +8,11 @@ export const validateTrade = [
     .isIn(["SPOT", "FORWARD", "SWAP"])
     .withMessage("Trade type must be one of 'SPOT', 'FORWARD', or 'SWAP'"),
   check("tradeDate")
-    .isISO8601()
-    .toDate()
-    .withMessage("Trade date must be a valid ISO 8601 date"),
+    .matches(/^\d{4}-\d{2}-\d{2}$/)
+    .withMessage("Trade date must be in YYYY-MM-DD format"),
   check("settlementDate")
-    .isISO8601()
-    .toDate()
-    .withMessage("Settlement date must be a valid ISO 8601 date"),
+    .matches(/^\d{4}-\d{2}-\d{2}$/)
+    .withMessage("Settlement date must be in YYYY-MM-DD format"),
   check("weBuyWeSell")
     .isString()
     .isIn(["we buy", "we sell"])
