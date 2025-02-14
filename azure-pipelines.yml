@@ -1,19 +1,7 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
   branches:
     include:
-      - main  # Runs pipeline when code is pushed to 'main' branch
-
-resources:
-  repositories:
-    - repository: Playwright_Tests_Repo
-      type: git
-      name: Playwright_Tests_Repo  # Use the exact repo name in Azure DevOps
-      ref: main  # Adjust if Playwright repo uses a different branch
+      - main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -23,7 +11,7 @@ steps:
 
   - task: UseNode@1
     inputs:
-      version: '18'  # Adjust Node.js version if needed
+      version: '18'
 
   - script: |
       npm install
@@ -34,13 +22,15 @@ steps:
     displayName: "Start API Server in Background"
 
   - script: |
-      sleep 5
-    displayName: "Wait for API Server to Start"
+      for i in {1..10}; do
+        curl -s http://localhost:3000 && break || sleep 2;
+      done
+    displayName: "Wait for API Server to be Ready"
 
-  # ✅ Cloning Playwright Tests from Azure DevOps (Using `checkout`)
-  - checkout: Playwright_Tests_Repo
+  # ✅ Checkout your Playwright Tests from GitHub
+  - checkout: git://github.com/sd576/Playwright-API-Tests
     path: tests
-    displayName: "Checkout Playwright Tests Repo"
+    displayName: "Checkout Playwright Tests from GitHub"
 
   - script: |
       npm install
@@ -57,6 +47,4 @@ steps:
       pathToPublish: tests/playwright-report/
       artifactName: playwright-results
     displayName: "Upload Test Results"
-
-
 
