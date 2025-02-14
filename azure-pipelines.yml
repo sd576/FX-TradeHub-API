@@ -12,6 +12,7 @@ resources:
       type: github
       name: sd576/Playwright-API-Tests
       ref: refs/heads/main
+      endpoint: GitHub_Connection
 
 steps:
   - checkout: self
