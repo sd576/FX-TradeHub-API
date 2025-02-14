@@ -6,6 +6,14 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+resources:
+  repositories:
+    - repository: Playwright_Tests_Repo
+      type: github
+      name: sd576/Playwright-API-Tests
+      ref: refs/heads/main
+      endpoint: GitHub_Connection  # This links the service connection
+
 steps:
   - checkout: self  # Check out the API repo
 
@@ -27,8 +35,8 @@ steps:
       done
     displayName: "Wait for API Server to be Ready"
 
-  # ✅ Checkout your Playwright Tests from GitHub
-  - checkout: git://github.com/sd576/Playwright-API-Tests
+  # ✅ Checkout Playwright Tests Repo from GitHub
+  - checkout: Playwright_Tests_Repo
     path: tests
     displayName: "Checkout Playwright Tests from GitHub"
 
@@ -47,4 +55,3 @@ steps:
       pathToPublish: tests/playwright-report/
       artifactName: playwright-results
     displayName: "Upload Test Results"
-
