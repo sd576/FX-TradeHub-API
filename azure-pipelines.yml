@@ -9,9 +9,9 @@ pool:
 resources:
   repositories:
     - repository: Playwright_Tests_Repo
-      type: git
-      name: Playwright_Tests_Repo
-      ref: main
+      type: github
+      name: sd576/Playwright-API-Tests
+      ref: refs/heads/main
 
 steps:
   - checkout: self
@@ -31,6 +31,41 @@ steps:
       find . -name "package.json"
     displayName: "Locate package.json"
 
+  # ✅ Install Dependencies
   - script: |
       npm install
     displayName: "Install Dependencies"
+
+  # ✅ Lint the Code with ESLint
+  - script: |
+      npm run lint
+    displayName: "Run ESLint Check"
+
+  # ✅ Format the Code with Prettier
+  - script: |
+      npm run format
+    displayName: "Run Prettier Check"
+
+  # ✅ Seed the Database and Start the Node.js Server
+  - script: |
+      npm run setup-and-start &
+    displayName: "Seed Database and Start Server"
+
+  # ⏳ Wait for Server to Start
+  - script: |
+      sleep 10
+    displayName: "Wait for Server to Start"
+
+  # ✅ Run API Tests
+  - script: |
+      npm run test:counterpartyAPI
+      npm run test:settlementAPI
+      npm run test:tradeAPI
+    displayName: "Run API Tests"
+
+  # ✅ Publish Mocha Test Results
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: "reports/*.xml"
+      testRunTitle: "Mocha API Tests"
+    displayName: "Publish JUnit Test Results"

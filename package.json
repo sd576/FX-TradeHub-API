@@ -17,7 +17,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/fx_trader_server.git"
+    "url": "https://github.com/sd576/FX-TradeHub-API.git"
   },
   "scripts": {
     "start": "node app.js",
@@ -26,9 +26,11 @@
     "setup-and-start": "npm run db && npm start",
     "dev": "nodemon app.js",
     "test:services": "node runServiceTests.js",
-    "test:counterpartyAPI": "npx mocha tests/api/counterpartyAPI.spec.js",
-    "test:settlementAPI": "npx mocha tests/api/settlementAPI.spec.js",
-    "test:tradeAPI": "npx mocha tests/api/tradeAPI.spec.js"
+    "test:counterpartyAPI": "npx mocha tests/api/counterpartyAPI.spec.js --reporter mocha-junit-reporter --reporter-options mochaFile=reports/counterparty-api-results.xml",
+    "test:settlementAPI": "npx mocha tests/api/settlementAPI.spec.js --reporter mocha-junit-reporter --reporter-options mochaFile=reports/settlement-api-results.xml",
+    "test:tradeAPI": "npx mocha tests/api/tradeAPI.spec.js --reporter mocha-junit-reporter --reporter-options mochaFile=reports/trade-api-results.xml",
+    "lint": "npx eslint . --fix",
+    "format": "npx prettier --write ."
   },
   "dependencies": {
     "better-sqlite3": "^11.7.2",
@@ -52,6 +54,7 @@
     "eslint": "^9.18.0",
     "globals": "^15.14.0",
     "mocha": "^11.0.1",
+    "mocha-junit-reporter": "^2.2.1",
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
     "supertest": "^7.0.0"

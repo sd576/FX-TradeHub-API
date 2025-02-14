@@ -16,7 +16,14 @@ export default [
     },
     rules: {
       // Suppress warnings for unused `next` parameter in middleware
-      "no-unused-vars": ["error", { argsIgnorePattern: "^next$" }],
+      "no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^next$",
+          varsIgnorePattern: "^_", // Ignore variables that start with an underscore
+          caughtErrors: "none", // Ignore unused variables in `catch` blocks
+        },
+      ],
     },
   },
   pluginJs.configs.recommended,
