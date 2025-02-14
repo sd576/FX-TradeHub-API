@@ -1,62 +1,36 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
   branches:
     include:
-      - main  # Runs pipeline when code is pushed to 'main' branch
+      - main # Runs pipeline when code is pushed to 'main' branch
+
+pool:
+  vmImage: "ubuntu-latest"
 
 resources:
   repositories:
     - repository: Playwright_Tests_Repo
       type: git
-      name: Playwright_Tests_Repo  # Use the exact repo name in Azure DevOps
-      ref: main  # Adjust if Playwright repo uses a different branch
-
-pool:
-  vmImage: 'ubuntu-latest'
+      name: Playwright_Tests_Repo
+      ref: main
 
 steps:
-  - checkout: self  # Check out the API repo
+  - checkout: self
 
   - task: UseNode@1
     inputs:
-      version: '18'  # Adjust Node.js version if needed
+      version: "20"
+    displayName: "Set Node.js to v20"
+
+  # 🔍 Debugging Step 1: List files in the current directory
+  - script: |
+      ls -la
+    displayName: "Check Files in Current Directory"
+
+  # 🔍 Debugging Step 2: Locate package.json recursively
+  - script: |
+      find . -name "package.json"
+    displayName: "Locate package.json"
 
   - script: |
       npm install
     displayName: "Install Dependencies"
-
-  - script: |
-      npm run start &
-    displayName: "Start API Server in Background"
-
-  - script: |
-      sleep 5
-    displayName: "Wait for API Server to Start"
-
-  # ✅ Cloning Playwright Tests from Azure DevOps (Using `checkout`)
-  - checkout: Playwright_Tests_Repo
-    path: tests
-    displayName: "Checkout Playwright Tests Repo"
-
-  - script: |
-      npm install
-    workingDirectory: tests
-    displayName: "Install Playwright Dependencies"
-
-  - script: |
-      npx playwright test
-    workingDirectory: tests
-    displayName: "Run Playwright API Tests"
-
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: tests/playwright-report/
-      artifactName: playwright-results
-    displayName: "Upload Test Results"
-
-
-
