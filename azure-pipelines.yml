@@ -55,9 +55,14 @@ steps:
       exit 1
     displayName: "Wait for Server to Start"
 
+  # ✅ List Test Files in tests/api (Debugging Step)
+  - script: ls -R tests/api
+    displayName: "List Test Files in tests/api"
+
   # 🏃 Run Playwright Tests with a Different Port (4000)
   - script: |
-      PORT=4000 NODE_ENV=playwright npx playwright test --reporter=junit --output=playwright-results
+      export CI=true
+      PORT=4000 NODE_ENV=playwright npx playwright test tests/api --reporter=junit --output=playwright-results
     displayName: "Run Playwright Tests"
 
   # ✅ Publish Playwright JUnit Test Results
