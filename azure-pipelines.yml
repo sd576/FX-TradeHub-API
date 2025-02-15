@@ -25,8 +25,7 @@ steps:
     displayName: "Set Node.js to v20"
 
   # ✅ Install Dependencies
-  - script: |
-      npm install
+  - script: npm ci
     displayName: "Install Dependencies"
 
   # ✅ Lint and Format Code
@@ -35,20 +34,26 @@ steps:
       npm run format
     displayName: "Run ESLint and Prettier Checks"
 
-  # ✅ Seed the Database and Start the API Server
+  # ✅ Seed the Database and Start the API Server in the Background
   - script: |
       npm run setup-and-start &
+      echo "Server starting in the background..."
     displayName: "Seed Database and Start Server"
 
-  # ⏳ Wait for Server to Be Ready
+  # ⏳ Wait for the Server to be Ready
   - script: |
-      sleep 10
+      for i in {1..10}; do
+        if curl --silent http://localhost:3000/api-docs; then
+          echo "Server is ready!"
+          exit 0
+        else
+          echo "Waiting for server... Attempt $i"
+          sleep 5
+        fi
+      done
+      echo "Server failed to start in time."
+      exit 1
     displayName: "Wait for Server to Start"
-
-  # 🔪 Kill Any Process Using Port 3000 (Prevent Port Conflict)
-  - script: |
-      lsof -i :3000 | grep LISTEN | awk '{print $2}' | xargs kill -9 || true
-    displayName: "Kill Process on Port 3000"
 
   # 🏃 Run Playwright Tests with a Different Port (4000)
   - script: |
