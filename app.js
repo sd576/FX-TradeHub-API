@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 
 // Determine environment and configure database
 let db;
-if (process.env.NODE_ENV === "test") {
+if (process.env.NODE_ENV === "test" || process.env.NODE_ENV === "playwright") {
   console.log("Using in-memory SQLite database for testing.");
   db = new sqlite3.Database(":memory:");
 } else {
@@ -59,14 +59,12 @@ process.on("SIGINT", () => {
   });
 });
 
-// Start the server only if not in test mode
-if (process.env.NODE_ENV !== "test") {
-  const PORT = process.env.PORT || 3000;
+// Start the server (skip during tests)
+const PORT = process.env.PORT || 3000;
+if (process.env.NODE_ENV !== "test" && process.env.NODE_ENV !== "playwright") {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-} else {
-  console.log("Server not started because NODE_ENV is set to 'test'.");
 }
 
 export default app;

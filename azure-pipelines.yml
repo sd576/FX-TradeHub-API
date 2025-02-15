@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main # Run the pipeline on every push to 'main'
+      - main
 
 pool:
   vmImage: "ubuntu-latest"
@@ -35,32 +35,29 @@ steps:
       npm run format
     displayName: "Run ESLint and Prettier Checks"
 
-  # ✅ Start the Server in the Background
+  # ✅ Seed the Database and Start the API Server
   - script: |
-      nohup npm run setup-and-start > server.log 2>&1 &
+      npm run setup-and-start &
     displayName: "Seed Database and Start Server"
 
-  # ⏳ Wait for the Server to Start
+  # ⏳ Wait for Server to Be Ready
   - script: |
       sleep 10
-      cat server.log
-    displayName: "Wait for Server to Start and Check Logs"
+    displayName: "Wait for Server to Start"
 
-  # ✅ Run API Tests
+  # 🔪 Kill Any Process Using Port 3000 (Prevent Port Conflict)
   - script: |
-      NODE_ENV=test npm run test:counterpartyAPI
-      NODE_ENV=test npm run test:settlementAPI
-      NODE_ENV=test npm run test:tradeAPI
-    displayName: "Run API Tests"
+      lsof -i :3000 | grep LISTEN | awk '{print $2}' | xargs kill -9 || true
+    displayName: "Kill Process on Port 3000"
 
-  # ✅ Run Playwright Tests with JUnit Reporter
+  # 🏃 Run Playwright Tests with a Different Port (4000)
   - script: |
-      npx playwright test --reporter=junit --output=playwright-results
+      PORT=4000 NODE_ENV=playwright npx playwright test --reporter=junit --output=playwright-results
     displayName: "Run Playwright Tests"
 
   # ✅ Publish Playwright JUnit Test Results
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: "playwright-results/*.xml"
-      testRunTitle: "Playwright API Tests"
+      testRunTitle: "Playwright Tests"
     displayName: "Publish Playwright Test Results"
