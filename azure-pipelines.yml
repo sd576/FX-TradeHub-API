@@ -58,15 +58,11 @@ steps:
       exit 1
     displayName: "Wait for Server to Start"
 
-  # ✅ Debugging Step: Print Working Directory and List All Files
+  # ✅ Debugging Step: Print Full Directory Structure
   - script: |
       pwd
       ls -R
-    displayName: "Print Working Directory and List All Files"
-
-  # ✅ List Test Files in src/tests/api (After Dependency Fix)
-  - script: ls -R src/tests/api
-    displayName: "List Test Files in src/tests/api"
+    displayName: "Print Full Directory Structure"
 
   # 🏃 Run Playwright Tests with a Different Port (4000)
   - script: |
