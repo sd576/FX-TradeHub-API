@@ -10,49 +10,36 @@ steps:
   # ✅ Checkout the Repository
   - checkout: self
 
-  # ✅ Set Node.js Version
+  # ✅ Install Node.js
   - task: UseNode@1
     inputs:
       version: "20"
     displayName: "Set Node.js to v20"
 
-  # ✅ Install Dependencies and Playwright with System Dependencies
+  # ✅ Install Dependencies and Playwright
   - script: |
       npm ci
       npx playwright install --with-deps
       echo "✅ Dependencies and Playwright installed successfully."
     displayName: "Install Dependencies and Playwright"
 
-  # ✅ Seed the Database and Start the API Server in the Background
-  - script: |
-      npm run setup-and-start &
-      echo "Server starting in the background..."
-    displayName: "Seed Database and Start Server"
-
-  # ⏳ Wait for the Server to be Ready
-  - script: |
-      for i in {1..10}; do
-        if curl --silent http://localhost:3000/api-docs; then
-          echo "Server is ready!"
-          exit 0
-        else
-          echo "Waiting for server... Attempt $i"
-          sleep 5
-        fi
-      done
-      echo "Server failed to start in time."
-      exit 1
-    displayName: "Wait for Server to Start"
-
-  # 🏃 Run Playwright Tests with a Single Worker
+  # ✅ Run Playwright Tests with JUnit Reporter
   - script: |
       export CI=true
-      PORT=4000 NODE_ENV=playwright npx playwright test src/tests/api --reporter=junit --workers=1 --output=playwright-results
+      npx playwright test src/tests/api --reporter=junit --workers=1 --output=playwright-results
     displayName: "Run Playwright Tests"
 
-  # ✅ Publish Playwright JUnit Test Results
+  # ✅ Publish Playwright Test Results
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: "playwright-results/*.xml"
       testRunTitle: "Playwright Tests"
-    displayName: "Publish Playwright Test Results"
+    displayName: "Publish Test Results"
+
+  # ✅ Publish Playwright HTML Report as an Artifact
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: playwright-report
+      artifact: PlaywrightHTMLReport
+      publishLocation: pipeline
+    displayName: "Publish Playwright HTML Report"
