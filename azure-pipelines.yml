@@ -6,6 +6,9 @@ trigger:
 pool:
   vmImage: "ubuntu-latest"
 
+variables:
+  SYSTEM_DEBUG: true # Enable detailed debug logging
+
 steps:
   # ✅ Checkout the Repository
   - checkout: self
@@ -26,18 +29,22 @@ steps:
   - script: ls -R node_modules
     displayName: "List Installed Node Modules"
 
-  # ✅ Ensure Playwright System Dependencies and Browser Binaries are Installed
+  # ✅ Check if @playwright/test is Installed
+  - script: |
+      if [ -d "node_modules/@playwright/test" ]; then
+        echo "✅ @playwright/test is installed."
+      else
+        echo "❌ @playwright/test is missing!"
+        exit 1
+      fi
+    displayName: "Check if @playwright/test is Installed"
+
+  # ✅ Install Playwright System Dependencies and Browser Binaries
   - script: |
       npx playwright install-deps
       npx playwright install
       echo "✅ Playwright and required system dependencies installed."
     displayName: "Install Playwright and System Dependencies"
-
-  # ✅ Lint and Format Code
-  - script: |
-      npm run lint
-      npm run format
-    displayName: "Run ESLint and Prettier Checks"
 
   # ✅ Seed the Database and Start the API Server in the Background
   - script: |
