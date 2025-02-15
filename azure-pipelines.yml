@@ -58,11 +58,15 @@ steps:
       exit 1
     displayName: "Wait for Server to Start"
 
-  # ✅ Debugging Step: Print Full Directory Structure
+  # ✅ Debugging Step 1: Print Full Directory Structure
   - script: |
       pwd
       ls -R
     displayName: "Print Full Directory Structure"
+
+  # ✅ Debugging Step 2: Check Playwright Config
+  - script: cat playwright.config.ts
+    displayName: "Show Playwright Config"
 
   # 🏃 Run Playwright Tests with a Different Port (4000)
   - script: |
