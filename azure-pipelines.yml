@@ -1,45 +1,44 @@
 trigger:
   branches:
     include:
-      - main # Trigger on every push to main
+      - main # Runs pipeline when code is pushed to 'main' branch
 
 pool:
   vmImage: "ubuntu-latest"
 
+resources:
+  repositories:
+    - repository: Playwright_Tests_Repo
+      type: github
+      name: sd576/Playwright-API-Tests
+      ref: refs/heads/main
+      endpoint: GitHub_Connection
+
 steps:
-  # ✅ Checkout the current repository
+  # ✅ Checkout the Repository
   - checkout: self
 
-  # ✅ Set Node.js version to v20
+  # ✅ Set Node.js Version
   - task: UseNode@1
     inputs:
       version: "20"
     displayName: "Set Node.js to v20"
 
-  # 🔍 Debugging Step: List all files in the current directory
+  # 🔍 Debugging Step: Check for Files and Directories
   - script: |
       ls -la
     displayName: "Check Files in Current Directory"
-
-  # 🔍 Debugging Step: Find all Playwright test files (*.spec.ts)
-  - script: |
-      find . -name "*.spec.ts"
-    displayName: "Find Playwright Test Files"
 
   # ✅ Install Dependencies
   - script: |
       npm install
     displayName: "Install Dependencies"
 
-  # ✅ Lint the Code with ESLint
+  # ✅ Lint and Format Code
   - script: |
       npm run lint
-    displayName: "Run ESLint Check"
-
-  # ✅ Format the Code with Prettier
-  - script: |
       npm run format
-    displayName: "Run Prettier Check"
+    displayName: "Run ESLint and Prettier Checks"
 
   # ✅ Seed the Database and Start the Node.js Server
   - script: |
@@ -51,14 +50,21 @@ steps:
       sleep 10
     displayName: "Wait for Server to Start"
 
-  # ✅ Run Playwright Tests with JUnit Reporting
+  # ✅ Run API Tests (No JUnit Reporter)
   - script: |
-      npx playwright test src/tests/api --workers=1 --reporter=junit --output=reports
-    displayName: "Run Playwright API Tests and Generate JUnit Reports"
+      npm run test:counterpartyAPI
+      npm run test:settlementAPI
+      npm run test:tradeAPI
+    displayName: "Run API Tests"
 
-  # ✅ Publish JUnit Test Results
+  # ✅ Run Playwright Tests with JUnit Reporter
+  - script: |
+      npx playwright test --reporter=junit --output=playwright-results
+    displayName: "Run Playwright Tests"
+
+  # ✅ Publish Playwright JUnit Test Results
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: "reports/*.xml"
+      testResultsFiles: "playwright-results/*.xml"
       testRunTitle: "Playwright API Tests"
-    displayName: "Publish JUnit Test Results"
+    displayName: "Publish Playwright Test Results"
