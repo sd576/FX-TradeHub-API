@@ -15,54 +15,55 @@ resources:
       endpoint: GitHub_Connection
 
 steps:
-  # ✅ Checkout the Repository
+  # ✅ Step 1: Checkout the Repository
   - checkout: self
+    displayName: "Checkout Repository"
 
-  # ✅ Set Node.js Version
+  # ✅ Step 2: Set Node.js Version
   - task: UseNode@1
     inputs:
       version: "20"
     displayName: "Set Node.js to v20"
 
-  # 🔍 Debugging Step: Check for Files and Directories
+  # ✅ Step 3: Debugging — Check Files in Current Directory
   - script: |
       ls -la
-    displayName: "Check Files in Current Directory"
+    displayName: "List Files in Current Directory"
 
-  # ✅ Install Dependencies
+  # ✅ Step 4: Install Dependencies
   - script: |
       npm install
     displayName: "Install Dependencies"
 
-  # ✅ Lint and Format Code
+  # ✅ Step 5: Lint and Format Code
   - script: |
       npm run lint
       npm run format
-    displayName: "Run ESLint and Prettier Checks"
+    displayName: "Run ESLint and Prettier"
 
-  # ✅ Seed the Database and Start the Node.js Server
+  # ✅ Step 6: Seed the Database and Start the Server
   - script: |
       npm run setup-and-start &
     displayName: "Seed Database and Start Server"
 
-  # ⏳ Wait for Server to Start
+  # ✅ Step 7: Wait for the Server to Be Ready
   - script: |
       sleep 10
     displayName: "Wait for Server to Start"
 
-  # ✅ Run API Tests (No JUnit Reporter)
+  # ✅ Step 8: Run All API Tests
   - script: |
       npm run test:counterpartyAPI
       npm run test:settlementAPI
       npm run test:tradeAPI
     displayName: "Run API Tests"
 
-  # ✅ Run Playwright Tests with JUnit Reporter
+  # ✅ Step 9: Run Playwright Tests with JUnit Reporter
   - script: |
       npx playwright test --reporter=junit --output=playwright-results
-    displayName: "Run Playwright Tests"
+    displayName: "Run Playwright API Tests"
 
-  # ✅ Publish Playwright JUnit Test Results
+  # ✅ Step 10: Publish Playwright Test Results
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: "playwright-results/*.xml"
