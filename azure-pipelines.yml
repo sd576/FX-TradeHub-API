@@ -1,36 +1,30 @@
 trigger:
   branches:
     include:
-      - main # Runs pipeline when code is pushed to 'main' branch
+      - main # Trigger on every push to main
 
 pool:
   vmImage: "ubuntu-latest"
 
-resources:
-  repositories:
-    - repository: Playwright_Tests_Repo
-      type: github
-      name: sd576/Playwright-API-Tests
-      ref: refs/heads/main
-      endpoint: GitHub_Connection
-
 steps:
+  # ✅ Checkout the current repository
   - checkout: self
 
+  # ✅ Set Node.js version to v20
   - task: UseNode@1
     inputs:
       version: "20"
     displayName: "Set Node.js to v20"
 
-  # 🔍 Debugging Step 1: List files in the current directory
+  # 🔍 Debugging Step: List all files in the current directory
   - script: |
       ls -la
     displayName: "Check Files in Current Directory"
 
-  # 🔍 Debugging Step 2: Locate package.json recursively
+  # 🔍 Debugging Step: Find all Playwright test files (*.spec.ts)
   - script: |
-      find . -name "package.json"
-    displayName: "Locate package.json"
+      find . -name "*.spec.ts"
+    displayName: "Find Playwright Test Files"
 
   # ✅ Install Dependencies
   - script: |
@@ -57,16 +51,14 @@ steps:
       sleep 10
     displayName: "Wait for Server to Start"
 
-  # ✅ Run API Tests
+  # ✅ Run Playwright Tests with JUnit Reporting
   - script: |
-      npm run test:counterpartyAPI
-      npm run test:settlementAPI
-      npm run test:tradeAPI
-    displayName: "Run API Tests"
+      npx playwright test src/tests/api --workers=1 --reporter=junit --output=reports
+    displayName: "Run Playwright API Tests and Generate JUnit Reports"
 
-  # ✅ Publish Mocha Test Results
+  # ✅ Publish JUnit Test Results
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: "reports/*.xml"
-      testRunTitle: "Mocha API Tests"
+      testRunTitle: "Playwright API Tests"
     displayName: "Publish JUnit Test Results"
