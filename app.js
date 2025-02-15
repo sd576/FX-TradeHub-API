@@ -59,12 +59,14 @@ process.on("SIGINT", () => {
   });
 });
 
-// Start the server (skip during tests)
+// Start the server only if not in test mode
 if (process.env.NODE_ENV !== "test") {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
+} else {
+  console.log("Server not started because NODE_ENV is set to 'test'.");
 }
 
 export default app;
