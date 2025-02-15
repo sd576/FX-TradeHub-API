@@ -16,17 +16,22 @@ steps:
       version: "20"
     displayName: "Set Node.js to v20"
 
-  # ✅ Install Dependencies (Ensure This Completes Before Playwright)
+  # ✅ Install Dependencies
   - script: |
       npm ci
       echo "✅ Dependencies installed successfully."
     displayName: "Install Dependencies"
 
-  # ✅ Install Playwright (After Dependencies)
+  # ✅ Debugging Step: List Installed Node Modules
+  - script: ls -R node_modules
+    displayName: "List Installed Node Modules"
+
+  # ✅ Ensure Playwright System Dependencies and Browser Binaries are Installed
   - script: |
+      npx playwright install-deps
       npx playwright install
-      echo "✅ Playwright installed successfully."
-    displayName: "Install Playwright"
+      echo "✅ Playwright and required system dependencies installed."
+    displayName: "Install Playwright and System Dependencies"
 
   # ✅ Lint and Format Code
   - script: |
@@ -55,13 +60,7 @@ steps:
       exit 1
     displayName: "Wait for Server to Start"
 
-  # ✅ Debugging Step: Print Full Directory Structure
-  - script: |
-      pwd
-      ls -R
-    displayName: "Print Full Directory Structure"
-
-  # 🏃 Run Playwright Tests with a Different Port (4000)
+  # 🏃 Run Playwright Tests
   - script: |
       export CI=true
       PORT=4000 NODE_ENV=playwright npx playwright test src/tests/api --reporter=junit --output=playwright-results
