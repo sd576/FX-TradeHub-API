@@ -24,9 +24,10 @@ steps:
       version: "20"
     displayName: "Set Node.js to v20"
 
-  # ✅ Install Dependencies
+  # ✅ Install Dependencies and Playwright
   - script: |
       npm ci
+      echo "Dependencies installed successfully."
       npx playwright install
     displayName: "Install Dependencies and Playwright"
 
@@ -63,7 +64,7 @@ steps:
       ls -R
     displayName: "Print Working Directory and List All Files"
 
-  # ✅ List Test Files in Correct Path (Adjust After Checking Directory Structure)
+  # ✅ List Test Files in src/tests/api (After Dependency Fix)
   - script: ls -R src/tests/api
     displayName: "List Test Files in src/tests/api"
 
