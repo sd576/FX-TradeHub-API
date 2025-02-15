@@ -25,8 +25,10 @@ steps:
     displayName: "Set Node.js to v20"
 
   # ✅ Install Dependencies
-  - script: npm ci
-    displayName: "Install Dependencies"
+  - script: |
+      npm ci
+      npx playwright install
+    displayName: "Install Dependencies and Playwright"
 
   # ✅ Lint and Format Code
   - script: |
@@ -55,14 +57,14 @@ steps:
       exit 1
     displayName: "Wait for Server to Start"
 
-  # ✅ List Test Files in tests/api (Debugging Step)
-  - script: ls -R tests/api
-    displayName: "List Test Files in tests/api"
+  # ✅ List Test Files in src/tests/api (Debugging Step)
+  - script: ls -R src/tests/api
+    displayName: "List Test Files in src/tests/api"
 
   # 🏃 Run Playwright Tests with a Different Port (4000)
   - script: |
       export CI=true
-      PORT=4000 NODE_ENV=playwright npx playwright test tests/api --reporter=junit --output=playwright-results
+      PORT=4000 NODE_ENV=playwright npx playwright test src/tests/api --reporter=junit --output=playwright-results
     displayName: "Run Playwright Tests"
 
   # ✅ Publish Playwright JUnit Test Results
