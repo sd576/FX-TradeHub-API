@@ -57,7 +57,13 @@ steps:
       exit 1
     displayName: "Wait for Server to Start"
 
-  # ✅ List Test Files in src/tests/api (Debugging Step)
+  # ✅ Debugging Step: Print Working Directory and List All Files
+  - script: |
+      pwd
+      ls -R
+    displayName: "Print Working Directory and List All Files"
+
+  # ✅ List Test Files in Correct Path (Adjust After Checking Directory Structure)
   - script: ls -R src/tests/api
     displayName: "List Test Files in src/tests/api"
 
