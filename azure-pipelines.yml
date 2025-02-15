@@ -6,17 +6,35 @@ trigger:
 pool:
   vmImage: "ubuntu-latest"
 
-resources:
-  repositories:
-    - repository: Playwright_Tests_Repo
-      type: github
-      name: sd576/Playwright-API-Tests
-      ref: refs/heads/main
-      endpoint: GitHub_Connection
-
 steps:
   # ✅ Checkout the Repository
   - checkout: self
+
+  # ✅ Install System Dependencies (for Playwright)
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y \
+        libnss3 \
+        libatk-bridge2.0-0 \
+        libdrm2 \
+        libxkbcommon0 \
+        libxcomposite1 \
+        libxrandr2 \
+        libgbm1 \
+        libpango-1.0-0 \
+        libcups2 \
+        libxdamage1 \
+        libxshmfence1 \
+        libgstreamer-gl1.0-0 \
+        libgstreamer-plugins-bad1.0-0 \
+        libgstreamer-plugins-base1.0-0 \
+        gstreamer1.0-libav \
+        gstreamer1.0-plugins-bad \
+        gstreamer1.0-plugins-base \
+        gstreamer1.0-plugins-good \
+        gstreamer1.0-plugins-ugly \
+        gstreamer1.0-pulseaudio
+    displayName: "Install System Dependencies for Playwright"
 
   # ✅ Set Node.js Version
   - task: UseNode@1
@@ -58,15 +76,11 @@ steps:
       exit 1
     displayName: "Wait for Server to Start"
 
-  # ✅ Debugging Step 1: Print Full Directory Structure
+  # ✅ Debugging Step: Print Full Directory Structure
   - script: |
       pwd
       ls -R
     displayName: "Print Full Directory Structure"
-
-  # ✅ Debugging Step 2: Check Playwright Config
-  - script: cat playwright.config.ts
-    displayName: "Show Playwright Config"
 
   # 🏃 Run Playwright Tests with a Different Port (4000)
   - script: |
