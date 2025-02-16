@@ -42,7 +42,7 @@ steps:
   # Run Playwright tests
   - script: |
       cd /tmp/fx_trader_api
-      npx playwright test --reporter=dot,junit
+      npx playwright test --config=playwright.config.ts --reporter=dot,junit
     displayName: "Run Playwright Tests"
 
   # Publish the Playwright test results
