@@ -23,16 +23,6 @@ steps:
       npm ci
     displayName: "Install API Server dependencies"
 
-  # Start the API server in the background and wait for readiness
-  - script: |
-      cd fx_trader_server
-      nohup npm start > nohup.out 2>&1 &
-      for i in {1..15}; do
-        curl -s http://localhost:3000/api/nostro-accounts && break || sleep 1
-      done
-      cat nohup.out
-    displayName: "Start API Server and Wait for Readiness"
-
   # Clone the Playwright API Tests repository
   - script: |
       git clone https://github.com/sd576/Playwright-API-Tests.git /tmp/fx_trader_api
