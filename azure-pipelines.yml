@@ -7,41 +7,69 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+  # ✅ Checkout the Repository
+  - checkout: self
+
   # ✅ Install Node.js
   - task: NodeTool@0
     inputs:
       versionSpec: "20"
     displayName: "Install Node.js"
 
-  # ✅ Install Dependencies
-  - script: npm ci
-    displayName: "npm ci"
+  # ✅ Install Node Dependencies
+  - script: |
+      npm ci
+      echo "✅ Node.js dependencies installed."
+    displayName: "Install Dependencies"
 
   # ✅ Install Playwright and System Dependencies
-  - script: npx playwright install --with-deps
-    displayName: "Install Playwright Browsers"
+  - script: |
+      npx playwright install --with-deps
+      echo "✅ Playwright and browsers installed."
+    displayName: "Install Playwright"
 
-  # ✅ Run Playwright Tests
-  - script: npx playwright test tests/api --reporter=junit --output=test-results
+  # ✅ Check for Playwright Installation
+  - script: |
+      if [ ! -d "node_modules/@playwright/test" ]; then
+        echo "❌ Playwright not found!"
+        exit 1
+      fi
+      echo "✅ Playwright is installed."
+    displayName: "Verify Playwright Installation"
+
+  # ✅ Run Playwright Tests with JUnit Reporter
+  - script: |
+      export CI=true
+      npx playwright test tests/api --reporter=junit --output=playwright-results
+      echo "✅ Playwright tests completed."
     displayName: "Run Playwright Tests"
-    env:
-      CI: "true"
 
-  # ✅ Publish JUnit Test Results
+  # ✅ Check for Playwright Report
+  - script: |
+      if [ -d "playwright-report" ]; then
+        echo "✅ Playwright report found."
+      else
+        echo "❌ No Playwright report generated!"
+        exit 1
+      fi
+    displayName: "Check for Playwright Report"
+
+  # ✅ Publish Playwright Test Results
   - task: PublishTestResults@2
-    displayName: "Publish Test Results"
     inputs:
+      testResultsFiles: "playwright-results/*.xml"
       testResultsFormat: "JUnit"
-      testResultsFiles: "test-results/*.xml"
       mergeTestResults: true
       failTaskOnFailedTests: true
       testRunTitle: "Playwright API Tests"
+    displayName: "Publish Test Results"
     condition: succeededOrFailed()
 
-  # ✅ Publish Playwright HTML Report as an Artifact
+  # ✅ Publish Playwright HTML Report
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: playwright-report
       artifact: playwright-report
-      publishLocation: "pipeline"
+      publishLocation: pipeline
+    displayName: "Publish Playwright Report"
     condition: succeededOrFailed()
