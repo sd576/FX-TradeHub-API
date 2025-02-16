@@ -31,17 +31,6 @@ steps:
       cat nohup.out
     displayName: "Start API Server and Check Logs"
 
-  # Check API Server Readiness
-  - script: |
-      for i in {1..10}; do
-        curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:3000/api/counterparties && exit 0
-        echo "API not ready yet. Retrying in 5 seconds..."
-        sleep 5
-      done
-      echo "API Server not ready after multiple attempts. Exiting..."
-      exit 1
-    displayName: "Check API Server Readiness"
-
   # Clone the Playwright API Tests repository
   - script: |
       git clone https://github.com/sd576/Playwright-API-Tests.git /tmp/fx_trader_api
