@@ -4,47 +4,44 @@ trigger:
       - main
 
 pool:
-  vmImage: "ubuntu-latest"
+  vmImage: ubuntu-latest
 
 steps:
-  # ✅ Checkout the Repository
-  - checkout: self
-
   # ✅ Install Node.js
-  - task: UseNode@1
+  - task: NodeTool@0
     inputs:
-      version: "20"
-    displayName: "Set Node.js to v20"
+      versionSpec: "20"
+    displayName: "Install Node.js"
 
-  # ✅ Step 1: Install All Node Dependencies
-  - script: |
-      npm ci
-      echo "✅ Node.js dependencies installed."
-    displayName: "Install Node Dependencies"
+  # ✅ Install Dependencies
+  - script: npm ci
+    displayName: "npm ci"
 
-  # ✅ Install Dependencies and Playwright
-  - script: |
-      npx playwright install --with-deps
-      echo "✅ Playwright and browsers installed."
-    displayName: "Install Playwright and System Dependencies"
+  # ✅ Install Playwright and System Dependencies
+  - script: npx playwright install --with-deps
+    displayName: "Install Playwright Browsers"
 
-  # ✅ Run Playwright Tests with JUnit Reporter
-  - script: |
-      export CI=true
-      npx playwright test src/tests/api --reporter=junit --workers=1 --output=playwright-results
+  # ✅ Run Playwright Tests
+  - script: npx playwright test tests/api --reporter=junit --output=test-results
     displayName: "Run Playwright Tests"
+    env:
+      CI: "true"
 
-  # ✅ Publish Playwright Test Results
+  # ✅ Publish JUnit Test Results
   - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: "playwright-results/*.xml"
-      testRunTitle: "Playwright Tests"
     displayName: "Publish Test Results"
+    inputs:
+      testResultsFormat: "JUnit"
+      testResultsFiles: "test-results/*.xml"
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+      testRunTitle: "Playwright API Tests"
+    condition: succeededOrFailed()
 
   # ✅ Publish Playwright HTML Report as an Artifact
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: playwright-report
-      artifact: PlaywrightHTMLReport
-      publishLocation: pipeline
-    displayName: "Publish Playwright HTML Report"
+      artifact: playwright-report
+      publishLocation: "pipeline"
+    condition: succeededOrFailed()
