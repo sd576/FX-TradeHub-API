@@ -40,14 +40,14 @@ steps:
 
   # List Available Playwright Tests
   - script: |
-      cd /tmp/fx_trader_api/src/tests/api
-      npx playwright test --config=../../playwright.config.ts --list
+      cd /tmp/fx_trader_api
+      npx playwright test --config=playwright.config.ts --list
     displayName: "Check Available Playwright Tests"
 
   # Run Playwright tests
   - script: |
       cd /tmp/fx_trader_api
-      npx playwright test --config=../../playwright.config.ts --reporter=dot,junit
+      npx playwright test --config=playwright.config.ts --reporter=dot,junit
     displayName: "Run Playwright Tests"
 
   # Publish the Playwright test results
