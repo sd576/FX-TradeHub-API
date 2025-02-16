@@ -7,60 +7,57 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-  # ✅ Checkout API Server Repository
+  # Checkout the API server repository
   - checkout: self
-    displayName: "Checkout API Server"
+    displayName: "Checkout API Server (FX-TradeHub-API)"
 
-  # ✅ Clone Playwright Test Repository
-  - script: |
-      git clone https://github.com/sd576/Playwright-API-Tests API_Playwright/fx_trader_api
-      cd API_Playwright/fx_trader_api
-      echo "✅ Cloned Playwright Test Repo."
-    displayName: "Clone Playwright Test Repo"
+  # Install Node.js 18
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "18"
+    displayName: "Install Node.js 18"
 
-  # ✅ Install Dependencies for Playwright Tests
+  # Install dependencies for the API server (FX-TradeHub-API)
   - script: |
-      cd API_Playwright/fx_trader_api
+      cd fx_trader_server
       npm ci
-      npm install @playwright/test --save-dev
+    displayName: "Install API Server dependencies"
+
+  # Start the API server in the background
+  - script: |
+      nohup npm start &
+      sleep 15
+    displayName: "Start API Server and wait for readiness"
+
+  # Clone the Playwright API Tests repository
+  - script: |
+      git clone https://github.com/sd576/Playwright-API-Tests.git /tmp/fx_trader_api
+      cd /tmp/fx_trader_api
+      npm ci
       npx playwright install --with-deps
-      echo "✅ Installed Playwright and dependencies."
-    displayName: "Install Playwright Dependencies"
+    displayName: "Clone and set up Playwright tests"
 
-  # ✅ Verify Playwright Installation
+  # Run Playwright tests
   - script: |
-      cd API_Playwright/fx_trader_api
-      if [ ! -d "node_modules/@playwright/test" ]; then
-        echo "❌ Playwright not installed!"
-        exit 1
-      fi
-      echo "✅ Playwright is installed."
-    displayName: "Verify Playwright Installation"
-
-  # ✅ Run Playwright Tests
-  - script: |
-      cd API_Playwright/fx_trader_api
-      export CI=true
-      npx playwright test src/tests/api --reporter=junit --workers=1 --output=test-results
-      echo "✅ Playwright tests completed."
+      cd /tmp/fx_trader_api
+      npx playwright test --reporter=dot,junit
     displayName: "Run Playwright Tests"
 
-  # ✅ Publish Test Results
+  # Publish the Playwright test results
   - task: PublishTestResults@2
     inputs:
+      searchFolder: "/tmp/fx_trader_api/test-results"
       testResultsFormat: "JUnit"
-      testResultsFiles: "API_Playwright/fx_trader_api/test-results/*.xml"
+      testResultsFiles: "**/results.xml"
       mergeTestResults: true
       failTaskOnFailedTests: true
-      testRunTitle: "Playwright API Tests"
-    displayName: "Publish Test Results"
-    condition: succeededOrFailed()
+    displayName: "Publish Playwright Test Results"
 
-  # ✅ Publish Playwright HTML Report
+  # Publish the Playwright report as an artifact
   - task: PublishPipelineArtifact@1
     inputs:
-      targetPath: "API_Playwright/fx_trader_api/playwright-report"
+      targetPath: /tmp/fx_trader_api/playwright-report
       artifact: playwright-report
-      publishLocation: pipeline
+      publishLocation: "pipeline"
     displayName: "Publish Playwright Report"
     condition: succeededOrFailed()
