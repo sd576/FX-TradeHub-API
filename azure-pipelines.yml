@@ -30,29 +30,11 @@ steps:
       npm ci
     displayName: "Clone and set up Playwright tests"
 
-  # List Available CRUD Tests
+  # Run All Playwright Tests
   - script: |
       cd /tmp/fx_trader_api
-      npx playwright test --project="CRUD tests" --list
-    displayName: "List CRUD Tests"
-
-  # List Available Negative Tests
-  - script: |
-      cd /tmp/fx_trader_api
-      npx playwright test --project="Negative tests" --list
-    displayName: "List Negative Tests"
-
-  # Run Playwright Tests for CRUD Tests
-  - script: |
-      cd /tmp/fx_trader_api
-      npx playwright test --project="CRUD tests" --reporter=junit --output=test-results/crud
-    displayName: "Run CRUD Tests"
-
-  # Run Playwright Tests for Negative Tests
-  - script: |
-      cd /tmp/fx_trader_api
-      npx playwright test --project="Negative tests" --reporter=junit --output=test-results/negative
-    displayName: "Run Negative Tests"
+      npx playwright test --reporter=junit --output=test-results
+    displayName: "Run All Playwright Tests"
 
   # Publish Playwright Test Results
   - task: PublishTestResults@2
