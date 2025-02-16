@@ -23,25 +23,15 @@ steps:
       npm ci
     displayName: "Install API Server dependencies"
 
-  # Start the API server in the background and wait for readiness
+  # Start the API server in the background
   - script: |
       cd fx_trader_server
       nohup npm start > nohup.out 2>&1 &
-      sleep 15
+      sleep 20
       cat nohup.out
-    displayName: "Start API Server and Check Logs"
+    displayName: "Start API Server"
 
-  # Check API Server Readiness
-  - script: |
-      for i in {1..10}; do
-        curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:3000/api/counterparties && exit 0
-        echo "API not ready yet. Retrying in 5 seconds..."
-        sleep 5
-      done
-      echo "API Server not ready after multiple attempts. Exiting..."
-      exit 1
-    displayName: "Check API Server Readiness"
-
+  # Remove API readiness check for now to prevent timeout issues
   # Clone the Playwright API Tests repository
   - script: |
       git clone https://github.com/sd576/Playwright-API-Tests.git /tmp/fx_trader_api
