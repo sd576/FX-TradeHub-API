@@ -7,7 +7,7 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-  # Checkout the API server repository
+  # Checkout the API Server repository
   - checkout: self
     displayName: "Checkout API Server (FX-TradeHub-API)"
 
@@ -27,9 +27,11 @@ steps:
   - script: |
       cd fx_trader_server
       nohup npm start > nohup.out 2>&1 &
-      sleep 15
+      for i in {1..15}; do
+        curl -s http://localhost:3000/api/nostro-accounts && break || sleep 1
+      done
       cat nohup.out
-    displayName: "Start API Server and Check Logs"
+    displayName: "Start API Server and Wait for Readiness"
 
   # Clone the Playwright API Tests repository
   - script: |
@@ -38,24 +40,36 @@ steps:
       npm ci
     displayName: "Clone and set up Playwright tests"
 
-  # List Available Playwright Tests
+  # List Available CRUD Tests
   - script: |
       cd /tmp/fx_trader_api
-      npx playwright test --config=playwright.config.ts --list
-    displayName: "Check Available Playwright Tests"
+      npx playwright test --project="CRUD tests" --list
+    displayName: "List CRUD Tests"
 
-  # Run Playwright tests
+  # List Available Negative Tests
   - script: |
       cd /tmp/fx_trader_api
-      npx playwright test --config=playwright.config.ts --reporter=dot,junit
-    displayName: "Run Playwright Tests"
+      npx playwright test --project="Negative tests" --list
+    displayName: "List Negative Tests"
 
-  # Publish the Playwright test results
+  # Run Playwright Tests for CRUD Tests
+  - script: |
+      cd /tmp/fx_trader_api
+      npx playwright test --project="CRUD tests" --reporter=junit --output=test-results/crud
+    displayName: "Run CRUD Tests"
+
+  # Run Playwright Tests for Negative Tests
+  - script: |
+      cd /tmp/fx_trader_api
+      npx playwright test --project="Negative tests" --reporter=junit --output=test-results/negative
+    displayName: "Run Negative Tests"
+
+  # Publish Playwright Test Results
   - task: PublishTestResults@2
     inputs:
       searchFolder: "/tmp/fx_trader_api/test-results"
       testResultsFormat: "JUnit"
-      testResultsFiles: "**/results.xml"
+      testResultsFiles: "**/*.xml"
       mergeTestResults: true
       failTaskOnFailedTests: true
     displayName: "Publish Playwright Test Results"
