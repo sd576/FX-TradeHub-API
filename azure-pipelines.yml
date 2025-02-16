@@ -7,56 +7,45 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-  # Checkout the API Server repository
+  # ✅ Checkout API Server Repository
   - checkout: self
-    displayName: "Checkout API Server (FX-TradeHub-API)"
+    displayName: "Checkout API Server"
 
-  # Install Node.js 18
-  - task: NodeTool@0
-    inputs:
-      versionSpec: "18"
-    displayName: "Install Node.js 18"
-
-  # Install dependencies for the API server
+  # ✅ Clone Playwright Test Repository
   - script: |
-      cd fx_trader_server
+      git clone https://github.com/sd576/Playwright-API-Tests API_Playwright/fx_trader_api
+      cd API_Playwright/fx_trader_api
+      echo "✅ Cloned Playwright Test Repo."
+    displayName: "Clone Playwright Test Repo"
+
+  # ✅ Install Dependencies for Playwright Tests
+  - script: |
+      cd API_Playwright/fx_trader_api
       npm ci
-    displayName: "Install API Server dependencies"
+      echo "✅ Installed Playwright and dependencies."
+    displayName: "Install Playwright Dependencies"
 
-  # Clone the Playwright API Tests repository
+  # ✅ Run Playwright Tests
   - script: |
-      git clone https://github.com/sd576/Playwright-API-Tests.git /tmp/fx_trader_api
-      cd /tmp/fx_trader_api
-      npm ci
-    displayName: "Clone and set up Playwright tests"
+      cd API_Playwright/fx_trader_api
+      npx playwright test src/tests/api --reporter=junit --workers=1 --output=test-results
+      echo "✅ Playwright tests completed."
+    displayName: "Run Playwright Tests"
 
-  # Check for Test Files
-  - script: |
-      cd /tmp/fx_trader_api/src/tests/api
-      ls -la
-    displayName: "Check for Test Files"
-
-  # Run All Playwright Tests
-  - script: |
-      cd /tmp/fx_trader_api
-      npx playwright test --reporter=junit --output=test-results
-    displayName: "Run All Playwright Tests"
-
-  # Publish Playwright Test Results
+  # ✅ Publish Test Results
   - task: PublishTestResults@2
     inputs:
-      searchFolder: "/tmp/fx_trader_api/test-results"
       testResultsFormat: "JUnit"
-      testResultsFiles: "**/*.xml"
+      testResultsFiles: "API_Playwright/fx_trader_api/test-results/*.xml"
       mergeTestResults: true
       failTaskOnFailedTests: true
-    displayName: "Publish Playwright Test Results"
+    displayName: "Publish Test Results"
 
-  # Publish the Playwright report as an artifact
+  # ✅ Publish Playwright HTML Report
   - task: PublishPipelineArtifact@1
     inputs:
-      targetPath: /tmp/fx_trader_api/playwright-report
+      targetPath: "API_Playwright/fx_trader_api/playwright-report"
       artifact: playwright-report
-      publishLocation: "pipeline"
+      publishLocation: pipeline
     displayName: "Publish Playwright Report"
     condition: succeededOrFailed()
