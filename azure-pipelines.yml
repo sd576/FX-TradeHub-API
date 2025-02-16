@@ -30,6 +30,12 @@ steps:
       npm ci
     displayName: "Clone and set up Playwright tests"
 
+  # Check for Test Files
+  - script: |
+      cd /tmp/fx_trader_api/src/tests/api
+      ls -la
+    displayName: "Check for Test Files"
+
   # Run All Playwright Tests
   - script: |
       cd /tmp/fx_trader_api
