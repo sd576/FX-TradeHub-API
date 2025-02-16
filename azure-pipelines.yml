@@ -16,13 +16,17 @@ steps:
       version: "20"
     displayName: "Set Node.js to v20"
 
-  # ✅ Install Dependencies and Playwright
+  # ✅ Step 1: Install All Node Dependencies
   - script: |
       npm ci
-      npm install playwright/test --save-dev
+      echo "✅ Node.js dependencies installed."
+    displayName: "Install Node Dependencies"
+
+  # ✅ Install Dependencies and Playwright
+  - script: |
       npx playwright install --with-deps
-      echo "✅ Dependencies and Playwright installed successfully."
-    displayName: "Install Dependencies and Playwright"
+      echo "✅ Playwright and browsers installed."
+    displayName: "Install Playwright and System Dependencies"
 
   # ✅ Run Playwright Tests with JUnit Reporter
   - script: |
