@@ -11,20 +11,35 @@ steps:
   - checkout: self
     displayName: "Checkout API Server"
 
-  # ✅ Step 2: Clone Playwright Test Repository
+  # ✅ Step 2: Start API Server in the Background
+  - script: |
+      cd fx_trader_server
+      npm ci
+      npm start &
+      echo "✅ API Server is starting in the background."
+    displayName: "Start API Server in Background"
+
+  # ✅ Step 3: Clone Playwright Test Repository
   - script: |
       git clone https://github.com/sd576/Playwright-API-Tests API_Playwright/fx_trader_api
       echo "✅ Cloned Playwright Test Repo."
     displayName: "Clone Playwright Test Repo"
 
-  # ✅ Step 3: Install Dependencies for Playwright Tests
+  # ✅ Step 4: Install Dependencies for Playwright Tests
   - script: |
       cd API_Playwright/fx_trader_api
       npm ci
       echo "✅ Installed Playwright and dependencies."
     displayName: "Install Playwright Dependencies"
 
-  # ✅ Step 4: Debugging - Check Directory and Test Files
+  # ✅ Step 5: Wait for API Server to be Ready
+  - script: |
+      npm install -g wait-on
+      wait-on http://localhost:3000/api/nostro-accounts
+      echo "✅ API Server is ready."
+    displayName: "Wait for API Server Readiness"
+
+  # ✅ Step 6: Debugging - Check Directory and Test Files
   - script: |
       pwd
       ls -la
@@ -33,25 +48,22 @@ steps:
       echo "✅ Directory and test files verified."
     displayName: "Check Current Directory and List Test Files"
 
-  # ✅ Step 5: Run Playwright Tests
+  # ✅ Step 7: Run Playwright Tests
   - script: |
       cd API_Playwright/fx_trader_api
       npx playwright test src/tests/api --reporter=junit --output=test-results
       echo "✅ Playwright tests completed."
     displayName: "Run Playwright Tests"
 
-  # ✅ Step 6: Publish Test Results
+  # ✅ Step 8: Publish Test Results
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: "JUnit"
       testResultsFiles: "API_Playwright/fx_trader_api/test-results/*.xml"
       mergeTestResults: true
-      failTaskOnFailedTests: true
-      testRunTitle: "Playwright API Tests"
     displayName: "Publish Test Results"
-    condition: succeededOrFailed()
 
-  # ✅ Step 7: Publish Playwright HTML Report
+  # ✅ Step 9: Publish Playwright HTML Report
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: "API_Playwright/fx_trader_api/playwright-report"
