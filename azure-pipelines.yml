@@ -39,7 +39,6 @@ steps:
       git clone https://github.com/sd576/Playwright-API-Tests.git /tmp/fx_trader_api
       cd /tmp/fx_trader_api
       npm ci
-      npx playwright install --with-deps
     displayName: "Clone and set up Playwright tests"
 
   # Create test-results directory
