@@ -17,21 +17,29 @@ steps:
       versionSpec: "18"
     displayName: "Install Node.js 18"
 
-  # Install dependencies for the API server (FX-TradeHub-API)
+  # Install dependencies for the API server
   - script: |
       cd fx_trader_server
       npm ci
     displayName: "Install API Server dependencies"
 
-  # Start the API server in the background
+  # Start the API server in the background and wait for readiness
   - script: |
-      nohup npm start &
+      cd fx_trader_server
+      nohup npm start > nohup.out 2>&1 &
       sleep 15
-    displayName: "Start API Server and wait for readiness"
+      cat nohup.out
+    displayName: "Start API Server and Check Logs"
 
-  # Check if the API server is ready
+  # Check API Server Readiness
   - script: |
-      curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:3000/api/counterparties
+      for i in {1..10}; do
+        curl --retry 5 --retry-delay 5 --retry-connrefused http://localhost:3000/api/counterparties && exit 0
+        echo "API not ready yet. Retrying in 5 seconds..."
+        sleep 5
+      done
+      echo "API Server not ready after multiple attempts. Exiting..."
+      exit 1
     displayName: "Check API Server Readiness"
 
   # Clone the Playwright API Tests repository
@@ -40,10 +48,6 @@ steps:
       cd /tmp/fx_trader_api
       npm ci
     displayName: "Clone and set up Playwright tests"
-
-  # Create test-results directory
-  - script: mkdir -p /tmp/fx_trader_api/test-results
-    displayName: "Ensure test-results directory exists"
 
   # Run Playwright tests
   - script: |
