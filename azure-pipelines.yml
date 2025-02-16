@@ -19,6 +19,7 @@ steps:
   # ✅ Install Dependencies and Playwright
   - script: |
       npm ci
+      npm install playwright/test --save-dev
       npx playwright install --with-deps
       echo "✅ Dependencies and Playwright installed successfully."
     displayName: "Install Dependencies and Playwright"
