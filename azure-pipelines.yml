@@ -16,19 +16,15 @@ steps:
       versionSpec: "20"
     displayName: "Install Node.js"
 
-  # ✅ Install Node Dependencies
+  # ✅ Install Dependencies and Playwright
   - script: |
       npm ci
-      echo "✅ Node.js dependencies installed."
-    displayName: "Install Dependencies"
-
-  # ✅ Install Playwright and System Dependencies
-  - script: |
+      npm install @playwright/test --save-dev
       npx playwright install --with-deps
-      echo "✅ Playwright and browsers installed."
-    displayName: "Install Playwright"
+      echo "✅ Playwright and dependencies installed."
+    displayName: "Install Dependencies and Playwright"
 
-  # ✅ Check for Playwright Installation
+  # ✅ Verify Playwright Installation
   - script: |
       if [ ! -d "node_modules/@playwright/test" ]; then
         echo "❌ Playwright not found!"
@@ -37,10 +33,10 @@ steps:
       echo "✅ Playwright is installed."
     displayName: "Verify Playwright Installation"
 
-  # ✅ Run Playwright Tests with JUnit Reporter
+  # ✅ Run Playwright Tests
   - script: |
       export CI=true
-      npx playwright test tests/api --reporter=junit --output=playwright-results
+      npx playwright test tests/api --reporter=junit --output=test-results
       echo "✅ Playwright tests completed."
     displayName: "Run Playwright Tests"
 
@@ -54,11 +50,11 @@ steps:
       fi
     displayName: "Check for Playwright Report"
 
-  # ✅ Publish Playwright Test Results
+  # ✅ Publish Test Results
   - task: PublishTestResults@2
     inputs:
-      testResultsFiles: "playwright-results/*.xml"
       testResultsFormat: "JUnit"
+      testResultsFiles: "test-results/*.xml"
       mergeTestResults: true
       failTaskOnFailedTests: true
       testRunTitle: "Playwright API Tests"
