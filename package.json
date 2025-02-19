@@ -33,7 +33,6 @@
     "format": "npx prettier --write ."
   },
   "dependencies": {
-    "better-sqlite3": "^11.7.2",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",

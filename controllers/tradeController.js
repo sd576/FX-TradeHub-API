@@ -11,17 +11,20 @@ import {
 } from "../services/tradeService.js";
 import { validationResult } from "express-validator";
 
-// Fetch all trades
+// ✅ Fetch all trades
 export const getAllTradesController = async (req, res) => {
   try {
+    console.log("🔍 API Call: GET /trades");
     const trades = await getAllTrades();
+    console.log(`✅ Returning ${trades.length} trades from API`); // ✅ Log API output
     res.status(200).json(trades);
   } catch (error) {
+    console.error("❌ Controller Error:", error.message);
     res.status(500).json({ error: error.message });
   }
 };
 
-// Fetch trades by counterparty ID
+// ✅ Fetch trades by counterparty ID
 export const getTradesByCounterpartyController = async (req, res) => {
   const { counterpartyId } = req.params;
   try {

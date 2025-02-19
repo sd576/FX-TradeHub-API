@@ -8,7 +8,7 @@ import {
   getTradesByCriteriaController,
   createTrade,
   modifyTrade,
-  patchTradeController, // Correct name
+  patchTradeController,
   deleteTradeByIdHandler,
 } from "../controllers/tradeController.js";
 import { validateTrade } from "../validators/tradeValidator.js";

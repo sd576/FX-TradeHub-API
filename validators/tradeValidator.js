@@ -45,4 +45,12 @@ export const validateTrade = [
     .optional()
     .isString()
     .withMessage("Sell Nostro Account ID must be a string"),
+  check("buyNostroDescription")
+    .optional()
+    .isString()
+    .withMessage("Buy Nostro Description must be a string"),
+  check("sellNostroDescription")
+    .optional()
+    .isString()
+    .withMessage("Sell Nostro Description must be a string"),
 ];
