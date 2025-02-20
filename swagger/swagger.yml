@@ -330,16 +330,19 @@ paths:
                   tradeDate: "2025-01-01"
                   tradeType: "SWAP"
                   weBuyWeSell: "we buy"
-                  counterpartyId: "004"
-                  counterpartyName: "Lloyds Bank"
+                  counterpartyId: "029"
+                  counterpartyName: "ANZ Banking Group"
                   settlementDate: "2025-12-01"
                   buyCurrency: "JPY"
                   sellCurrency: "GBP"
-                  buyAmount: 5000000
-                  sellAmount: 35000
-                  exchangeRate: 0.007
-                  buyNostroAccountId: "003"
-                  sellNostroAccountId: "012"
+                  buyAmount: 147225000
+                  sellAmount: 1000000
+                  exchangeRate: 147.225
+                  buyNostroAccountId: "029-JPY"
+                  sellNostroAccountId: "029-USD"
+                  parentTradeId: null
+                  buyNostroDescription: "036 - JPY Nostro Account managed by ANZ Banking Group"
+                  sellNostroDescription: "010 - USD Nostro Account managed by ANZ Banking Group"
       responses:
         "201":
           description: Trade created successfully.
@@ -394,6 +397,20 @@ paths:
                   exchangeRate: 1.265
                   buyAmount: 1200000
                   sellAmount: 1518000
+              partialUpdateForward:
+                summary: Partial update for a FORWARD trade
+                value:
+                  exchangeRate: 1.110
+                  buyAmount: 2500000
+                  sellAmount: 2775000
+                  settlementDate: "2025-09-15"
+              partialUpdateSwap:
+                summary: Partial update for a SWAP trade
+                value:
+                  exchangeRate: 147.800
+                  buyAmount: 149500000
+                  sellAmount: 1010000
+                  settlementDate: "2025-06-07"
       responses:
         "200":
           description: Trade updated successfully.
@@ -421,22 +438,53 @@ paths:
             schema:
               $ref: "#/components/schemas/Trade"
             examples:
-              replaceTradeExample:
-                summary: Replace a trade with new details
+              replaceSpotTrade:
+                summary: Replace a SPOT trade
                 value:
-                  tradeId: TRADE001
+                  tradeId: "SPOT-002-001"
                   tradeType: SPOT
-                  tradeDate: "2025-01-19"
-                  settlementDate: "2025-01-22"
-                  weBuyWeSell: we buy
-                  counterpartyId: CPTY001
-                  buyCurrency: USD
-                  sellCurrency: EUR
-                  buyAmount: 1000
-                  sellAmount: 900
-                  exchangeRate: 0.9
-                  buyNostroAccountId: BNK123
-                  sellNostroAccountId: BNK456
+                  tradeDate: "2025-02-19"
+                  settlementDate: "2025-02-24"
+                  weBuyWeSell: "we buy"
+                  counterpartyId: "CPTY001"
+                  buyCurrency: "GBP"
+                  sellCurrency: "USD"
+                  buyAmount: 5000000
+                  sellAmount: 6310000
+                  exchangeRate: 1.262
+                  buyNostroAccountId: "001"
+                  sellNostroAccountId: "010"
+              replaceForwardTrade:
+                summary: Replace a FORWARD trade
+                value:
+                  tradeId: "FWD-003-002"
+                  tradeType: "FORWARD"
+                  settlementDate: "2025-10-10"
+                  weBuyWeSell: "we sell"
+                  counterpartyId: "003"
+                  buyCurrency: "USD"
+                  sellCurrency: "EUR"
+                  buyAmount: 4340000
+                  sellAmount: 4000000
+                  exchangeRate: 1.085
+                  buyNostroAccountId: "002"
+                  sellNostroAccountId: "011"
+              replaceSwapTrade:
+                summary: Replace a SWAP trade
+                value:
+                  tradeId: "SWAP-029-066"
+                  tradeType: "SWAP"
+                  tradeDate: "2025-05-05"
+                  settlementDate: "2025-05-05"
+                  weBuyWeSell: "we buy"
+                  counterpartyId: "029"
+                  buyCurrency: "JPY"
+                  sellCurrency: "USD"
+                  buyAmount: 736125000
+                  sellAmount: 5000000
+                  exchangeRate: 147.225
+                  buyNostroAccountId: "029-JPY"
+                  sellNostroAccountId: "029-USD"
       responses:
         "200":
           description: Trade replaced successfully.
@@ -458,8 +506,8 @@ paths:
             type: string
           description: Trade ID to delete.
       responses:
-        "200":
-          description: Trade deleted successfully.
+        "204":
+          description: "Trade deleted successfully. If the trade was a SWAP, the associated far leg was also removed."
         "404":
           description: Trade not found.
         "500":
@@ -503,6 +551,7 @@ components:
         - id
         - name
         - currency
+
     Nostro:
       type: object
       properties:
@@ -520,7 +569,7 @@ components:
           example: "016"
         nostroDescription:
           type: string
-          example: 016 - EUR Nostro Account managed by Barclays Bank
+          example: "016 - EUR Nostro Account managed by Barclays Bank"
         managedById:
           type: string
           example: "016"
@@ -529,6 +578,7 @@ components:
         - counterpartyId
         - currency
         - managedById
+
     Trade:
       type: object
       properties:
@@ -542,6 +592,10 @@ components:
             - FORWARD
             - SWAP
           example: SPOT
+        parentTradeId:
+          type: string
+          nullable: true
+          example: null
         tradeDate:
           type: string
           format: date
@@ -567,19 +621,25 @@ components:
           example: EUR
         buyAmount:
           type: number
-          example: 1000
+          example: 5000000
         sellAmount:
           type: number
-          example: 900
+          example: 5440000
         exchangeRate:
           type: number
-          example: 0.9
+          example: 1.088
         buyNostroAccountId:
           type: string
           example: BNK123
         sellNostroAccountId:
           type: string
           example: BNK456
+        buyNostroDescription:
+          type: string
+          example: "USD Nostro Account managed by JP Morgan"
+        sellNostroDescription:
+          type: string
+          example: "EUR Nostro Account managed by Deutsche Bank"
       required:
         - tradeId
         - tradeType
@@ -592,16 +652,12 @@ components:
         - buyAmount
         - sellAmount
         - exchangeRate
+        - buyNostroAccountId
+        - sellNostroAccountId
+
     TradePatch:
       type: object
       properties:
-        tradeType:
-          type: string
-          enum:
-            - SPOT
-            - FORWARD
-            - SWAP
-          example: FORWARD
         settlementDate:
           type: string
           format: date
@@ -620,10 +676,22 @@ components:
           example: EUR
         buyAmount:
           type: number
-          example: 2000
+          example: 3000000
         sellAmount:
           type: number
-          example: 1800
+          example: 3264000
         exchangeRate:
           type: number
-          example: 0.9
+          example: 1.088
+        buyNostroAccountId:
+          type: string
+          example: BNK123
+        sellNostroAccountId:
+          type: string
+          example: BNK456
+        buyNostroDescription:
+          type: string
+          example: "USD Nostro Account managed by Citibank"
+        sellNostroDescription:
+          type: string
+          example: "EUR Nostro Account managed by HSBC"
