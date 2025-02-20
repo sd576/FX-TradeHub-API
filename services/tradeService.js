@@ -11,7 +11,7 @@ const executeQuery = (query, params = []) => {
         console.error("❌ Error executing query:", err.message);
         reject(err);
       } else {
-        resolve(this.lastID); // ✅ Resolve with last inserted row ID
+        resolve(this.lastID);
       }
     });
   });
@@ -35,7 +35,14 @@ export const getAllTrades = () => {
         console.error("❌ Error fetching trades:", err.message);
         reject(new Error("Failed to fetch trades"));
       } else {
-        console.log(`✅ Query Success! Fetched ${rows.length}`);
+        console.log(`✅ Query Success! Fetched ${rows.length} trades`);
+
+        // ✅ Format dates before returning
+        rows.forEach((row) => {
+          row.tradeDate = formatDate(row.tradeDate);
+          row.settlementDate = formatDate(row.settlementDate);
+        });
+
         resolve(rows);
       }
     });
@@ -78,12 +85,21 @@ export const getTradesByDateRange = (startDate, endDate) => {
 // ✅ GET a single trade
 export const getTradeById = (tradeId) => {
   const query = buildTradeQuery("WHERE t.tradeId = ?");
+  console.log(`🔍 Running Query: ${query} | Params: ${tradeId}`);
+
   return new Promise((resolve, reject) => {
     db.get(query, [tradeId], (err, row) => {
       if (err) {
-        console.error(`Error fetching trade ${tradeId}:`, err.message);
+        console.error(`❌ Error fetching trade ${tradeId}:`, err.message);
         reject(new Error("Failed to fetch trade by ID"));
       } else {
+        if (row) {
+          row.tradeDate = formatDate(row.tradeDate);
+          row.settlementDate = formatDate(row.settlementDate);
+          console.log(`✅ Trade Found: ${JSON.stringify(row)}`);
+        } else {
+          console.log(`⚠️ No trade found for ID '${tradeId}'`);
+        }
         resolve(row || null);
       }
     });
@@ -97,15 +113,15 @@ export const getTradesByCriteria = (criteria) => {
   const params = [];
 
   if (buyCurrency) {
-    query += " AND t.buyCurrency = ?";
+    whereClause += " AND t.buyCurrency = ?";
     params.push(buyCurrency);
   }
   if (sellCurrency) {
-    query += " AND t.sellCurrency = ?";
+    whereClause += " AND t.sellCurrency = ?";
     params.push(sellCurrency);
   }
   if (exchangeRate) {
-    query += " AND t.exchangeRate = ?";
+    whereClause += " AND t.exchangeRate = ?";
     params.push(exchangeRate);
   }
 
@@ -126,13 +142,16 @@ export const getTradesByCriteria = (criteria) => {
 // ✅ POST a new Trade (Handles SWAP near & far legs)
 export const insertTrade = async (trade) => {
   try {
+    console.log(`🚀 Inserting Trade: ${trade.tradeId}`);
+
     // 🔎 Check if the trade already exists
     const existingTrade = await getTradeById(trade.tradeId);
     if (existingTrade) {
+      console.log(`⚠️ Trade '${trade.tradeId}' already exists. Skipping.`);
       throw new Error(`Trade with ID '${trade.tradeId}' already exists.`);
     }
 
-    // ✅ Define the SQL query for inserting trades
+    // ✅ SQL Query to insert trade
     const query = `
       INSERT INTO trades (
         tradeId, tradeType, parentTradeId, tradeDate, settlementDate, weBuyWeSell,
@@ -141,7 +160,7 @@ export const insertTrade = async (trade) => {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
-    // ✅ Prepare parameters for the near leg (first trade)
+    // ✅ Insert Near Leg (Original Trade)
     const nearParams = [
       trade.tradeId,
       trade.tradeType,
@@ -161,16 +180,52 @@ export const insertTrade = async (trade) => {
       trade.sellNostroDescription || "Unknown",
     ];
 
-    // 🔹 INSERT the Near Leg (Original Trade)
-    await executeQuery(query, nearParams); // ✅ Fixed function call (removed `db` param)
+    await executeQuery(query, nearParams);
+    console.log(`✅ Near Leg Created: ${trade.tradeId}`);
 
-    // 🚀 If it's a SWAP, generate the FAR leg
-    if (trade.tradeType === "SWAP") {
-      const farLegTrade = generateFarLegTrade(trade);
-      await insertTrade(farLegTrade); // ✅ Recursively insert the far leg
+    // 🚀 If this is a SWAP trade, create the FAR leg **only once**
+    if (trade.tradeType === "SWAP" && !trade.tradeId.includes("-FAR")) {
+      const farLegTradeId = `${trade.tradeId}-FAR`;
+
+      // ✅ Check if the far leg already exists before inserting
+      const existingFarLeg = await getTradeById(farLegTradeId);
+      if (!existingFarLeg) {
+        console.log(`🚀 Generating Far Leg for ${farLegTradeId}`);
+
+        // ✅ Generate the Far Leg using the function
+        const farLegTrade = generateFarLegTrade(trade);
+        farLegTrade.tradeId = farLegTradeId; // ✅ Ensure the correct ID
+        farLegTrade.parentTradeId = trade.tradeId; // ✅ Link to the Near Leg
+
+        console.log("🛠 FAR Leg Trade Data:", farLegTrade);
+
+        // ✅ Insert the Far Leg into the database
+        await executeQuery(query, [
+          farLegTrade.tradeId,
+          farLegTrade.tradeType,
+          farLegTrade.parentTradeId,
+          formatDate(farLegTrade.tradeDate),
+          formatDate(farLegTrade.settlementDate),
+          farLegTrade.weBuyWeSell,
+          farLegTrade.counterpartyId,
+          farLegTrade.buyCurrency,
+          farLegTrade.sellCurrency,
+          farLegTrade.buyAmount,
+          farLegTrade.sellAmount,
+          farLegTrade.exchangeRate,
+          farLegTrade.buyNostroAccountId,
+          farLegTrade.sellNostroAccountId,
+          farLegTrade.buyNostroDescription || "Unknown",
+          farLegTrade.sellNostroDescription || "Unknown",
+        ]);
+
+        console.log(`✅ Far Leg Created: ${farLegTradeId}`);
+      } else {
+        console.log(`⚠️ Far Leg ${farLegTradeId} already exists. Skipping.`);
+      }
     }
 
-    return;
+    return; // Ensure function exits correctly
   } catch (error) {
     console.error("❌ Error in insertTrade:", error.message);
     throw error;
@@ -251,71 +306,104 @@ export const patchTrade = async (tradeId, updates) => {
   }
 };
 
-// ✅ PUT a trade
+// ✅ PUT: Fully Update a Trade (Handles SWAP Near & Far Legs)
 export const updateTrade = async (tradeId, updates) => {
   try {
-    // Ensure the trade exists
+    console.log(`🚀 Updating Trade: ${tradeId}`);
+
+    // 🔎 Ensure trade exists
     const existingTrade = await getTradeById(tradeId);
     if (!existingTrade) {
       throw new Error(`No trade found with ID '${tradeId}'`);
     }
 
-    // ✅ Prepare SQL Query for updating trades
+    // 🚨 Prevent modification of immutable fields
+    if (updates.tradeId && updates.tradeId !== tradeId) {
+      throw new Error("Trade ID cannot be modified.");
+    }
+
+    // 🚨 Prevent modifying trade type for existing trades
+    if (updates.tradeType && updates.tradeType !== existingTrade.tradeType) {
+      throw new Error("Trade type cannot be modified.");
+    }
+
+    // ✅ Allowed fields for update
+    const allowedFields = [
+      "parentTradeId",
+      "tradeDate",
+      "settlementDate",
+      "weBuyWeSell",
+      "counterpartyId",
+      "buyCurrency",
+      "sellCurrency",
+      "buyAmount",
+      "sellAmount",
+      "exchangeRate",
+      "buyNostroAccountId",
+      "sellNostroAccountId",
+    ];
+
+    // ✅ Filter allowed updates
+    const filteredUpdates = Object.keys(updates)
+      .filter((key) => allowedFields.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = updates[key];
+        return obj;
+      }, {});
+
+    if (Object.keys(filteredUpdates).length === 0) {
+      throw new Error("No valid fields to update.");
+    }
+
+    // ✅ Format dates if present
+    if (filteredUpdates.tradeDate) {
+      filteredUpdates.tradeDate = formatDate(filteredUpdates.tradeDate);
+    }
+    if (filteredUpdates.settlementDate) {
+      filteredUpdates.settlementDate = formatDate(
+        filteredUpdates.settlementDate
+      );
+    }
+
+    // ✅ Prepare SQL query dynamically
+    const fields = Object.keys(filteredUpdates);
+    const values = Object.values(filteredUpdates);
+
     const query = `
       UPDATE trades
-      SET tradeType = ?, parentTradeId = ?, tradeDate = ?, settlementDate = ?,
-          weBuyWeSell = ?, counterpartyId = ?, buyCurrency = ?, sellCurrency = ?,
-          buyAmount = ?, sellAmount = ?, exchangeRate = ?, buyNostroAccountId = ?, sellNostroAccountId = ?,
-          buyNostroDescription = ?, sellNostroDescription = ?
+      SET ${fields.map((field) => `${field} = ?`).join(", ")}
       WHERE tradeId = ?;
     `;
 
-    // ✅ Prepare parameters for the update
-    const params = [
-      updates.tradeType || existingTrade.tradeType, // ✅ Ensures tradeType is never null
-      updates.parentTradeId || existingTrade.parentTradeId,
-      formatDate(updates.tradeDate || existingTrade.tradeDate),
-      formatDate(updates.settlementDate || existingTrade.settlementDate),
-      updates.weBuyWeSell || existingTrade.weBuyWeSell,
-      updates.counterpartyId || existingTrade.counterpartyId,
-      updates.buyCurrency || existingTrade.buyCurrency,
-      updates.sellCurrency || existingTrade.sellCurrency,
-      updates.buyAmount || existingTrade.buyAmount,
-      updates.sellAmount || existingTrade.sellAmount,
-      updates.exchangeRate || existingTrade.exchangeRate,
-      updates.buyNostroAccountId || existingTrade.buyNostroAccountId,
-      updates.sellNostroAccountId || existingTrade.sellNostroAccountId,
-      updates.buyNostroDescription ||
-        existingTrade.buyNostroDescription ||
-        "Unknown",
-      updates.sellNostroDescription ||
-        existingTrade.sellNostroDescription ||
-        "Unknown",
-      tradeId,
-    ];
-
-    // ✅ Execute the update
     await new Promise((resolve, reject) => {
-      db.run(query, params, (err) => {
+      db.run(query, [...values, tradeId], function (err) {
         if (err) {
           console.error(`❌ Error updating trade '${tradeId}':`, err.message);
           reject(new Error("Failed to update trade"));
+        } else if (this.changes === 0) {
+          reject(new Error("No trade found to update"));
         } else {
+          console.log(`✅ Successfully updated trade '${tradeId}'`);
           resolve();
         }
       });
     });
 
-    console.log(`✅ Successfully updated trade '${tradeId}'`);
-
     // 🔹 If it's a SWAP trade, update the far leg as well
     if (existingTrade.tradeType === "SWAP") {
       const farLegTradeId = `${tradeId}-FAR`;
 
-      // ✅ Ensure the far leg retains tradeType and required fields
-      const farLegTrade = generateFarLegTrade({ ...existingTrade, ...updates });
-
-      await updateTrade(farLegTradeId, farLegTrade);
+      // ✅ Ensure the far leg exists
+      const farLegExists = await getTradeById(farLegTradeId);
+      if (farLegExists) {
+        const farLegTrade = generateFarLegTrade({
+          ...existingTrade,
+          ...updates,
+        });
+        await updateTrade(farLegTradeId, farLegTrade);
+      } else {
+        console.warn(`⚠️ No far leg found for '${tradeId}', skipping update.`);
+      }
     }
 
     return;

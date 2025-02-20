@@ -4,37 +4,30 @@
  * @returns {Object} - The generated far leg trade.
  */
 export const generateFarLegTrade = (trade) => {
+  console.log(`🚀 Generating Far Leg for ${trade.tradeId}`);
+
+  // ✅ Prevent double-appending "-FAR" if already a far leg
+  if (trade.tradeId.includes("-FAR")) {
+    console.warn(
+      `⚠️ Far leg already exists: ${trade.tradeId}. Skipping re-generation.`
+    );
+    return trade; // Return unchanged to prevent duplicates
+  }
+
   return {
-    tradeId: `${trade.tradeId}-FAR`,
     tradeType: "SWAP",
-    tradeDate: trade.tradeDate,
-    settlementDate: formatDate(
-      new Date(
-        new Date(trade.settlementDate).setMonth(
-          new Date(trade.settlementDate).getMonth() + 1
-        )
-      )
-    ),
+    tradeId: `${trade.tradeId}-FAR`,
+    parentTradeId: trade.tradeId,
+    tradeDate: trade.settlementDate,
+    settlementDate: trade.settlementDate,
     weBuyWeSell: trade.weBuyWeSell === "we buy" ? "we sell" : "we buy",
     counterpartyId: trade.counterpartyId,
     buyCurrency: trade.sellCurrency,
     sellCurrency: trade.buyCurrency,
     buyAmount: trade.sellAmount,
     sellAmount: trade.buyAmount,
-    exchangeRate: parseFloat((trade.exchangeRate * 1.0003).toFixed(6)),
+    exchangeRate: 1 / trade.exchangeRate,
     buyNostroAccountId: trade.sellNostroAccountId,
     sellNostroAccountId: trade.buyNostroAccountId,
-    buyNostroDescription: trade.sellNostroDescription,
-    sellNostroDescription: trade.buyNostroDescription,
   };
-};
-
-/**
- * Utility to format data as 'YYYY-MM-DD'
- * @param {Date} date
- * @returns {string} Formatted date.
- */
-const formatDate = (date) => {
-  if (!date) return null;
-  return new Date(date).toISOString().split("T")[0];
 };

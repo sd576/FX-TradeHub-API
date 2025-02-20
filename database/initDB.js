@@ -88,8 +88,6 @@ const createTables = async (db) => {
   console.log("✅ Tables created successfully.");
 };
 
-// =================
-
 // Seed counterparties
 const seedCounterparties = async (db) => {
   console.log("Seeding counterparties...");
